@@ -2,9 +2,10 @@ import { NextRequest, NextResponse } from 'next/server';
 import { stripe } from '@/lib/stripe';
 import { prisma } from '@/lib/prisma';
 
-export async function POST(request: NextRequest) {
+export async function GET(request: NextRequest) {
     try {
-        const { userId } = await request.json();
+        const { searchParams } = new URL(request.url);
+        const userId = searchParams.get('userId');
 
         if (!userId) {
             return NextResponse.json(

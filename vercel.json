@@ -9,5 +9,13 @@
     "env": {
         "NEXT_PUBLIC_URL": "https://steadyletters.com"
     },
-    "crons": []
+    "github": {
+        "deployHooks": [
+            {
+                "name": "Post-Deploy Tests",
+                "url": "https://www.steadyletters.com/api/post-deploy",
+                "events": ["deployment"]
+            }
+        ]
+    }
 }
