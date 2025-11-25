@@ -8,5 +8,6 @@
     ],
     "env": {
         "NEXT_PUBLIC_URL": "https://steadyletters.com"
-    }
+    },
+    "crons": []
 }

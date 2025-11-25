@@ -68,27 +68,40 @@ async function runTests() {
     // API Endpoints
     log('\nTesting API Endpoints...', 'yellow');
     results.push(await testEndpoint('Health Check', `${PRODUCTION_URL}/api/health`));
-    results.push(await testEndpoint('Auth Sync (Unauthenticated)', `${PRODUCTION_URL}/api/auth/sync-user`, {
-        method: 'POST',
-        expectStatus: 401,
-    }));
-    results.push(await testEndpoint('Billing Usage (Unauthenticated)', `${PRODUCTION_URL}/api/billing/usage`, {
-        expectStatus: 401,
-    }));
-    results.push(await testEndpoint('Transcribe (Unauthenticated)', `${PRODUCTION_URL}/api/transcribe`, {
-        method: 'POST',
-        expectStatus: 401,
-    }));
-    results.push(await testEndpoint('Analyze Image (Unauthenticated)', `${PRODUCTION_URL}/api/analyze-image`, {
-        method: 'POST',
-        expectStatus: 401,
-    }));
-    results.push(await testEndpoint('Generate Letter (Unauthenticated)', `${PRODUCTION_URL}/api/generate/letter`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ context: 'test', tone: 'warm', occasion: 'general' }),
-        expectStatus: 401,
-    }));
+    results.push(await testEndpoint('Handwriting Styles (Public)', `${PRODUCTION_URL}/api/handwriting-styles`));
+    
+    // Authenticated endpoints (should return 401)
+    const authEndpoints = [
+        { name: 'Auth Sync', path: '/api/auth/sync-user', method: 'POST' },
+        { name: 'Billing Usage', path: '/api/billing/usage', method: 'GET' },
+        { name: 'Transcribe', path: '/api/transcribe', method: 'POST' },
+        { name: 'Analyze Image', path: '/api/analyze-image', method: 'POST' },
+        { name: 'Generate Letter', path: '/api/generate/letter', method: 'POST', body: { context: 'test', tone: 'warm', occasion: 'general' } },
+        { name: 'Generate Card Image', path: '/api/generate/card-image', method: 'POST', body: { tone: 'warm', occasion: 'general' } },
+        { name: 'Generate Images', path: '/api/generate/images', method: 'POST', body: { occasion: 'general', tone: 'warm' } },
+        { name: 'Extract Address', path: '/api/extract-address', method: 'POST' },
+        { name: 'Orders GET', path: '/api/orders', method: 'GET' },
+        { name: 'Orders POST', path: '/api/orders', method: 'POST', body: {} },
+        { name: 'Thanks.io Products', path: '/api/thanks-io/products', method: 'GET' },
+        { name: 'Thanks.io Styles', path: '/api/thanks-io/styles', method: 'GET' },
+        { name: 'Thanks.io Send', path: '/api/thanks-io/send', method: 'POST', body: { productType: 'postcard', recipients: [], message: 'test' } },
+        { name: 'Stripe Checkout', path: '/api/stripe/checkout', method: 'POST', body: { priceId: 'test' } },
+        { name: 'Stripe Portal', path: '/api/stripe/portal', method: 'GET' },
+    ];
+
+    for (const endpoint of authEndpoints) {
+        const options = {
+            method: endpoint.method,
+            expectStatus: 401,
+        };
+        
+        if (endpoint.body) {
+            options.headers = { 'Content-Type': 'application/json' };
+            options.body = JSON.stringify(endpoint.body);
+        }
+        
+        results.push(await testEndpoint(`${endpoint.name} (Unauthenticated)`, `${PRODUCTION_URL}${endpoint.path}`, options));
+    }
 
     // Summary
     const passed = results.filter(r => r.success).length;

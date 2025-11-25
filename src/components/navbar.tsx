@@ -72,10 +72,16 @@ export function Navbar() {
                             Orders
                         </Link>
                         <Link
-                            href="/settings"
+                            href="/analytics"
                             className="text-sm font-medium transition-colors hover:text-primary"
                         >
-                            Settings
+                            Analytics
+                        </Link>
+                        <Link
+                            href="/account"
+                            className="text-sm font-medium transition-colors hover:text-primary"
+                        >
+                            Account
                         </Link>
                     </div>
                 )}

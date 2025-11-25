@@ -23,6 +23,17 @@ model User {
   stripeSubscriptionId   String?   @unique
   stripePriceId          String?
   stripeCurrentPeriodEnd DateTime?
+  
+  // Return Address (Phase 2)
+  returnName          String?
+  returnAddress1      String?
+  returnAddress2      String?
+  returnCity          String?
+  returnState         String?
+  returnZip           String?
+  returnCountry       String?  @default("US")
+  
+  mailOrders     MailOrder[]
 }
 
 model UserUsage {
@@ -100,6 +111,27 @@ model Order {
   thanksIoOrderId String?
   status          String   @default("pending")
   createdAt       DateTime @default(now())
+}
+
+model MailOrder {
+  id              String   @id @default(cuid())
+  userId          String
+  user            User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  thanksIoOrderId String   @unique
+  productType     String
+  status          String   @default("queued")
+  
+  recipientCount  Int
+  message         String   @db.Text
+  
+  cost            Decimal  @db.Decimal(10, 2)
+  
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+  
+  @@index([userId])
+  @@index([thanksIoOrderId])
 }
 
 model Event {

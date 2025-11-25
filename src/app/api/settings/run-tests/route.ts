@@ -169,6 +169,216 @@ export async function POST(request: NextRequest) {
             };
         }));
 
+        // Test: Generate Card Image (with auth)
+        apiTests.push(await runTest('Generate Card Image Endpoint (Auth Required)', async () => {
+            const response = await fetch(`${BASE_URL}/api/generate/card-image`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Cookie': request.headers.get('cookie') || '',
+                },
+                body: JSON.stringify({
+                    tone: 'warm',
+                    occasion: 'general',
+                }),
+            });
+            const data = await response.json();
+            const isExpected = response.status === 401 || response.status === 400;
+            return {
+                success: isExpected || response.ok,
+                error: isExpected ? undefined : `Status ${response.status}: ${data.error || 'Unexpected error'}`,
+                details: { status: response.status, expected: isExpected },
+                logs: [`Status: ${response.status}`, `Expected: ${isExpected ? 'Yes (401/400)' : 'No'}`],
+            };
+        }));
+
+        // Test: Generate Images (with auth)
+        apiTests.push(await runTest('Generate Images Endpoint (Auth Required)', async () => {
+            const response = await fetch(`${BASE_URL}/api/generate/images`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Cookie': request.headers.get('cookie') || '',
+                },
+                body: JSON.stringify({
+                    occasion: 'general',
+                    tone: 'warm',
+                }),
+            });
+            const data = await response.json();
+            const isExpected = response.status === 401 || response.status === 400;
+            return {
+                success: isExpected || response.ok,
+                error: isExpected ? undefined : `Status ${response.status}: ${data.error || 'Unexpected error'}`,
+                details: { status: response.status, expected: isExpected },
+                logs: [`Status: ${response.status}`, `Expected: ${isExpected ? 'Yes (401/400)' : 'No'}`],
+            };
+        }));
+
+        // Test: Extract Address (with auth)
+        apiTests.push(await runTest('Extract Address Endpoint (Auth Required)', async () => {
+            const response = await fetch(`${BASE_URL}/api/extract-address`, {
+                method: 'POST',
+                headers: {
+                    'Cookie': request.headers.get('cookie') || '',
+                },
+            });
+            const data = await response.json();
+            const isExpected = response.status === 401 || response.status === 400;
+            return {
+                success: isExpected || response.ok,
+                error: isExpected ? undefined : `Status ${response.status}: ${data.error || 'Unexpected error'}`,
+                details: { status: response.status, expected: isExpected },
+                logs: [`Status: ${response.status}`, `Expected: ${isExpected ? 'Yes (401/400)' : 'No'}`],
+            };
+        }));
+
+        // Test: Orders GET (with auth)
+        apiTests.push(await runTest('Orders GET Endpoint (Auth Required)', async () => {
+            const response = await fetch(`${BASE_URL}/api/orders`, {
+                headers: {
+                    'Cookie': request.headers.get('cookie') || '',
+                },
+            });
+            const data = await response.json();
+            const isExpected = response.status === 401 || response.ok;
+            return {
+                success: isExpected,
+                error: isExpected ? undefined : `Status ${response.status}: ${data.error || 'Unexpected error'}`,
+                details: { status: response.status, expected: isExpected },
+                logs: [`Status: ${response.status}`, `Expected: ${isExpected ? 'Yes (200/401)' : 'No'}`],
+            };
+        }));
+
+        // Test: Orders POST (with auth)
+        apiTests.push(await runTest('Orders POST Endpoint (Auth Required)', async () => {
+            const response = await fetch(`${BASE_URL}/api/orders`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Cookie': request.headers.get('cookie') || '',
+                },
+                body: JSON.stringify({}),
+            });
+            const data = await response.json();
+            const isExpected = response.status === 401 || response.status === 400;
+            return {
+                success: isExpected || response.ok,
+                error: isExpected ? undefined : `Status ${response.status}: ${data.error || 'Unexpected error'}`,
+                details: { status: response.status, expected: isExpected },
+                logs: [`Status: ${response.status}`, `Expected: ${isExpected ? 'Yes (401/400)' : 'No'}`],
+            };
+        }));
+
+        // Test: Thanks.io Products (with auth)
+        apiTests.push(await runTest('Thanks.io Products Endpoint (Auth Required)', async () => {
+            const response = await fetch(`${BASE_URL}/api/thanks-io/products`, {
+                headers: {
+                    'Cookie': request.headers.get('cookie') || '',
+                },
+            });
+            const data = await response.json();
+            const isExpected = response.status === 401 || response.ok;
+            return {
+                success: isExpected,
+                error: isExpected ? undefined : `Status ${response.status}: ${data.error || 'Unexpected error'}`,
+                details: { status: response.status, expected: isExpected },
+                logs: [`Status: ${response.status}`, `Expected: ${isExpected ? 'Yes (200/401)' : 'No'}`],
+            };
+        }));
+
+        // Test: Thanks.io Styles (with auth)
+        apiTests.push(await runTest('Thanks.io Styles Endpoint (Auth Required)', async () => {
+            const response = await fetch(`${BASE_URL}/api/thanks-io/styles`, {
+                headers: {
+                    'Cookie': request.headers.get('cookie') || '',
+                },
+            });
+            const data = await response.json();
+            const isExpected = response.status === 401 || response.ok;
+            return {
+                success: isExpected,
+                error: isExpected ? undefined : `Status ${response.status}: ${data.error || 'Unexpected error'}`,
+                details: { status: response.status, expected: isExpected },
+                logs: [`Status: ${response.status}`, `Expected: ${isExpected ? 'Yes (200/401)' : 'No'}`],
+            };
+        }));
+
+        // Test: Thanks.io Send (with auth)
+        apiTests.push(await runTest('Thanks.io Send Endpoint (Auth Required)', async () => {
+            const response = await fetch(`${BASE_URL}/api/thanks-io/send`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Cookie': request.headers.get('cookie') || '',
+                },
+                body: JSON.stringify({
+                    productType: 'postcard',
+                    recipients: [],
+                    message: 'test',
+                }),
+            });
+            const data = await response.json();
+            const isExpected = response.status === 401 || response.status === 400;
+            return {
+                success: isExpected || response.ok,
+                error: isExpected ? undefined : `Status ${response.status}: ${data.error || 'Unexpected error'}`,
+                details: { status: response.status, expected: isExpected },
+                logs: [`Status: ${response.status}`, `Expected: ${isExpected ? 'Yes (401/400)' : 'No'}`],
+            };
+        }));
+
+        // Test: Stripe Checkout (with auth)
+        apiTests.push(await runTest('Stripe Checkout Endpoint (Auth Required)', async () => {
+            const response = await fetch(`${BASE_URL}/api/stripe/checkout`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Cookie': request.headers.get('cookie') || '',
+                },
+                body: JSON.stringify({
+                    priceId: 'test',
+                }),
+            });
+            const data = await response.json();
+            const isExpected = response.status === 401 || response.status === 400;
+            return {
+                success: isExpected || response.ok,
+                error: isExpected ? undefined : `Status ${response.status}: ${data.error || 'Unexpected error'}`,
+                details: { status: response.status, expected: isExpected },
+                logs: [`Status: ${response.status}`, `Expected: ${isExpected ? 'Yes (401/400)' : 'No'}`],
+            };
+        }));
+
+        // Test: Stripe Portal (with auth)
+        apiTests.push(await runTest('Stripe Portal Endpoint (Auth Required)', async () => {
+            const response = await fetch(`${BASE_URL}/api/stripe/portal`, {
+                headers: {
+                    'Cookie': request.headers.get('cookie') || '',
+                },
+            });
+            const data = await response.json();
+            const isExpected = response.status === 401 || response.status === 400;
+            return {
+                success: isExpected || response.ok,
+                error: isExpected ? undefined : `Status ${response.status}: ${data.error || 'Unexpected error'}`,
+                details: { status: response.status, expected: isExpected },
+                logs: [`Status: ${response.status}`, `Expected: ${isExpected ? 'Yes (401/400)' : 'No'}`],
+            };
+        }));
+
+        // Test: Handwriting Styles (public)
+        apiTests.push(await runTest('Handwriting Styles Endpoint (Public)', async () => {
+            const response = await fetch(`${BASE_URL}/api/handwriting-styles`);
+            const data = await response.json();
+            return {
+                success: response.ok,
+                error: response.ok ? undefined : `Status ${response.status}: ${data.error || 'Unknown error'}`,
+                details: { status: response.status },
+                logs: [`Status: ${response.status}`],
+            };
+        }));
+
         suites.push({
             name: 'API Endpoints',
             tests: apiTests,
