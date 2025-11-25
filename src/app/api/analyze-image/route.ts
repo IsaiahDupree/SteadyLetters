@@ -35,15 +35,25 @@ export async function POST(request: NextRequest) {
             );
         }
 
-        // Get or create user usage record
+        // Ensure user exists in Prisma
         const userId = user.id;
+        await prisma.user.upsert({
+            where: { id: userId },
+            update: {},
+            create: {
+                id: userId,
+                email: user.email!,
+            },
+        });
+
+        // Get or create user usage record
         let usage = await prisma.userUsage.findUnique({
             where: { userId },
         });
 
         if (!usage) {
             usage = await prisma.userUsage.create({
-                data: { userId },
+                data: { userId, tier: 'FREE' },
             });
         }
 

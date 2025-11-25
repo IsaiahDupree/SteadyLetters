@@ -23,21 +23,28 @@ export async function POST(request: NextRequest) {
             );
         }
 
-        // Verify user exists in Prisma
+        // Ensure user exists in Prisma and create UserUsage if needed
         const { prisma } = await import('@/lib/prisma');
-        let dbUser = await prisma.user.findUnique({
+        
+        // Use upsert to handle race conditions
+        await prisma.user.upsert({
             where: { id: user.id },
+            update: {}, // No update needed if exists
+            create: {
+                id: user.id,
+                email: user.email!,
+            },
         });
 
-        if (!dbUser) {
-            // Create user in Prisma if they don't exist
-            dbUser = await prisma.user.create({
-                data: {
-                    id: user.id,
-                    email: user.email!,
-                },
-            });
-        }
+        // Ensure UserUsage exists
+        await prisma.userUsage.upsert({
+            where: { userId: user.id },
+            update: {}, // No update needed if exists
+            create: {
+                userId: user.id,
+                tier: 'FREE',
+            },
+        });
 
         // Get or create Stripe customer
         const customerId = await getOrCreateStripeCustomer(user.id, user.email!);
@@ -61,10 +68,19 @@ export async function POST(request: NextRequest) {
         });
 
         return NextResponse.json({ url: session.url });
-    } catch (error) {
+    } catch (error: any) {
         console.error('Checkout session error:', error);
+        
+        // Provide more detailed error information in development
+        const errorMessage = process.env.NODE_ENV === 'development' 
+            ? error.message || 'Failed to create checkout session'
+            : 'Failed to create checkout session';
+        
         return NextResponse.json(
-            { error: 'Failed to create checkout session' },
+            { 
+                error: errorMessage,
+                ...(process.env.NODE_ENV === 'development' && { details: error.stack })
+            },
             { status: 500 }
         );
     }
