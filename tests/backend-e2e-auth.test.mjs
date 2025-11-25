@@ -5,7 +5,7 @@
  * payments, and letter tracking
  */
 
-import { describe, it, before } from 'node:test';
+import { describe, it, beforeAll } from '@jest/globals';
 import assert from 'node:assert';
 import { getTestUserSession, authenticatedPost, authenticatedFormPost } from './utils/auth-helper.mjs';
 import {
@@ -23,7 +23,7 @@ const baseUrl = process.env.NEXT_PUBLIC_URL || 'http://localhost:3000';
 
 let testSession = null;
 
-before(async () => {
+beforeAll(async () => {
     const { session, error } = await getTestUserSession();
     if (error) {
         throw new Error(`Failed to get test session: ${error.message}`);

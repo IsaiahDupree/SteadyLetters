@@ -8,7 +8,10 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
-    "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js"
+    "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js",
+    "test:local": "LOCAL_URL=http://localhost:3000 npm test -- tests/environment-comparison.test.mjs",
+    "test:production": "PRODUCTION_URL=https://www.steadyletters.com npm test -- tests/environment-comparison.test.mjs",
+    "test:compare": "npm run test:local && npm run test:production"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.2.2",

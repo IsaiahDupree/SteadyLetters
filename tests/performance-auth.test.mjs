@@ -3,7 +3,7 @@
  * Tests API response times and load handling
  */
 
-import { describe, it, before } from 'node:test';
+import { describe, it, beforeAll } from '@jest/globals';
 import assert from 'node:assert';
 import { performance } from 'node:perf_hooks';
 import { getTestUserSession, authenticatedPost, authenticatedFormPost } from './utils/auth-helper.mjs';
@@ -13,7 +13,7 @@ const baseUrl = process.env.NEXT_PUBLIC_URL || 'http://localhost:3000';
 
 let testSession = null;
 
-before(async () => {
+beforeAll(async () => {
     const { session, error } = await getTestUserSession();
     if (error) {
         throw new Error(`Failed to get test session: ${error.message}`);

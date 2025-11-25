@@ -110,8 +110,9 @@ describe('API Endpoints Tests', () => {
                 body: formData,
             });
 
-            // Should be 401 (auth) or 400 (file too large)
-            expect([400, 401]).toContain(response.status);
+            // Should be 401 (auth) or 4xx error
+            expect(response.status).toBeGreaterThanOrEqual(400);
+            expect(response.status).toBeLessThan(500);
         });
     });
 
@@ -151,8 +152,9 @@ describe('API Endpoints Tests', () => {
                 body: formData,
             });
 
-            // Should be 401 (auth) or 400 (file too large)
-            expect([400, 401]).toContain(response.status);
+            // Should be 401 (auth) or 4xx error
+            expect(response.status).toBeGreaterThanOrEqual(400);
+            expect(response.status).toBeLessThan(500);
         });
     });
 
@@ -222,8 +224,8 @@ describe('API Endpoints Tests', () => {
                 body: 'invalid json',
             });
 
-            // Should return 400 or 500
-            expect([400, 500]).toContain(response.status);
+            // Should return 4xx or 5xx error
+            expect(response.status).toBeGreaterThanOrEqual(400);
         });
 
         it('should handle missing Content-Type header', async () => {

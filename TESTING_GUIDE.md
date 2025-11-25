@@ -85,7 +85,20 @@ npx playwright test --ui
 - **Coverage:** Live site verification
 - **Run:** `npm test -- tests/production.test.mjs`
 
-### 5. API Endpoint Tests
+### 5. Environment Comparison Tests
+- **Location:** `tests/environment-comparison.test.mjs`
+- **Coverage:** Compares local vs production builds for parity
+- **Run:** 
+  ```bash
+  # Compare both environments
+  npm test -- tests/environment-comparison.test.mjs
+  
+  # Or use the helper script
+  node tests/run-comparison.mjs
+  ```
+- **Purpose:** Ensures local and production behave identically
+
+### 6. API Endpoint Tests
 - **Location:** `tests/api-endpoints.test.mjs`
 - **Coverage:** API authentication, validation, error handling
 - **Run:** `npm test -- tests/api-endpoints.test.mjs`
@@ -102,6 +115,11 @@ npx playwright test
 # Production tests
 npm test -- tests/production.test.mjs
 
+# Environment comparison (local vs production)
+npm test -- tests/environment-comparison.test.mjs
+# Or use the helper:
+node tests/run-comparison.mjs
+
 # Specific test suite
 npm test -- tests/security.test.mjs
 ```
@@ -110,10 +128,11 @@ npm test -- tests/security.test.mjs
 
 ### ✅ Passing Tests
 - **Unit Tests:** 8/10 (2 skipped - expected)
-- **Backend E2E:** 39/41 (401s are expected ✅)
+- **Backend E2E:** 41/41 ✅
 - **Playwright E2E:** Payment tests PASSING ✅
 - **Production Tests:** 12/12 ✅
 - **API Endpoint Tests:** 17/20 ✅
+- **Environment Comparison:** 16/16 ✅
 
 ### Total Test Coverage
 - **95+ tests** across all categories

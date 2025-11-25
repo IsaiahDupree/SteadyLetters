@@ -3,7 +3,7 @@
  * Tests api-auth, pricing-tiers, and other utility functions
  */
 
-import { describe, it } from 'node:test';
+import { describe, it } from '@jest/globals';
 import assert from 'node:assert';
 
 describe('API Auth Helper', () => {
