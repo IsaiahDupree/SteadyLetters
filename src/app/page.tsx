@@ -8,17 +8,17 @@ export default function HomePage() {
       {/* Hero Section */}
       <section className="container mx-auto px-4 py-20 md:py-32">
         <div className="text-center max-w-4xl mx-auto">
-          <h1 className="text-5xl md:text-7xl font-bold mb-6 bg-gradient-to-r from-primary to-purple-600 bg-clip-text text-transparent">
+          <h1 className="text-5xl md:text-7xl font-bold mb-6 bg-gradient-to-r from-primary to-violet-600 bg-clip-text text-transparent">
             Turn Your Thoughts Into Heartfelt Letters
           </h1>
           <p className="text-xl md:text-2xl text-muted-foreground mb-8">
             Speak, write, or show us an image—we'll create the perfect handwritten letter and send it anywhere.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Button asChild size="lg" className="text-lg px-8">
+            <Button asChild size="lg" className="text-lg px-8 h-14 bg-gradient-to-r from-primary to-violet-600 hover:from-primary/90 hover:to-violet-600/90 shadow-lg shadow-primary/20 hover:shadow-primary/30 transition-all hover:scale-105">
               <Link href="/generate">Start Free Trial</Link>
             </Button>
-            <Button asChild variant="outline" size="lg" className="text-lg px-8">
+            <Button asChild variant="outline" size="lg" className="text-lg px-8 h-14 hover:bg-muted/50 transition-all hover:scale-105">
               <Link href="/pricing">View Pricing</Link>
             </Button>
           </div>

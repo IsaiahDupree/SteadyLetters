@@ -12,14 +12,28 @@ export async function generateLetterContent(params: {
     occasion: Occasion;
     holiday?: string;
     imageAnalysis?: string;
+    length?: 'short' | 'medium' | 'long';
 }): Promise<string> {
-    const { context, tone, occasion, holiday, imageAnalysis } = params;
+    const { context, tone, occasion, holiday, imageAnalysis, length = 'medium' } = params;
 
     const occasionText = occasion === 'general' ? '' : `This is a ${occasion.replace('-', ' ')} letter.`;
     const holidayText = holiday ? `Apply a ${holiday} theme to the letter.` : '';
     const imageContext = imageAnalysis
         ? `Image Context: The user provided an image showing: ${imageAnalysis}. Incorporate relevant elements from this image into the letter in a natural way.`
         : '';
+
+    // Adjust length based on user selection
+    const lengthGuidelines = {
+        short: '50-100 words. Keep it brief and to the point.',
+        medium: '150-250 words. Standard letter length.',
+        long: '300-500 words. Detailed and comprehensive.',
+    };
+
+    const maxTokens = {
+        short: 200,
+        medium: 500,
+        long: 1000,
+    };
 
     const prompt = `You are writing a heartfelt handwritten letter.
 
@@ -30,7 +44,8 @@ ${holidayText}
 ${imageContext}
 
 Write a warm, personal letter suitable for sending via physical mail.
-Keep it concise (150-250 words). Include a greeting and closing.
+Length: ${lengthGuidelines[length]}
+Include a greeting and closing.
 Make it sound natural and human, not AI-generated.
 Do not include a date or recipient address.`;
 
@@ -38,7 +53,7 @@ Do not include a date or recipient address.`;
         model: 'gpt-4o',
         messages: [{ role: 'user', content: prompt }],
         temperature: 0.8,
-        max_tokens: 500,
+        max_tokens: maxTokens[length],
     });
 
     return completion.choices[0]?.message?.content || '';

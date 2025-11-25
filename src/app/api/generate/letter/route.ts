@@ -18,7 +18,7 @@ export async function POST(request: NextRequest) {
         }
 
         const body = await request.json();
-        const { context, tone, occasion, holiday, imageAnalysis } = body;
+        const { context, tone, occasion, holiday, imageAnalysis, length } = body;
 
         if (!context || !tone || !occasion) {
             return NextResponse.json(
@@ -71,6 +71,7 @@ export async function POST(request: NextRequest) {
             occasion,
             holiday,
             imageAnalysis,
+            length,
         });
 
         // Increment usage counter

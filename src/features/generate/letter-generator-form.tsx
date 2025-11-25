@@ -23,6 +23,7 @@ import { Checkbox } from '@/components/ui/checkbox';
 import { ImageSelector } from '@/components/image-selector';
 import { VoiceRecorder } from '@/components/voice-recorder';
 import { ImageUpload } from '@/components/image-upload';
+import { EnhancedLetterResult } from './enhanced-letter-result';
 import type { Tone, Occasion } from '@/lib/types';
 
 const tones: { value: Tone; label: string }[] = [
@@ -41,6 +42,12 @@ const occasions: { value: Occasion; label: string }[] = [
     { value: 'thank-you', label: 'Thank You' },
     { value: 'sympathy', label: 'Sympathy' },
     { value: 'get-well-soon', label: 'Get Well Soon' },
+];
+
+const letterLengths = [
+    { value: 'short', label: 'Short (50-100 words)', description: 'Quick note or greeting' },
+    { value: 'medium', label: 'Medium (150-250 words)', description: 'Standard letter' },
+    { value: 'long', label: 'Long (300-500 words)', description: 'Detailed message' },
 ];
 
 const holidays = [
@@ -63,7 +70,12 @@ export function LetterGeneratorForm() {
     const [selectedImage, setSelectedImage] = useState<string>('');
     const [voiceUsed, setVoiceUsed] = useState(false);
     const [imageAnalysis, setImageAnalysis] = useState('');
+    const [letterLength, setLetterLength] = useState<'short' | 'medium' | 'long'>('medium');
+    const [step, setStep] = useState(1);
     const router = useRouter();
+
+    const totalSteps = 2;
+    const isStep1Valid = context.trim().length > 0;
 
     const handleTranscription = (text: string) => {
         setContext(text);
@@ -90,6 +102,7 @@ export function LetterGeneratorForm() {
                     tone,
                     occasion,
                     holiday: applyHoliday ? holiday : undefined,
+                    length: letterLength,
                 }),
             });
 
@@ -106,6 +119,14 @@ export function LetterGeneratorForm() {
         } finally {
             setLoading(false);
         }
+    };
+
+    const handleNext = () => {
+        if (step < totalSteps) setStep(step + 1);
+    };
+
+    const handleBack = () => {
+        if (step > 1) setStep(step - 1);
     };
 
     const handleSaveTemplate = () => {
@@ -127,150 +148,256 @@ export function LetterGeneratorForm() {
     return (
         <div className="grid gap-6">
             <div className="grid gap-6 lg:grid-cols-2">
-                <Card>
+                <Card className="border-muted/40 shadow-xl shadow-primary/5 overflow-hidden relative">
+                    <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-primary/5 pointer-events-none" />
                     <CardHeader>
-                        <CardTitle>Generate Letter</CardTitle>
-                        <CardDescription>
-                            Let AI write a personalized letter for you
+                        <div className="flex items-center justify-between mb-2">
+                            <CardTitle className="text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-primary to-violet-600">
+                                Generate Letter
+                            </CardTitle>
+                            <span className="text-sm font-medium text-muted-foreground bg-muted/50 px-3 py-1 rounded-full">
+                                Step {step} of {totalSteps}
+                            </span>
+                        </div>
+                        <CardDescription className="text-base">
+                            {step === 1 ? 'How should we write this letter?' : 'Customize the style and tone'}
                         </CardDescription>
+                        {/* Progress Bar */}
+                        <div className="h-1 w-full bg-muted rounded-full mt-4 overflow-hidden">
+                            <div
+                                className="h-full bg-primary transition-all duration-500 ease-in-out"
+                                style={{ width: `${(step / totalSteps) * 100}%` }}
+                            />
+                        </div>
                     </CardHeader>
-                    <CardContent className="space-y-4">
-                        <div className="space-y-2">
-                            <Label>Option 1: Speak Your Context</Label>
-                            <VoiceRecorder onTranscriptionComplete={handleTranscription} />
-                        </div>
+                    <CardContent className="space-y-6 relative min-h-[400px]">
+                        {step === 1 && (
+                            <div className="space-y-6 animate-in slide-in-from-left-4 fade-in duration-300">
+                                <div className="space-y-3 p-4 rounded-xl bg-muted/30 border border-muted/40 transition-colors hover:bg-muted/50 group">
+                                    <Label className="text-base font-medium flex items-center gap-2">
+                                        <span className="flex h-6 w-6 items-center justify-center rounded-full bg-primary/10 text-primary text-xs">1</span>
+                                        Speak Your Context
+                                    </Label>
+                                    <VoiceRecorder onTranscriptionComplete={handleTranscription} />
+                                </div>
 
-                        <div className="space-y-2">
-                            <Label>Option 2: Upload an Image</Label>
-                            <ImageUpload onAnalysisComplete={handleImageAnalysis} />
-                        </div>
+                                <div className="space-y-3 p-4 rounded-xl bg-muted/30 border border-muted/40 transition-colors hover:bg-muted/50 group">
+                                    <Label className="text-base font-medium flex items-center gap-2">
+                                        <span className="flex h-6 w-6 items-center justify-center rounded-full bg-primary/10 text-primary text-xs">2</span>
+                                        Upload an Image
+                                    </Label>
+                                    <ImageUpload onAnalysisComplete={handleImageAnalysis} />
+                                </div>
 
-                        <div className="flex items-center">
-                            <div className="flex-1 border-t" />
-                            <span className="px-3 text-xs text-muted-foreground">OR</span>
-                            <div className="flex-1 border-t" />
-                        </div>
+                                <div className="flex items-center gap-4">
+                                    <div className="flex-1 h-px bg-gradient-to-r from-transparent via-border to-transparent" />
+                                    <span className="px-2 text-xs font-medium text-muted-foreground uppercase tracking-wider">OR</span>
+                                    <div className="flex-1 h-px bg-gradient-to-r from-transparent via-border to-transparent" />
+                                </div>
 
-                        <div className="space-y-2">
-                            <Label htmlFor="context">
-                                Option 3: Type Your Context
-                                {voiceUsed && <span className="text-primary ml-2">✓ Voice transcription loaded</span>}
-                            </Label>
-                            <Textarea
-                                id="context"
-                                placeholder="E.g., Thank them for their support this year..."
-                                value={context}
-                                onChange={(e) => {
-                                    setContext(e.target.value);
-                                    setVoiceUsed(false);
-                                }}
-                                rows={5}
-                            />
-                        </div>
-
-                        <div className="space-y-2">
-                            <Label htmlFor="tone">Tone</Label>
-                            <Select value={tone} onValueChange={(v) => setTone(v as Tone)}>
-                                <SelectTrigger id="tone">
-                                    <SelectValue />
-                                </SelectTrigger>
-                                <SelectContent>
-                                    {tones.map((t) => (
-                                        <SelectItem key={t.value} value={t.value}>
-                                            {t.label}
-                                        </SelectItem>
-                                    ))}
-                                </SelectContent>
-                            </Select>
-                        </div>
-
-                        <div className="space-y-2">
-                            <Label htmlFor="occasion">Occasion</Label>
-                            <Select value={occasion} onValueChange={(v) => setOccasion(v as Occasion)}>
-                                <SelectTrigger id="occasion">
-                                    <SelectValue />
-                                </SelectTrigger>
-                                <SelectContent>
-                                    {occasions.map((o) => (
-                                        <SelectItem key={o.value} value={o.value}>
-                                            {o.label}
-                                        </SelectItem>
-                                    ))}
-                                </SelectContent>
-                            </Select>
-                        </div>
-
-                        <div className="flex items-center space-x-2">
-                            <Checkbox
-                                id="holiday"
-                                checked={applyHoliday}
-                                onCheckedChange={(checked) => setApplyHoliday(checked as boolean)}
-                            />
-                            <Label htmlFor="holiday" className="cursor-pointer">
-                                Apply holiday theme
-                            </Label>
-                        </div>
-
-                        {applyHoliday && (
-                            <div className="space-y-2">
-                                <Label htmlFor="holiday-select">Holiday</Label>
-                                <Select value={holiday} onValueChange={setHoliday}>
-                                    <SelectTrigger id="holiday-select">
-                                        <SelectValue />
-                                    </SelectTrigger>
-                                    <SelectContent>
-                                        {holidays.map((h) => (
-                                            <SelectItem key={h} value={h}>
-                                                {h}
-                                            </SelectItem>
-                                        ))}
-                                    </SelectContent>
-                                </Select>
+                                <div className="space-y-3">
+                                    <Label htmlFor="context" className="text-base font-medium flex items-center gap-2">
+                                        <span className="flex h-6 w-6 items-center justify-center rounded-full bg-primary/10 text-primary text-xs">3</span>
+                                        Type Your Context
+                                        {voiceUsed && (
+                                            <span className="text-xs font-normal px-2 py-0.5 rounded-full bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400 animate-in fade-in zoom-in">
+                                                ✓ Voice loaded
+                                            </span>
+                                        )}
+                                    </Label>
+                                    <Textarea
+                                        id="context"
+                                        placeholder="E.g., Thank them for their support this year..."
+                                        value={context}
+                                        onChange={(e) => {
+                                            setContext(e.target.value);
+                                            setVoiceUsed(false);
+                                        }}
+                                        rows={5}
+                                        className="resize-none focus-visible:ring-primary/30 transition-shadow"
+                                    />
+                                </div>
                             </div>
                         )}
 
-                        <Button
-                            onClick={handleGenerate}
-                            disabled={loading || !context.trim()}
-                            className="w-full"
-                        >
-                            {loading ? 'Generating...' : 'Generate Letter'}
-                        </Button>
+                        {step === 2 && (
+                            <div className="space-y-6 animate-in slide-in-from-right-4 fade-in duration-300">
+                                <div className="grid grid-cols-2 gap-4">
+                                    <div className="space-y-2">
+                                        <Label htmlFor="tone">Tone</Label>
+                                        <Select value={tone} onValueChange={(v) => setTone(v as Tone)}>
+                                            <SelectTrigger id="tone" className="transition-all hover:border-primary/50">
+                                                <SelectValue />
+                                            </SelectTrigger>
+                                            <SelectContent>
+                                                {tones.map((t) => (
+                                                    <SelectItem key={t.value} value={t.value}>
+                                                        {t.label}
+                                                    </SelectItem>
+                                                ))}
+                                            </SelectContent>
+                                        </Select>
+                                    </div>
+
+                                    <div className="space-y-2">
+                                        <Label htmlFor="occasion">Occasion</Label>
+                                        <Select value={occasion} onValueChange={(v) => setOccasion(v as Occasion)}>
+                                            <SelectTrigger id="occasion" className="transition-all hover:border-primary/50">
+                                                <SelectValue />
+                                            </SelectTrigger>
+                                            <SelectContent>
+                                                {occasions.map((o) => (
+                                                    <SelectItem key={o.value} value={o.value}>
+                                                        {o.label}
+                                                    </SelectItem>
+                                                ))}
+                                            </SelectContent>
+                                        </Select>
+                                    </div>
+                                </div>
+
+                                <div className="flex items-center space-x-2 p-3 rounded-lg border border-transparent hover:bg-muted/30 transition-colors">
+                                    <Checkbox
+                                        id="holiday"
+                                        checked={applyHoliday}
+                                        onCheckedChange={(checked) => setApplyHoliday(checked as boolean)}
+                                        className="data-[state=checked]:bg-primary data-[state=checked]:border-primary"
+                                    />
+                                    <Label htmlFor="holiday" className="cursor-pointer flex-1">
+                                        Apply holiday theme
+                                    </Label>
+                                </div>
+
+                                {applyHoliday && (
+                                    <div className="space-y-2 animate-in slide-in-from-top-2 fade-in duration-200">
+                                        <Label htmlFor="holiday-select">Holiday</Label>
+                                        <Select value={holiday} onValueChange={setHoliday}>
+                                            <SelectTrigger id="holiday-select">
+                                                <SelectValue />
+                                            </SelectTrigger>
+                                            <SelectContent>
+                                                {holidays.map((h) => (
+                                                    <SelectItem key={h} value={h}>
+                                                        {h}
+                                                    </SelectItem>
+                                                ))}
+                                            </SelectContent>
+                                        </Select>
+                                    </div>
+                                )}
+
+                                <div className="space-y-2">
+                                    <Label htmlFor="length">Letter Length</Label>
+                                    <Select value={letterLength} onValueChange={(v) => setLetterLength(v as 'short' | 'medium' | 'long')}>
+                                        <SelectTrigger id="length" className="transition-all hover:border-primary/50">
+                                            <SelectValue />
+                                        </SelectTrigger>
+                                        <SelectContent>
+                                            {letterLengths.map((l) => (
+                                                <SelectItem key={l.value} value={l.value}>
+                                                    <div className="flex flex-col py-1">
+                                                        <span className="font-medium">{l.label}</span>
+                                                        <span className="text-xs text-muted-foreground">{l.description}</span>
+                                                    </div>
+                                                </SelectItem>
+                                            ))}
+                                        </SelectContent>
+                                    </Select>
+                                </div>
+                            </div>
+                        )}
+
+                        <div className="flex gap-3 pt-4">
+                            {step > 1 && (
+                                <Button
+                                    variant="outline"
+                                    onClick={handleBack}
+                                    className="flex-1"
+                                >
+                                    Back
+                                </Button>
+                            )}
+                            {step < totalSteps ? (
+                                <Button
+                                    onClick={handleNext}
+                                    disabled={!isStep1Valid}
+                                    className="flex-1 bg-primary hover:bg-primary/90"
+                                >
+                                    Next Step
+                                </Button>
+                            ) : (
+                                <Button
+                                    onClick={handleGenerate}
+                                    disabled={loading || !context.trim()}
+                                    className="flex-1 h-10 text-base font-medium bg-gradient-to-r from-primary to-violet-600 hover:from-primary/90 hover:to-violet-600/90 shadow-lg shadow-primary/20 transition-all hover:scale-[1.01] hover:shadow-primary/30 disabled:opacity-50 disabled:hover:scale-100"
+                                >
+                                    {loading ? (
+                                        <span className="flex items-center gap-2">
+                                            <span className="h-4 w-4 animate-spin rounded-full border-2 border-current border-t-transparent" />
+                                            Generating...
+                                        </span>
+                                    ) : (
+                                        'Generate Letter'
+                                    )}
+                                </Button>
+                            )}
+                        </div>
                     </CardContent>
                 </Card>
 
-                <Card>
-                    <CardHeader>
-                        <CardTitle>Generated Letter</CardTitle>
-                        <CardDescription>
-                            Preview and save your AI-generated content
-                        </CardDescription>
-                    </CardHeader>
-                    <CardContent>
-                        {generatedLetter ? (
-                            <div className="space-y-4">
-                                <div className="whitespace-pre-wrap rounded-lg border p-4 min-h-[300px]">
-                                    {generatedLetter}
-                                </div>
-                                <Button onClick={handleSaveTemplate} className="w-full">
-                                    Save as Template
-                                </Button>
-                            </div>
-                        ) : (
+                {!generatedLetter ? (
+                    <Card>
+                        <CardHeader>
+                            <CardTitle>Generated Letter</CardTitle>
+                            <CardDescription>
+                                Preview and save your AI-generated content
+                            </CardDescription>
+                        </CardHeader>
+                        <CardContent>
                             <div className="flex items-center justify-center min-h-[300px] text-muted-foreground">
                                 Your generated letter will appear here
                             </div>
-                        )}
-                    </CardContent>
-                </Card>
+                        </CardContent>
+                    </Card>
+                ) : null}
             </div>
 
             {generatedLetter && (
-                <ImageSelector
-                    tone={tone}
-                    occasion={occasion}
-                    holiday={applyHoliday ? holiday : undefined}
-                    onSelect={setSelectedImage}
+                <EnhancedLetterResult
+                    initialLetter={generatedLetter}
+                    onSave={(letter, options) => {
+                        // Save with all options
+                        const params = new URLSearchParams({
+                            generated: 'true',
+                            content: letter,
+                            tone,
+                            occasion,
+                            handwriting: options.handwriting,
+                            cardStyle: options.cardStyle,
+                            envelope: options.envelope,
+                        });
+
+                        if (options.frontImage) {
+                            params.append('frontImage', options.frontImage);
+                        }
+
+                        router.push(`/templates?${params.toString()}`);
+                    }}
+                    onSendNow={(letter, options) => {
+                        // Navigate to send page with all options
+                        const params = new URLSearchParams({
+                            content: letter,
+                            handwriting: options.handwriting,
+                            cardStyle: options.cardStyle,
+                            envelope: options.envelope,
+                        });
+
+                        if (options.frontImage) {
+                            params.append('frontImage', options.frontImage);
+                        }
+
+                        router.push(`/send?${params.toString()}`);
+                    }}
                 />
             )}
         </div>

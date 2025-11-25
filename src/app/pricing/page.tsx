@@ -40,7 +40,10 @@ export default function PricingPage() {
             // Redirect to Stripe Checkout
             window.location.href = data.url;
         } catch (error) {
-            console.error('Checkout error:', error);
+            // Only log in development
+            if (process.env.NODE_ENV === 'development') {
+                console.error('Checkout error:', error);
+            }
             alert('Failed to start checkout. Please try again.');
             setLoading(null);
         }

@@ -2,9 +2,21 @@ import { NextRequest, NextResponse } from 'next/server';
 import { generateCardImage } from '@/lib/openai';
 import { prisma } from '@/lib/prisma';
 import { canGenerate } from '@/lib/tiers';
+import { trackEvent } from '@/lib/events';
+import { getAuthenticatedUser } from '@/lib/api-auth';
 
 export async function POST(request: NextRequest) {
     try {
+        // Get authenticated user
+        const user = await getAuthenticatedUser(request);
+
+        if (!user) {
+            return NextResponse.json(
+                { error: 'Unauthorized. Please sign in to generate images.' },
+                { status: 401 }
+            );
+        }
+
         const body = await request.json();
         const { occasion, tone, holiday, imageAnalysis } = body;
 
@@ -15,21 +27,37 @@ export async function POST(request: NextRequest) {
             );
         }
 
+        // Ensure user exists in Prisma
+        const userId = user.id;
+        await prisma.user.upsert({
+            where: { id: userId },
+            update: {}, // No update needed if exists
+            create: {
+                id: userId,
+                email: user.email!,
+            },
+        });
+
         // Get or create user usage record
-        const userId = 'default-user'; // TODO: Get from auth
         let usage = await prisma.userUsage.findUnique({
             where: { userId },
         });
 
         if (!usage) {
             usage = await prisma.userUsage.create({
-                data: { userId },
+                data: { userId, tier: 'FREE' },
             });
         }
 
         // Check if user can generate images (need 4 credits for 4 images)
         const canGenerateImages = canGenerate(usage, 'image');
         if (!canGenerateImages) {
+            await trackEvent({
+                userId,
+                eventType: 'limit_reached',
+                metadata: { type: 'image_generation', tier: usage.tier },
+            });
+
             return NextResponse.json(
                 { error: 'You have reached your image generation limit. Please upgrade your plan.' },
                 { status: 403 }
@@ -64,11 +92,36 @@ export async function POST(request: NextRequest) {
             },
         });
 
+        // Track event for each image generated
+        for (let i = 0; i < validImages.length; i++) {
+            await trackEvent({
+                userId,
+                eventType: 'image_generated',
+                metadata: {
+                    occasion,
+                    tone,
+                    tier: usage.tier,
+                },
+            });
+        }
+
         return NextResponse.json({ images: validImages });
-    } catch (error) {
+    } catch (error: any) {
         console.error('Failed to generate images:', error);
+        
+        // Provide more detailed error in development
+        const errorMessage = process.env.NODE_ENV === 'development'
+            ? error.message || 'Failed to generate images'
+            : 'Failed to generate images. Please try again.';
+        
         return NextResponse.json(
-            { error: 'Failed to generate images. Please try again.' },
+            { 
+                error: errorMessage,
+                ...(process.env.NODE_ENV === 'development' && { 
+                    details: error.stack,
+                    type: error.constructor?.name 
+                })
+            },
             { status: 500 }
         );
     }
