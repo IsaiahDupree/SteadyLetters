@@ -91,13 +91,16 @@ export const config = {
     matcher: [
         /*
          * Match all request paths except for the ones starting with:
-         * - /api (API routes - MUST be excluded)
+         * - /api (API routes - MUST be excluded via early return in middleware function)
          * - _next/static (static files)
          * - _next/image (image optimization files)
          * - favicon.ico (favicon file)
          * - site.webmanifest (manifest file)
          * - logo.png and other image files
+         * 
+         * Note: We use early return in middleware function to skip /api routes
+         * because the matcher pattern cannot reliably exclude them
          */
-        '/((?!api/|_next/static|_next/image|favicon.ico|site.webmanifest|logo.png|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)',
+        '/((?!_next/static|_next/image|favicon.ico|site.webmanifest|logo.png|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)',
     ],
 };
