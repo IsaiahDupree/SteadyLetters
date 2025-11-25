@@ -11,7 +11,12 @@
     "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js",
     "test:local": "LOCAL_URL=http://localhost:3000 npm test -- tests/environment-comparison.test.mjs",
     "test:production": "PRODUCTION_URL=https://www.steadyletters.com npm test -- tests/environment-comparison.test.mjs",
-    "test:compare": "npm run test:local && npm run test:production"
+    "test:compare": "npm run test:local && npm run test:production",
+    "test:e2e": "playwright test",
+    "test:e2e:local": "playwright test --project=local",
+    "test:e2e:production": "TEST_ENV=production playwright test --project=production",
+    "test:e2e:both": "playwright test --project=local && TEST_ENV=production playwright test --project=production",
+    "test:all": "npm test && npm run test:e2e:local"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.2.2",

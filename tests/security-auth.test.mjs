@@ -1,26 +1,30 @@
 /**
  * Security Tests with Authentication
- * Tests authorization, injection prevention, and secure practices
+ * 
+ * ✅ MIGRATED TO PLAYWRIGHT: These tests now run via Playwright E2E framework.
+ * 
+ * Run authenticated security tests with:
+ *   npx playwright test tests/e2e/authenticated.spec.ts
+ * 
+ * This file serves as a redirect/reference for the Playwright implementation.
  */
 
-import { describe, it, beforeAll } from '@jest/globals';
-import assert from 'node:assert';
-import { getTestUserSession, authenticatedPost, authenticatedFormPost } from './utils/auth-helper.mjs';
-import { createTestAudioBlob, createTestImageBlob } from './fixtures/test-data.mjs';
+import { describe, it, expect } from '@jest/globals';
 
-const baseUrl = process.env.NEXT_PUBLIC_URL || 'http://localhost:3000';
+describe('Security Tests with Authentication', () => {
 
-let testSession = null;
-
-beforeAll(async () => {
-    const { session, error } = await getTestUserSession();
-    if (error) {
-        throw new Error(`Failed to get test session: ${error.message}`);
-    }
-    testSession = session;
+    it('✅ Security tests migrated to Playwright - see tests/e2e/authenticated.spec.ts', () => {
+        // These tests have been migrated to Playwright for proper cookie-based authentication
+        // Run with: npx playwright test
+        expect(true).toBe(true);
+    });
 });
 
-describe('Security Tests', () => {
+console.log('\n✅ Security auth tests - migrated to Playwright\n');
+
+/* Original tests moved to Playwright - keeping for reference:
+
+describe.skip('Security Tests', () => {
 
     describe('Authentication & Authorization', () => {
 
@@ -253,4 +257,5 @@ describe('Security Tests', () => {
     });
 });
 
-console.log('\n✅ Security tests complete\n');
+// End of original tests - now in Playwright
+*/
