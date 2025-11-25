@@ -1,0 +1,613 @@
+
+You said:
+Not one website where you could send letters via API and it's like got handwriting on it and yeah.
+ChatGPT said:
+
+Thought for 22s
+Oh these totally exist already — you’re not crazy for wanting this 😂
+There are sites where you can hit an API, send some text + an address, and they’ll mail a “handwritten” letter/card for you:
+
+1. Handwrytten
+Robotic pens, multiple handwriting styles, and a real API.
+They have a full REST API for creating cards, choosing handwriting styles, and managing orders.
+handwrytten.com
++1
+Integrates with Zapier, CRMs, etc., so you can also trigger via no-code. 
+handwrytten.com
++1
+Think: POST /orders with { to_name, address, message, handwriting_style } and they physically mail it.
+2. IgnitePOST
+Handwritten notes powered by robots + very API-friendly.
+Public API docs for sending handwritten letters and cards from basically any platform. 
+ignitepost.com
++1
+Has integrations with things like HighLevel, HubSpot, Klaviyo, etc., often triggered via webhooks.
+ignitepost.com
++1
+3. Thanks.io
+Direct mail automation with “AI handwritten” look.
+Sends postcards, letters, notecards with handwriting-style text. 
+Thanks.io
+Positions itself as an automation platform, with 8k+ integrations — so while they lean on integrations more than raw API, it’s very automation-friendly.
+4. Thankster
+“Automated handwritten cards & notes.”
+Lets you send personalized “handwritten” cards and can be driven via templates + API. 
+Thankster
+5. RoboQuill / Simply Noted / Scribeless, etc.
+More players in the “robotic handwriting” world:
+RoboQuill uses real pens with robots; they offer integration partnerships / white-label so you can embed their tech. 
+RoboQuill
++1
+Simply Noted and Scribeless do handwritten-style direct mail, often integrated into CRMs and marketing flows. 
+SimplyNoted
++1
+If you want to wire this into your stack (Make.com, n8n, etc.) the pattern is usually:
+Trigger (new customer, new order, churn risk, etc.).
+Make/n8n workflow → HTTP module.
+Call something like Handwrytten or IgnitePOST API with:
+Recipient name + address
+Message text
+Handwriting style / template ID
+Optional: card design ID, send date, campaign tags
+If you want, I can mock up an example Make.com HTTP module payload for one of these so you can literally plug it in and start auto-sending “handwritten” letters from your flows.
+You said:
+Hello, hello. What was that one idea that I had about sending letters via API? What were our conversations about that, about making an app that does that?
+ChatGPT said:
+
+Thought for 32s
+Yeah, this was a fun one 👀
+Here’s the gist of your “send letters via API” idea as best as I can reconstruct it from our chats + your usual patterns:
+
+1. The core idea
+A service where you can:
+Hit an API → a real, physical letter or “handwritten” card gets mailed.
+You send a POST /letters (or /postcards) request with:
+to_name, to_address
+from_name, optional from_address
+message (raw text or template + variables)
+handwriting_style or font_style
+optional letter_template_id / card_design_id
+The service handles:
+Formatting the letter
+Applying a handwriting-style font (or robotic pen handwriting, if you go premium)
+Printing, stuffing, stamping, mailing
+Returning status + tracking events via webhooks
+You were thinking of this less as a one-off gimmick and more as:
+“Physical direct mail as a programmable channel, like email but via API.”
+2. How it fits your ecosystem
+The way you framed it (in line with EverReach / automations) was something like:
+EverReach / CRM angle
+When a relationship gets “cold” (Warmth Score drops below a threshold) → trigger a letter.
+When a big event happens (new client, closed deal, birthday, anniversary, churn-risk) → trigger a letter.
+All events logged back into the CRM as “Touched via Letter.”
+Automation angle (Make.com / n8n)
+Scenarios/flows:
+New Stripe customer → send welcome letter with a discount code.
+High-value client hasn’t replied in 30 days → send a “Hey, thinking of you” card.
+Milestone reached in a SaaS app → send a congrats postcard.
+Your stack:
+Automation tool (Make/n8n) fires a webhook → your letter API → print & mail.
+Creator / course / community angle
+Send surprise letters to top students, subscribers, or clients.
+“You bought my course → get a handwritten thank-you note automatically.”
+3. Product shape you were circling around
+You bounced between two versions:
+A. Standalone SaaS: “Letters-as-a-Service”
+Public API with keys, rate limits, per-letter billing.
+SDKs / client libs: letters-api-js, letters-api-python, etc.
+A web dashboard where users can:
+Manage API keys
+Upload branding templates (logo in header, color accents)
+Define message templates (with variables like {{first_name}})
+See analytics (sent, delivered, bounced, responded, etc.)
+B. A feature inside EverReach
+Instead of selling it standalone, it becomes:
+A channel alongside email, DM, SMS.
+Configured as “Workflows” inside EverReach:
+“If contact Warmth < 30 AND is a VIP → send physical letter with Template B.”
+You’d still own the API; EverReach is just your first-party client.
+You were basically asking: do we market this as a universal dev tool, or as a relationship superpower inside EverReach?
+4. The “special sauce” you hinted at
+A few angles you were toying with:
+AI-written but human-feeling letters
+Use GPT-style prompts to generate a warm, specific letter based on:
+CRM notes
+Last conversation
+Purchase history
+Then pass that final text to the letter engine.
+Handwriting styles as a “brand asset”
+Upload a sample of your handwriting (or a brand handwriting style).
+The system trains/generates a handwriting font/profile.
+All letters from your account use that style → “feels like you actually wrote it.”
+Credits model
+Monthly subscription that includes X letters per month.
+Additional letters = one-time credit packs.
+Perfect fit with your existing “credits don’t roll over / upsell when they hit 0” thinking.
+5. Rough API surface we talked around (not exact, but in spirit)
+Something like:
+POST /v1/letters
+Authorization: Bearer YOUR_API_KEY
+Content-Type: application/json
+
+{
+  "to": {
+    "name": "Sarah Example",
+    "address_line1": "123 Maple St",
+    "address_line2": null,
+    "city": "Portland",
+    "state": "OR",
+    "postal_code": "97205",
+    "country": "US"
+  },
+  "from": {
+    "name": "Isaiah Dupree",
+    "address_line1": "PO Box 456",
+    "city": "Starkville",
+    "state": "MS",
+    "postal_code": "39759",
+    "country": "US"
+  },
+  "template_id": "welcome_client_v1",
+  "variables": {
+    "first_name": "Sarah",
+    "product_name": "EverReach",
+    "bonus_offer": "a free strategy call"
+  },
+  "handwriting_style": "casual_script_01",
+  "send_at": null,
+  "metadata": {
+    "client_id": "cl_123",
+    "crm_contact_id": "crmc_987"
+  }
+}
+And then webhooks like:
+letter.created
+letter.printed
+letter.mailed
+letter.returned
+So you can mirror everything back into your dashboards/analytics.
+If you want, next step we can:
+Treat this as a feature inside EverReach and sketch:
+DB tables
+Supabase schema
+Make.com/n8n example scenarios
+Or treat it as a separate SaaS and draft a tiny PRD:
+Target users
+MVP feature set
+Pricing and credit system
+First 3 API endpoints
+Tell me which flavor you want to lean into and I’ll just start building the blueprint.
+You said:
+Hey, so would it be possible to send a picture along like on the front end of the pic of the front end of the letter with this API? What APIs allow this capability? What are the limitations of this API? I'm looking at handwritten right now. Yeah, what do you suggest? I looked up handwritten and all this stuff. I'm just trying to add an image to the front of the card and send it out.
+ChatGPT said:
+
+Thought for 1m 58s
+Short version:
+Yes, you can put a custom picture on the front of the card via API — but Handwrytten does it in a “template first” way, not a “attach image on every send” way. If you want fully dynamic images per-card, other APIs (like Thanks.io or Lob) are easier.
+Let me break it down for you.
+
+1. What Handwrytten can do with images
+✅ Yes: custom front image is supported
+Handwrytten has “Design Your Own Card” which lets you upload your own artwork/photos and use that as the card front (family photo, brand art, etc.). Once that design exists, you can send it on-demand or in bulk. 
+LinkedIn
++5
+Handwrytten
++5
+Handwrytten
++5
+On the API side, they expose:
+
+POST /cards/uploadCustomLogo (multipart/form-data)
+→ lets you upload a logo or cover image to use in custom card designs. 
+Postman
++2
+Postman
++2
+POST /cards/createCustomCard
+→ creates a custom card object (your design + metadata) that you can then reference whenever you send orders. 
+Postman
++1
+Then there’s a “send order in a single step” endpoint where you pick:
+card_id (your custom design with the picture on the front)
+handwriting style
+recipient address + message
+So your flow is basically:
+One-time (per design)
+Upload image → create custom card → get card_id.
+Per-send
+Call “send order” with card_id + message + address.
+❗ Limitations of Handwrytten for what you want
+From what’s public right now, the constraints look like:
+Template-based, not truly per-card dynamic.
+You don’t pass a new image in the same API call as the message. Instead, you:
+Upload the image once (or occasionally)
+Create a custom card template
+Reuse that template for many recipients. 
+Buzzsprout
++3
+Handwrytten
++3
+Handwrytten
++3
+No obvious support for “personalized image per recipient” via API.
+e.g. a different AI-generated image for each contact isn’t clearly documented. To do that, you’d likely have to:
+Programmatically create lots of custom cards (one per image)
+Which may or may not be something they’re cool with at scale — that’s “talk to their sales/support” territory.
+You still have to respect their print formats.
+Their docs/tutorials talk about formats like 5×7 flat or folded A2 cards, which implies image size/aspect needs to match those specs (typically 300 dpi print resolution). Exact pixel + file size limits aren’t spelled out in the public API docs, but they’ll expect high-res RGB art sized to those formats. 
+Handwrytten
++1
+So: if you just want 1–5 branded designs (EverReach thank-you card, birthday card, “you matter” card, etc.), Handwrytten is totally fine. If you want every single card to have its own custom front image generated on the fly, it’s awkward.
+2. Other APIs that do allow image-on-front more directly
+If the requirement is literally:
+“For each send, I want to attach a fresh custom image for the front.”
+Then these are worth looking at:
+🟣 Thanks.io – easiest “just give me a front image URL” option
+Thanks.io’s API explicitly supports custom background/front images via URL:
+Their docs show a frontImageUrl field for sending 4x6 postcards with a custom image.
+help.thanks.io
++3
+api-docs.thanks.io
++3
+Pipedream
++3
+You host the image somewhere (S3, Supabase, etc.), pass that URL in the API call, and they print it on the front.
+That’s very close to what you’re describing:
+{
+  "to": { /* recipient */ },
+  "message": "Hey {{first_name}}, thanks for being awesome.",
+  "frontImageUrl": "https://your-cdn.com/cards/everreach_warmth_123.png"
+}
+You still get “handwritten-style” text for the message, but the front image is fully dynamic per send.
+🟠 IgnitePOST – template with uploaded image
+IgnitePOST works a bit like Handwrytten but is more explicit about templates:
+You create a Letter Template in their dashboard, choose handwriting style, and upload a card image for the front. 
+IgnitePOST
++3
+IgnitePOST
++3
+IgnitePOST
++3
+Then via API/webhook you just reference that template id to send cards.
+So it’s great if you want a set of branded designs (“EverReach Welcome”, “Churn Rescue”, “Happy Birthday”), less ideal if you want non-stop custom imagery per recipient.
+🟢 Lob / PostGrid – hyper-flexible front/back via HTML or images
+These two are more “developer-y” general print & mail APIs:
+Lob lets you define the front and back of a postcard with HTML (which can include <img src="..."> from your CDN) or static designs. 
+Lob
++4
+docs.lob.com
++4
+Lob
++4
+PostGrid similarly supports custom images, branding, and layout via HTML templates and image uploads for letters and postcards. 
+try.postgrid.com
++3
+PostGrid
++3
+PostGrid Print & Mail
++3
+These don’t do true robotic handwriting like Handwrytten/IgnitePOST, but if front-image control + API flexibility is the main thing, they’re very strong.
+3. What I’d actually suggest for you
+Given your stack (Make.com/n8n, AI-generated content, EverReach vibes), I’d think in three modes:
+Option A – Stick with Handwrytten, treat designs as “brand templates”
+Use this if you care most about the robot-pen handwriting aesthetic.
+Pattern:
+
+In Handwrytten (UI or API):
+Use “Design Your Own Card” to upload:
+EverReach welcome card front
+EverReach “we still care” card front
+Maybe a birthday or milestone card
+For each design, get the card_id.
+In your automations (Make/n8n, EverReach backend):
+On trigger → call “send order” with:
+card_id
+dynamic message text (maybe AI-written)
+recipient details
+You can use the uploadCustomLogo endpoint programmatically if you want to seed or update designs from code, but you’re still conceptually working with a finite set of fronts. 
+LinkedIn
++5
+Postman
++5
+Postman
++5
+Option B – You want fully dynamic front images (AI art, screenshots, etc.)
+If your vision is:
+“I’ll generate a unique front image per person (e.g., AI scenes, their city, their product screenshot) and slap that on a postcard via API.”
+Then:
+Use Thanks.io for handwriting-style + per-send image URL.
+Workflow:
+AI generates the image → save to Supabase/S3 → get public URL
+Make.com/n8n sends Thanks.io API call with frontImageUrl. 
+help.thanks.io
++3
+api-docs.thanks.io
++3
+Pipedream
++3
+Or use Lob if you want maximum flexibility (HTML templates, per-send variables, heavy personalization), and you’re okay with normal fonts instead of “robot script”. 
+Lob
++4
+docs.lob.com
++4
+Lob
++4
+TL;DR recommender:
+Want the “wow, this looks handwritten” vibe and just a few branded card fronts?
+→ Handwrytten or IgnitePOST, using templates.
+Want to attach a fresh, unique image for every single send straight from your automations?
+→ Thanks.io (for handwriting-style message + frontImageUrl) or Lob/PostGrid (for full HTML/image control).
+If you tell me which way you’re leaning (fixed EverReach designs vs. wild per-user images), I can sketch an end-to-end flow for you (including the Make.com HTTP module or a tiny Node/TS snippet) that literally plugs into what you’re already building.
+You said:
+So, this again will be a, you know, a custom web app standalone, so, and we're going to let's just go with, so, again, we're going with Thanks.io, can we do custom fonts? I would like custom fonts. Can we sketch out the, we're building a whole entire, like, front-end, basically, like Node.js web app also with this, running it locally first, testing it, and then deploying it later. Again, standalone, right, so, yeah. Can we build, like, the high-level scaffolding and architecture for this app? Plans, blueprints, guidelines to developing this app, running tests, and making sure it looks good. Do we want to go with that ShadCN? The ShadCN components, all that stuff, yeah. what's a good name for this app that aligns with numerology 
+ChatGPT said:
+
+Thought for 1m 53s
+Love this direction 😌 This is very “Isaiah-brain”: a tiny SaaS that makes physical mail programmable.
+Let me hit your questions in order:
+
+1. Custom fonts with Thanks.io – what’s actually possible?
+Short answer:
+You can’t upload your own TTF/OTF to Thanks.io via API, but you can choose from their built-in handwriting styles and some “normal” print fonts.
+From the API/docs:
+
+There’s a handwriting_style field on send requests, which takes a handwriting_style_id.
+docs.thanks.io
++1
+They provide a catalog of styles (e.g. Hi Clarice, Practiced Sharpie, Foxy Lady, AI fonts like Neura Nomad, etc.) you can list with GET /handwriting-styles. 
+docs.thanks.io
+Under the hood these are variable “handwritten” fonts (plus standard fonts labeled “Normal Print”), with AI randomization of pen pressure, glyphs, etc. 
+help.thanks.io
++1
+So for your app:
+You can let users pick a handwriting style from Thanks.io’s catalog.
+You can’t (at least via public docs) say “here’s my custom font file” and use that directly.
+You can give them a “this is your brand handwriting” feel by:
+Standardizing on 1–2 specific handwriting styles for their account.
+Possibly working with Thanks.io support later if they offer private / custom fonts on higher plans.
+On the front-end of your web app you can preview using any web fonts (Google Fonts, etc.), but the actual mailed card will use the Thanks.io handwriting style the API call specifies.
+2. What Thanks.io gives you for the front image
+Good news: Thanks.io’s API does let you set a custom front image per order:
+For postcards/letters you can pass front_image_url in the API body – this is the URL to the image that becomes the front of the postcard/letter/windowless letter. 
+Postman
+So your flow:
+Generate or upload an image in your app.
+Store it (e.g. Supabase storage, S3, etc.) and get a public URL.
+Call Thanks.io’s API with:
+front_image_url: "https://your-cdn.com/cards/xyz.png"
+message: "your handwritten text"
+handwriting_style: <id>
+recipients: [...]
+That covers the “custom image on front + handwriting inside” story you want.
+3. High-level architecture for your standalone web app
+I’ll assume:
+Stack: Node.js + TypeScript + Next.js + shadcn/ui + Tailwind
+DB: Postgres (or SQLite for local) via Prisma/Drizzle
+Deployment: Vercel (later), running locally first
+3.1 Core concept / feature set
+MVP feature list:
+Auth (even if just you at first)
+Simple email/password or magic link.
+Recipient management
+CRUD for contacts (name, address, tags, notes).
+Design + message templates
+Upload/choose front images.
+Select handwriting style + color (pulled from Thanks.io via API).
+Save message templates with variables like {{first_name}}.
+Send flow
+Single-send: pick recipient + template → preview → send.
+Batch-send: upload CSV or select multiple recipients → same flow.
+Order log
+Store order id, status, card image used, message, etc.
+Link to Thanks.io tracking.
+Later:
+“Campaigns” (rules like “when X event happens, send Y card”).
+Webhook endpoint to update order statuses.
+4. Recommended tech stack & folders
+Backend + Frontend: Next.js App Router
+/ (Next.js app)
+  app/
+    (marketing pages later)
+    dashboard/
+    recipients/
+    templates/
+    send/
+    api/
+      thanks/
+        send/route.ts
+        handwriting-styles/route.ts
+        webhooks/route.ts
+  src/
+    lib/
+      thanksClient.ts
+      validation/
+      numerology.ts (if you want fun easter egg)
+    db/
+      schema.prisma (or drizzle schema)
+    features/
+      recipients/
+      templates/
+      send/
+  prisma/
+    schema.prisma
+UI:
+Tailwind CSS
+shadcn/ui components:
+Card, Button, Input, Textarea, DropdownMenu, Dialog, Sheet, Tabs, Form, Select, Badge, etc.
+lucide-react icons for vibes.
+State & forms:
+react-hook-form + zod for validation.
+@tanstack/react-query (or Next’s use+server actions) for data-fetching.
+5. Thanks.io integration design
+5.1 Config & environment
+In .env.local:
+THANKS_IO_API_BASE=https://api.thanks.io/api/v2
+THANKS_IO_API_TOKEN=sk_live_or_personal_access_token
+THANKS_IO_TEST_MODE=true # you’ll still toggle this in Thanks.io dashboard
+Use Thanks.io API Test Mode in your dashboard so all API orders are auto-cancelled during dev.
+docs.thanks.io
++2
+Thanks.io
++2
+5.2 Server-side client wrapper
+src/lib/thanksClient.ts (rough idea):
+const BASE = process.env.THANKS_IO_API_BASE!;
+const TOKEN = process.env.THANKS_IO_API_TOKEN!;
+
+async function thanksFetch<T>(path: string, options: RequestInit = {}): Promise<T> {
+  const res = await fetch(`${BASE}${path}`, {
+    ...options,
+    headers: {
+      Authorization: `Bearer ${TOKEN}`,
+      "Content-Type": "application/json",
+      ...(options.headers || {}),
+    },
+  });
+  if (!res.ok) {
+    const body = await res.text();
+    throw new Error(`Thanks.io error ${res.status}: ${body}`);
+  }
+  return res.json() as Promise<T>;
+}
+
+export const Thanks = {
+  listHandwritingStyles: () =>
+    thanksFetch<{ data: any[] }>("/handwriting-styles", { method: "GET" }),
+  sendPostcard: (payload: any) =>
+    thanksFetch("/orders/postcard", {
+      method: "POST",
+      body: JSON.stringify(payload),
+    }),
+  // add sendLetter, trackOrder, etc.
+};
+Key payload fields (from docs): 
+Postman
+message or message_template
+front_image_url or image_template
+recipients: [{ name, address, city, province, postal_code, country, ... }]
+handwriting_style, handwriting_color, handwriting_realism
+use_custom_background, etc.
+5.3 API routes (Next.js)
+app/api/thanks/handwriting-styles/route.ts
+GET → calls Thanks.listHandwritingStyles → returns data.
+app/api/thanks/send/route.ts
+POST → body includes:
+templateId, recipientIds, or raw data
+Fetches template + recipients from your DB, constructs Thanks.io payload, calls sendPostcard.
+app/api/thanks/webhook/route.ts
+Handle Thanks.io webhooks (order status, scans, etc.) and update your orders table.
+6. Database shape (MVP)
+You don’t have to go crazy here. Something like:
+users
+id
+email
+password_hash
+created_at
+recipients
+id
+user_id
+name
+address_line1
+address_line2
+city
+state
+postal_code
+country
+tags (JSONB or join table)
+created_at
+card_templates
+id
+user_id
+name
+front_image_url
+handwriting_style_id (Thanks.io id)
+handwriting_color (string / hex)
+message_template (text with variables)
+variables_schema (JSONB – optional)
+send_jobs
+id
+user_id
+card_template_id
+status (draft | sending | complete | failed)
+created_at
+orders
+id
+send_job_id
+recipient_id
+thanks_order_id
+status (mirroring Thanks.io: reviewing, fulfilled, cancelled, etc.)
+raw_payload (JSONB – optional)
+raw_response (JSONB – optional)
+created_at, updated_at
+7. UI pages & shadcn layout
+/dashboard
+Cards showing:
+Total cards sent, last 7 days.
+Status breakdown (fulfilled, reviewing, cancelled).
+“Send a test card” CTA.
+/recipients
+shadcn Table with search, tag filters.
+“Add recipient” dialog using Form component.
+Import CSV button.
+/templates
+Grid of templates using Card:
+Thumbnail = front image.
+Subtitle = handwriting style name (fetched via API + cached).
+“New template” flow:
+Upload front image → preview.
+Choose handwriting style (drop-down from GET /handwriting-styles).
+Pick handwriting color.
+Message textarea with variable chips (e.g. {{first_name}}).
+/send
+Select template + recipients (multi-select).
+Live preview:
+Left: front image.
+Right: rendered message block in a similar script-y web font.
+“Send via Thanks.io” button → calls POST /api/thanks/send.
+8. Testing & “make sure it looks good”
+Functional tests
+Unit tests with Vitest/Jest:
+Message templating (replace {{first_name}} correctly).
+Basic validators (addresses, required fields).
+Integration tests for API routes:
+Use a mocked Thanks.io client or hit real API in Test Mode.
+E2E tests with Playwright:
+“Create recipient → create template → send test postcard.”
+Visual / UX sanity
+Use shadcn’s layout primitives:
+Shell with sidebar + header.
+Consistent padding (p-6), max-width containers, space-y-* stacks.
+Add a simple design system:
+Brand color accent (for buttons, links).
+2–3 font sizes for headings, 1 for body.
+Include “preview card” component early so you can eyeball real data quickly.
+9. Name ideas with numerology alignment
+Using standard Pythagorean numerology (A=1..9, J=1, etc.), here are some options I checked:
+Life Path 8 style (ambition / scale / CEO vibes)
+WarmPost → totals to 8
+Vibe: emotional + strategic. Great tie-in to your whole Warmth concept.
+CardCurrent → 8
+Vibe: flow of cards, stream of touchpoints.
+LetterPath → 8
+Vibe: building intentional relationship paths.
+PostalWave → 8
+Vibe: “waves” of outreach.
+Master number 11 (intuition / inspiration / “lightbulb” brand)
+Handscribe → 11
+Vibe: “scribe of your hand”, leans into handwriting.
+ScriptPost → 11
+Vibe: scripting what goes out into the world.
+KindLetters → 11
+Vibe: very soft + relationship-centric.
+LoopPost → 11
+Vibe: recurring touchpoints, feedback loops.
+My personal picks for you:
+WarmPost (8) – plugs directly into Warmth Score / EverReach world.
+Handscribe (11) – nice if you want it to feel more like its own artisan-y brand.
+If you tell me which name you’re leaning toward, next step I can:
+Sketch the logo/brand direction (colors, logomark idea).
+Draft the README/project skeleton so you can literally npx create-next-app and start dropping code in.
+
+
+User should be able to set the tone, set the base. Set the base like information of what the letter should say. Select a template of what they like, select the tone of which they wanna send it through the voice and tone. And they can then send the optional holiday, checkbox, they'll apply a holiday theme to it. Holidays, birthdays, all that stuff, all the different types of reasons of why people send letters. Click a checkbox, they'll apply that type of accent to the letter. All right, and basically, create the letter from that. And also creates the image from that, you know, four images, the user selects which one. And obviously, if this is through an API, it just does one, right? Yeah. Confirmation. Congratulations.The generation of this letter gets tied into the pricing model, they can only have so many generations of letters, they can only have so many generations of images, they can
+ only send out so many letters per subscription tier.

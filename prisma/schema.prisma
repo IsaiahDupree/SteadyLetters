@@ -1,0 +1,103 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  createdAt DateTime @default(now())
+
+  recipients Recipient[]
+  templates  Template[]
+  orders     Order[]
+  usage      UserUsage?
+  events     Event[]
+  
+  // Stripe subscription fields
+  stripeCustomerId       String?   @unique
+  stripeSubscriptionId   String?   @unique
+  stripePriceId          String?
+  stripeCurrentPeriodEnd DateTime?
+}
+
+model UserUsage {
+  id                  String   @id @default(cuid())
+  userId              String   @unique
+  user                User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  letterGenerations   Int      @default(0)
+  imageGenerations    Int      @default(0)
+  lettersSent         Int      @default(0)
+  
+  tier                String   @default("FREE") // FREE, PRO, BUSINESS
+  resetAt             DateTime @default(now())
+  
+  createdAt           DateTime @default(now())
+  updatedAt           DateTime @updatedAt
+}
+
+model Recipient {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  name      String
+  address1  String
+  address2  String
+  city      String
+  state     String
+  zip       String
+  country   String   @default("US")
+  createdAt DateTime @default(now())
+
+  orders Order[]
+}
+
+model Template {
+  id                String   @id @default(cuid())
+  userId            String
+  user              User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  name              String
+  frontImageUrl     String?
+  message           String
+  handwritingStyle  String
+  
+  // AI generation fields
+  aiGenerated       Boolean  @default(false)
+  generationPrompt  String?
+  tone              String?
+  occasion          String?
+  
+  createdAt         DateTime @default(now())
+
+  orders Order[]
+}
+
+model Order {
+  id              String   @id @default(cuid())
+  userId          String
+  user            User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  recipientId     String
+  recipient       Recipient @relation(fields: [recipientId], references: [id])
+  templateId      String?
+  template        Template? @relation(fields: [templateId], references: [id])
+  thanksIoOrderId String?
+  status          String   @default("pending")
+  createdAt       DateTime @default(now())
+}
+
+model Event {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  eventType String
+  metadata  Json     @default("{}")
+  timestamp DateTime @default(now())
+  
+  @@index([userId, eventType])
+  @@index([timestamp])
+}
