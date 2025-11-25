@@ -5,6 +5,8 @@ import { Button } from "@/components/ui/button";
 import { useAuth } from "@/contexts/auth-context";
 import { useRouter } from "next/navigation";
 
+import { Logo } from "@/components/logo";
+
 export function Navbar() {
     const { user, loading, signOut } = useAuth();
     const router = useRouter();
@@ -14,10 +16,10 @@ export function Navbar() {
     };
 
     return (
-        <nav className="border-b">
+        <nav className="border-b bg-background/80 backdrop-blur-sm sticky top-0 z-50">
             <div className="flex h-16 items-center px-4 container mx-auto">
-                <Link href="/" className="font-bold text-xl mr-8">
-                    SteadyLetters
+                <Link href="/" className="mr-8 hover:opacity-90 transition-opacity">
+                    <Logo />
                 </Link>
                 {user && (
                     <div className="flex items-center space-x-4 lg:space-x-6 mx-6">

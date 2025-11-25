@@ -115,11 +115,13 @@ export function ImageUpload({ onAnalysisComplete }: ImageUploadProps) {
                 ) : (
                     <div className="space-y-4">
                         <div className="relative">
-                            <img
-                                src={imagePreview}
-                                alt="Uploaded preview"
-                                className="w-full h-64 object-cover rounded-lg"
-                            />
+                            {imagePreview && (
+                                <img
+                                    src={imagePreview}
+                                    alt="Uploaded preview"
+                                    className="w-full h-64 object-cover rounded-lg"
+                                />
+                            )}
                             <Button
                                 variant="destructive"
                                 size="icon"

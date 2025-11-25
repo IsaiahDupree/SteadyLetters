@@ -2,7 +2,7 @@
 
 import { Button } from '@/components/ui/button';
 import { Check } from 'lucide-react';
-import { STRIPE_PLANS } from '@/lib/stripe';
+import { STRIPE_PLANS } from '@/lib/pricing-tiers';
 
 interface PricingCardProps {
     tier: 'FREE' | 'PRO' | 'BUSINESS';
@@ -17,8 +17,8 @@ export function PricingCard({ tier, highlighted = false, onSelect }: PricingCard
     return (
         <div
             className={`relative rounded-2xl p-8 ${highlighted
-                    ? 'border-2 border-primary shadow-2xl scale-105'
-                    : 'border border-border shadow-lg'
+                ? 'border-2 border-primary shadow-2xl scale-105'
+                : 'border border-border shadow-lg'
                 } bg-card transition-all duration-300 hover:shadow-xl`}
         >
             {highlighted && (

@@ -10,7 +10,7 @@ import {
     CardTitle,
 } from '@/components/ui/card';
 import { Loader2, Check } from 'lucide-react';
-import type { Tone, Occasion } from '@/lib/openai';
+import type { Tone, Occasion } from '@/lib/types';
 
 interface ImageSelectorProps {
     tone: Tone;
@@ -94,8 +94,8 @@ export function ImageSelector({ tone, occasion, holiday, onSelect }: ImageSelect
                                     key={index}
                                     onClick={() => handleSelectImage(imageUrl)}
                                     className={`relative aspect-square rounded-lg overflow-hidden border-2 transition-all ${selectedImage === imageUrl
-                                            ? 'border-primary ring-2 ring-primary ring-offset-2'
-                                            : 'border-border hover:border-primary/50'
+                                        ? 'border-primary ring-2 ring-primary ring-offset-2'
+                                        : 'border-border hover:border-primary/50'
                                         }`}
                                 >
                                     {/* eslint-disable-next-line @next/next/no-img-element */}

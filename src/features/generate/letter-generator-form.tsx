@@ -23,7 +23,7 @@ import { Checkbox } from '@/components/ui/checkbox';
 import { ImageSelector } from '@/components/image-selector';
 import { VoiceRecorder } from '@/components/voice-recorder';
 import { ImageUpload } from '@/components/image-upload';
-import type { Tone, Occasion } from '@/lib/openai';
+import type { Tone, Occasion } from '@/lib/types';
 
 const tones: { value: Tone; label: string }[] = [
     { value: 'formal', label: 'Formal' },
@@ -140,6 +140,11 @@ export function LetterGeneratorForm() {
                             <VoiceRecorder onTranscriptionComplete={handleTranscription} />
                         </div>
 
+                        <div className="space-y-2">
+                            <Label>Option 2: Upload an Image</Label>
+                            <ImageUpload onAnalysisComplete={handleImageAnalysis} />
+                        </div>
+
                         <div className="flex items-center">
                             <div className="flex-1 border-t" />
                             <span className="px-3 text-xs text-muted-foreground">OR</span>
@@ -148,7 +153,7 @@ export function LetterGeneratorForm() {
 
                         <div className="space-y-2">
                             <Label htmlFor="context">
-                                Option 2: Type Your Context
+                                Option 3: Type Your Context
                                 {voiceUsed && <span className="text-primary ml-2">✓ Voice transcription loaded</span>}
                             </Label>
                             <Textarea

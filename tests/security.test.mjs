@@ -1,7 +1,7 @@
 import { describe, it, expect } from '@jest/globals';
 
 describe('Security Tests', () => {
-    const baseUrl = 'http://localhost:3001';
+    const baseUrl = 'http://localhost:3000';
 
     describe('Authentication Security', () => {
         it('should use secure password hashing', () => {

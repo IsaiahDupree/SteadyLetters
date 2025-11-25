@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { PricingCard } from '@/components/pricing-card';
-import { STRIPE_PLANS } from '@/lib/stripe';
+import { STRIPE_PLANS } from '@/lib/pricing-tiers';
 import { useRouter } from 'next/navigation';
 
 export default function PricingPage() {

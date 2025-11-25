@@ -1,0 +1,29 @@
+# Recent Status - Fixed Issues
+
+## Fixed (2025-11-24)
+
+### 1. Stripe Checkout 400 Error - "Missing required fields"
+**Cause**: Missing `NEXT_PUBLIC_STRIPE_PRO_PRICE_ID` and `NEXT_PUBLIC_STRIPE_BUSINESS_PRICE_ID` environment variables
+**Fix**: Added to `.env` file
+
+### 2. Wrong App URL
+**Cause**: `NEXT_PUBLIC_URL` was set to `http://localhost:3001` but dev server runs on port 3000
+**Fix**: Updated to `http://localhost:3000`
+
+### 3. React Warning - Empty String in img src
+**Cause**: `imagePreview` state initialized as empty string in `image-upload.tsx`
+**Fix**: Conditionally render img element only when `imagePreview` is truthy
+
+## Remaining Issues to Investigate
+
+### Transcribe API 500 Error
+- Check if local Supabase database is running on port 54422
+- Verify OpenAI API key is valid
+
+### Image Analysis API 500 Error  
+- Same as transcribe - likely database connectivity or OpenAI API issue
+
+## Next Steps
+1. Restart dev server to pick up new environment variables
+2. Run backend E2E tests to verify fixes
+3. Test Stripe checkout flow manually

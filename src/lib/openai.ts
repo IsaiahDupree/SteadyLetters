@@ -4,8 +4,7 @@ const openai = new OpenAI({
     apiKey: process.env.OPENAI_API_KEY,
 });
 
-export type Tone = 'formal' | 'casual' | 'warm' | 'professional' | 'friendly';
-export type Occasion = 'general' | 'birthday' | 'holiday' | 'congratulations' | 'thank-you' | 'sympathy' | 'get-well-soon';
+import type { Tone, Occasion } from '@/lib/types';
 
 export async function generateLetterContent(params: {
     context: string;

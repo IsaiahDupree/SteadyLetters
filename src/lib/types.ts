@@ -30,3 +30,6 @@ export type Order = {
     status: string;
     createdAt: Date;
 };
+
+export type Tone = 'formal' | 'casual' | 'warm' | 'professional' | 'friendly';
+export type Occasion = 'general' | 'birthday' | 'holiday' | 'congratulations' | 'thank-you' | 'sympathy' | 'get-well-soon';

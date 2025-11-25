@@ -1,7 +1,7 @@
 import { describe, it, expect } from '@jest/globals';
 
 describe('Performance Tests', () => {
-    const baseUrl = 'http://localhost:3001';
+    const baseUrl = 'http://localhost:3000';
 
     describe('Page Load Performance', () => {
         it('should load landing page within 2 seconds', async () => {

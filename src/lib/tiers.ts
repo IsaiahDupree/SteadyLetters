@@ -9,13 +9,13 @@ export const TIERS = {
         name: 'Pro',
         letterGenerations: 50,
         imageGenerations: 100,
-        lettersSent: 25,
+        lettersSent: 10, // Updated per tierresearch.txt
     },
     BUSINESS: {
         name: 'Business',
-        letterGenerations: -1, // unlimited
-        imageGenerations: -1, // unlimited
-        lettersSent: 100,
+        letterGenerations: 200, // Updated per tierresearch.txt
+        imageGenerations: 400, // Updated per tierresearch.txt
+        lettersSent: 50, // Updated per tierresearch.txt
     },
 } as const;
 

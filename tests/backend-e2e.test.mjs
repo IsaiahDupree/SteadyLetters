@@ -2,7 +2,7 @@ import { describe, it, expect, beforeAll } from '@jest/globals';
 
 // Backend E2E Tests - Testing API endpoints and backend functionality
 describe('Backend E2E Tests', () => {
-    const baseUrl = 'http://localhost:3001';
+    const baseUrl = 'http://localhost:3000';
 
     describe('API Health Checks', () => {
         it('should have server running', async () => {

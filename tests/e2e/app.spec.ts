@@ -16,15 +16,14 @@ test.describe('SteadyLetters E2E Tests', () => {
         test('pricing page displays all tiers', async ({ page }) => {
             await page.goto('/pricing');
 
-            // Check for all three pricing tiers
-            await expect(page.getByText('Free')).toBeVisible();
-            await expect(page.getByText('Pro')).toBeVisible();
-            await expect(page.getByText('Business')).toBeVisible();
+            // Check for tier names as text (they are h3 elements within cards)
+            await expect(page.getByText('Free', { exact: true }).first()).toBeVisible();
+            await expect(page.getByText('Pro', { exact: true }).first()).toBeVisible();
+            await expect(page.getByText('Business', { exact: true }).first()).toBeVisible();
 
             // Check for FAQ section
             await expect(page.getByRole('heading', { name: /frequently asked questions/i })).toBeVisible();
         });
-
         test('privacy policy page loads', async ({ page }) => {
             await page.goto('/privacy');
 
@@ -56,15 +55,17 @@ test.describe('SteadyLetters E2E Tests', () => {
         test('login page displays form', async ({ page }) => {
             await page.goto('/login');
 
-            // Check for login form elements
+            // Check form elements
             await expect(page.getByLabel(/email/i)).toBeVisible();
             await expect(page.getByLabel(/password/i)).toBeVisible();
             await expect(page.getByRole('button', { name: /log in/i })).toBeVisible();
 
-            // Check for signup link
-            await expect(page.getByRole('link', { name: /sign up/i })).toBeVisible();
-        });
+            // Check signup link (use first match to avoid strict mode)
+            await expect(page.getByRole('link', { name: /sign up/i }).first()).toBeVisible();
 
+            // Verify page title
+            await expect(page.getByRole('heading', { name: /welcome back/i })).toBeVisible();
+        });
         test('validates email format on signup', async ({ page }) => {
             await page.goto('/signup');
 
@@ -159,13 +160,15 @@ test.describe('SteadyLetters E2E Tests', () => {
         test('can navigate to signup from login', async ({ page }) => {
             await page.goto('/login');
 
-            // Click signup link
-            await page.getByRole('link', { name: /sign up/i }).click();
+            // Click signup link (use first to avoid strict mode violation)
+            await page.getByRole('link', { name: /sign up/i }).first().click();
 
             // Should be on signup page
             await expect(page).toHaveURL(/\/signup/);
+            await expect(page.getByRole('heading', { name: /create an account/i })).toBeVisible();
         });
     });
+
 
     test.describe('Responsive Design', () => {
         test('landing page is responsive on mobile', async ({ page }) => {
@@ -177,13 +180,14 @@ test.describe('SteadyLetters E2E Tests', () => {
         });
 
         test('pricing page is responsive on tablet', async ({ page }) => {
+            // Set tablet viewport
             await page.setViewportSize({ width: 768, height: 1024 });
             await page.goto('/pricing');
 
-            // All tiers should be visible
-            await expect(page.getByText('Free')).toBeVisible();
-            await expect(page.getByText('Pro')).toBeVisible();
-            await expect(page.getByText('Business')).toBeVisible();
+            // All tiers should be visible (use headings for reliability)
+            await expect(page.getByRole('heading', { name: /free/i })).toBeVisible();
+            await expect(page.getByRole('heading', { name: /pro/i })).toBeVisible();
+            await expect(page.getByRole('heading', { name: /business/i })).toBeVisible();
         });
     });
 
