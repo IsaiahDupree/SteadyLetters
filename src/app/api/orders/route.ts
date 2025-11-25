@@ -54,11 +54,11 @@ export async function POST(request: NextRequest) {
         }
 
         const body = await request.json();
-        const { recipientId, content, status = 'draft' } = body;
+        const { recipientId, templateId, status = 'draft' } = body;
 
-        if (!recipientId || !content) {
+        if (!recipientId) {
             return NextResponse.json(
-                { error: 'Missing required fields: recipientId, content' },
+                { error: 'Missing required field: recipientId' },
                 { status: 400 }
             );
         }
@@ -75,16 +75,31 @@ export async function POST(request: NextRequest) {
             );
         }
 
-        // Create order
+        // If templateId provided, verify it belongs to user
+        if (templateId) {
+            const template = await prisma.template.findUnique({
+                where: { id: templateId },
+            });
+
+            if (!template || template.userId !== user.id) {
+                return NextResponse.json(
+                    { error: 'Template not found or does not belong to user' },
+                    { status: 404 }
+                );
+            }
+        }
+
+        // Create order (content is stored in template, linked via templateId)
         const order = await prisma.order.create({
             data: {
                 userId: user.id,
                 recipientId,
-                content,
+                templateId: templateId || null,
                 status,
             },
             include: {
                 recipient: true,
+                template: true,
             },
         });
 

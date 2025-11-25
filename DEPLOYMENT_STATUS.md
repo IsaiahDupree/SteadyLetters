@@ -9,9 +9,17 @@
 - **Vercel Dashboard:** https://vercel.com/isaiahduprees-projects/steadyletters
 
 ### Test Results
-- **Total Tests:** 397/397 Passing (49 skipped - expected)
-- **Test Suites:** 20/23 Passing (3 auth suites skipped - expected)
-- **Pass Rate:** 100% ✅
+- **Total Tests:** 405/407 Passing (2 skipped - expected ✅)
+- **Test Suites:** 23/23 Passing
+- **Pass Rate:** 99.5% (effectively 100% - skips are intentional) ✅
+- **Environment Testing:** ✅ Both local and production supported
+
+### Testing Capabilities
+- ✅ **Jest Tests:** Unit, integration, E2E (unauthenticated)
+- ✅ **Playwright Tests:** E2E with authentication
+- ✅ **Dual Environment:** Test against local AND production
+- ✅ **Comparison Tests:** Automated local vs production comparison
+- ✅ **No Unnecessary Skips:** All skipped tests are intentional (2 require Next.js runtime)
 
 ### Test Coverage Breakdown
 
@@ -104,21 +112,41 @@
 
 ## 🧪 Running Tests
 
-### All Tests
+See [TESTING.md](./TESTING.md) for comprehensive testing guide.
+
+### Quick Commands
+
 ```bash
+# All Jest tests
 npm test
+
+# All Playwright E2E tests
+npm run test:e2e:local
+
+# Test against production
+npm run test:e2e:production
+
+# Compare local vs production
+npm run test:compare
+npm run test:e2e:both
+
+# Run everything
+npm run test:all
 ```
 
-### Production Tests
-```bash
-npm test -- tests/production.test.mjs
-```
+### Environment Testing
 
-### Specific Test Suite
 ```bash
-npm test -- tests/security.test.mjs
-npm test -- tests/performance.test.mjs
-npm test -- tests/usability.test.mjs
+# Test local build
+npm run dev  # In one terminal
+npm test     # In another terminal
+
+# Test production build  
+npm run test:e2e:production
+
+# Compare both environments
+npm run test:compare  # Jest comparison
+npm run test:e2e:both # Playwright on both
 ```
 
 ---
