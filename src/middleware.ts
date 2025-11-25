@@ -59,7 +59,7 @@ export async function middleware(request: NextRequest) {
     } = await supabase.auth.getSession();
 
     // Protected routes - require authentication
-    const protectedRoutes = ['/dashboard', '/generate', '/billing', '/orders', '/recipients', '/templates', '/send'];
+    const protectedRoutes = ['/dashboard', '/generate', '/billing', '/orders', '/recipients', '/templates', '/send', '/settings'];
     const isProtectedRoute = protectedRoutes.some(route =>
         request.nextUrl.pathname.startsWith(route)
     );

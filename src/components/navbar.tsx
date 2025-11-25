@@ -71,6 +71,12 @@ export function Navbar() {
                         >
                             Orders
                         </Link>
+                        <Link
+                            href="/settings"
+                            className="text-sm font-medium transition-colors hover:text-primary"
+                        >
+                            Settings
+                        </Link>
                     </div>
                 )}
                 <div className="ml-auto flex items-center space-x-4">
