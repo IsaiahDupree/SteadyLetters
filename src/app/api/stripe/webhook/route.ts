@@ -42,7 +42,7 @@ export async function POST(request: NextRequest) {
 
                 const subscription = await stripe.subscriptions.retrieve(
                     session.subscription as string
-                );
+                ) as Stripe.Subscription;
 
                 await prisma.user.update({
                     where: { id: userId },
