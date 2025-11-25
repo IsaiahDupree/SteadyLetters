@@ -35,7 +35,7 @@ export function canGenerate(usage: {
         case 'image':
             return tier.imageGenerations === -1 || usage.imageGenerations < tier.imageGenerations;
         case 'send':
-            return tier.lettersSent === -1 || usage.lettersSent < tier.lettersSent;
+            return usage.lettersSent < tier.lettersSent;
         default:
             return false;
     }
