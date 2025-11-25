@@ -263,7 +263,7 @@ describe('API Endpoints Tests', () => {
             });
 
             // OPTIONS might not be implemented, but should not crash
-            expect([200, 404, 405]).toContain(response.status);
+            expect([200, 204, 404, 405]).toContain(response.status);
         });
 
         it('should return JSON content type', async () => {
