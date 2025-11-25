@@ -100,7 +100,7 @@ describe('Authentication System', () => {
         });
 
         it('should clear session on logout', () => {
-            let session: any = { user: null, accessToken: null };
+            let session = { user: null, accessToken: null };
 
             // Simulate logout
             session = null;
