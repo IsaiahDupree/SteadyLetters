@@ -41,15 +41,18 @@ export async function POST(request: NextRequest) {
                 if (!userId) break;
 
                 const subscription = await stripe.subscriptions.retrieve(
-                    session.subscription as string
-                ) as Stripe.Subscription;
+                    session.subscription as string,
+                    { expand: ['items.data.price'] }
+                ) as any;
 
                 await prisma.user.update({
                     where: { id: userId },
                     data: {
                         stripeSubscriptionId: subscription.id,
                         stripePriceId: subscription.items.data[0].price.id,
-                        stripeCurrentPeriodEnd: new Date(subscription.current_period_end * 1000),
+                        stripeCurrentPeriodEnd: subscription.current_period_end 
+                            ? new Date(subscription.current_period_end * 1000)
+                            : null,
                     },
                 });
 
