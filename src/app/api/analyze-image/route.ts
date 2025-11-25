@@ -3,9 +3,20 @@ import { openai } from '@/lib/openai';
 import { prisma } from '@/lib/prisma';
 import { canGenerate } from '@/lib/tiers';
 import { trackEvent } from '@/lib/events';
+import { getAuthenticatedUser } from '@/lib/api-auth';
 
 export async function POST(request: NextRequest) {
     try {
+        // Get authenticated user
+        const user = await getAuthenticatedUser(request);
+
+        if (!user) {
+            return NextResponse.json(
+                { error: 'Unauthorized. Please sign in to use this feature.' },
+                { status: 401 }
+            );
+        }
+
         const formData = await request.formData();
         const imageFile = formData.get('image') as File;
 
@@ -25,7 +36,7 @@ export async function POST(request: NextRequest) {
         }
 
         // Get or create user usage record
-        const userId = 'default-user'; // TODO: Get from auth
+        const userId = user.id;
         let usage = await prisma.userUsage.findUnique({
             where: { userId },
         });

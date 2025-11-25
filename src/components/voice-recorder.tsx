@@ -20,19 +20,41 @@ export function VoiceRecorder({ onTranscriptionComplete }: VoiceRecorderProps) {
 
     const startRecording = async () => {
         try {
-            const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+            const stream = await navigator.mediaDevices.getUserMedia({ 
+                audio: {
+                    echoCancellation: true,
+                    noiseSuppression: true,
+                    autoGainControl: true,
+                }
+            });
+            
+            // Use the best available mime type
+            let mimeType = 'audio/webm';
+            if (MediaRecorder.isTypeSupported('audio/webm;codecs=opus')) {
+                mimeType = 'audio/webm;codecs=opus';
+            } else if (MediaRecorder.isTypeSupported('audio/mp4')) {
+                mimeType = 'audio/mp4';
+            } else if (MediaRecorder.isTypeSupported('audio/ogg;codecs=opus')) {
+                mimeType = 'audio/ogg;codecs=opus';
+            }
+            
             const mediaRecorder = new MediaRecorder(stream, {
-                mimeType: 'audio/webm',
+                mimeType,
+                audioBitsPerSecond: 128000, // Optimize for quality/size balance
             });
 
             mediaRecorderRef.current = mediaRecorder;
             chunksRef.current = [];
 
+            // Collect data more frequently for better responsiveness
             mediaRecorder.ondataavailable = (event) => {
                 if (event.data.size > 0) {
                     chunksRef.current.push(event.data);
                 }
             };
+            
+            // Request data every second for better UX
+            mediaRecorder.start(1000);
 
             mediaRecorder.onstop = async () => {
                 const audioBlob = new Blob(chunksRef.current, { type: 'audio/webm' });
@@ -40,7 +62,6 @@ export function VoiceRecorder({ onTranscriptionComplete }: VoiceRecorderProps) {
                 await transcribeAudio(audioBlob);
             };
 
-            mediaRecorder.start();
             setIsRecording(true);
             setTranscribed(false);
             setDuration(0);

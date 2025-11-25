@@ -1,19 +1,46 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { stripe, getOrCreateStripeCustomer } from '@/lib/stripe';
+import { getAuthenticatedUser } from '@/lib/api-auth';
 
 export async function POST(request: NextRequest) {
     try {
-        const { priceId, userId, email } = await request.json();
-
-        if (!priceId || !userId || !email) {
+        // Get authenticated user
+        const user = await getAuthenticatedUser(request);
+        
+        if (!user) {
             return NextResponse.json(
-                { error: 'Missing required fields' },
+                { error: 'Unauthorized. Please sign in to purchase a plan.' },
+                { status: 401 }
+            );
+        }
+
+        const { priceId } = await request.json();
+
+        if (!priceId) {
+            return NextResponse.json(
+                { error: 'Missing priceId' },
                 { status: 400 }
             );
         }
 
+        // Verify user exists in Prisma
+        const { prisma } = await import('@/lib/prisma');
+        let dbUser = await prisma.user.findUnique({
+            where: { id: user.id },
+        });
+
+        if (!dbUser) {
+            // Create user in Prisma if they don't exist
+            dbUser = await prisma.user.create({
+                data: {
+                    id: user.id,
+                    email: user.email!,
+                },
+            });
+        }
+
         // Get or create Stripe customer
-        const customerId = await getOrCreateStripeCustomer(userId, email);
+        const customerId = await getOrCreateStripeCustomer(user.id, user.email!);
 
         // Create checkout session
         const session = await stripe.checkout.sessions.create({
@@ -29,7 +56,7 @@ export async function POST(request: NextRequest) {
             success_url: `${process.env.NEXT_PUBLIC_URL}/dashboard?success=true&session_id={CHECKOUT_SESSION_ID}`,
             cancel_url: `${process.env.NEXT_PUBLIC_URL}/pricing?canceled=true`,
             metadata: {
-                userId,
+                userId: user.id,
             },
         });
 

@@ -4,20 +4,26 @@ import { useState } from 'react';
 import { PricingCard } from '@/components/pricing-card';
 import { STRIPE_PLANS } from '@/lib/pricing-tiers';
 import { useRouter } from 'next/navigation';
+import { useAuth } from '@/contexts/auth-context';
 
 export default function PricingPage() {
     const [loading, setLoading] = useState<string | null>(null);
     const router = useRouter();
+    const { user } = useAuth();
 
     const handleSelectPlan = async (tier: 'PRO' | 'BUSINESS') => {
+        // Require authentication for paid plans
+        if (!user) {
+            router.push('/login?redirectTo=/pricing');
+            return;
+        }
+
         setLoading(tier);
 
         try {
             const priceId = STRIPE_PLANS[tier].priceId;
-
-            // TODO: Get real user ID and email from auth
-            const userId = 'default-user';
-            const email = 'user@example.com';
+            const userId = user.id;
+            const email = user.email!;
 
             const response = await fetch('/api/stripe/checkout', {
                 method: 'POST',
