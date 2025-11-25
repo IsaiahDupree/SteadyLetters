@@ -1,6 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getAuthenticatedUser } from '@/lib/api-auth';
 
+export const runtime = 'nodejs';
+export const dynamic = 'force-dynamic';
+
 interface TestResult {
     name: string;
     status: 'pass' | 'fail' | 'running' | 'pending';

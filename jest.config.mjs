@@ -7,4 +7,5 @@ export default {
     },
     testMatch: ['**/tests/**/*.test.mjs'],
     testTimeout: 30000,
+    setupFilesAfterEnv: ['<rootDir>/jest.setup.mjs'],
 };
