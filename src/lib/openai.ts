@@ -90,7 +90,7 @@ Clean design with space for text. No text in the image.`;
         n: 1,
     });
 
-    return response.data[0]?.url || '';
+    return response.data?.[0]?.url || '';
 }
 
 export { openai };
