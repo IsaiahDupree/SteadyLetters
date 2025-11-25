@@ -1,6 +1,8 @@
 import { TemplateForm } from '@/features/templates/template-form';
 import { TemplateList } from '@/features/templates/template-list';
 
+export const dynamic = 'force-dynamic';
+
 export default function TemplatesPage() {
     return (
         <div className="space-y-8">

@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { createClient } from '@/lib/supabase/server';
+import { getAuthenticatedUser } from '@/lib/api-auth';
 import {
     sendPostcard,
     sendLetter,
@@ -16,10 +16,9 @@ import { prisma } from '@/lib/prisma';
 
 export async function POST(request: NextRequest) {
     try {
-        const supabase = await createClient();
-        const { data: { user }, error: authError } = await supabase.auth.getUser();
+        const user = await getAuthenticatedUser(request);
 
-        if (authError || !user) {
+        if (!user) {
             return NextResponse.json(
                 { error: 'Unauthorized' },
                 { status: 401 }
@@ -47,11 +46,10 @@ export async function POST(request: NextRequest) {
         }
 
         // Get user's tier
-        const { data: dbUser } = await supabase
-            .from('User')
-            .select('stripePriceId')
-            .eq('id', user.id)
-            .single();
+        const dbUser = await prisma.user.findUnique({
+            where: { id: user.id },
+            select: { stripePriceId: true },
+        });
 
         let userTier: 'free' | 'pro' | 'business' = 'free';
         if (dbUser?.stripePriceId) {
