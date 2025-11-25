@@ -1,40 +1,31 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { createServerSupabaseClient } from '@/lib/auth';
+import { createClient } from '@/lib/supabase-auth';
 import { prisma } from '@/lib/prisma';
 
-/**
- * Sync Supabase auth user to Prisma User model
- * This should be called after user signs up or signs in
- */
 export async function POST(request: NextRequest) {
     try {
-        const supabase = createServerSupabaseClient();
-        
-        // Get the authenticated user from Supabase
-        const { data: { user: authUser }, error: authError } = await supabase.auth.getUser();
+        const supabase = createClient();
+        const { data: { user } } = await supabase.auth.getUser();
 
-        if (authError || !authUser) {
-            return NextResponse.json(
-                { error: 'Unauthorized' },
-                { status: 401 }
-            );
+        if (!user) {
+            return NextResponse.json({ error: 'Not authenticated' }, { status: 401 });
         }
 
         // Check if user exists in Prisma
-        let user = await prisma.user.findUnique({
-            where: { email: authUser.email! },
+        const existingUser = await prisma.user.findUnique({
+            where: { id: user.id },
         });
 
-        // Create user if doesn't exist
-        if (!user) {
-            user = await prisma.user.create({
+        if (!existingUser) {
+            // Create user in Prisma
+            await prisma.user.create({
                 data: {
-                    id: authUser.id,
-                    email: authUser.email!,
+                    id: user.id,
+                    email: user.email!,
                 },
             });
 
-            // Create UserUsage record
+            // Create initial UserUsage record
             await prisma.userUsage.create({
                 data: {
                     userId: user.id,
@@ -43,13 +34,12 @@ export async function POST(request: NextRequest) {
             });
         }
 
-        return NextResponse.json({ user });
+        return NextResponse.json({ success: true });
     } catch (error) {
-        console.error('Error syncing user:', error);
+        console.error('Sync user error:', error);
         return NextResponse.json(
-            { error: 'Internal server error' },
+            { error: 'Failed to sync user' },
             { status: 500 }
         );
     }
 }
-

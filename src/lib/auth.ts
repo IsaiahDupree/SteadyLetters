@@ -21,7 +21,6 @@ export function createServerSupabaseClient() {
         auth: {
             persistSession: false,
             autoRefreshToken: false,
-            detectSessionInCookie: true,
             storage: {
                 getItem: (key: string) => {
                     return cookieStore.get(key)?.value ?? null;
