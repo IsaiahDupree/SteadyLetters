@@ -1,6 +1,7 @@
 {
-  "timestamp": "2025-11-25T21:44:45.769Z",
+  "timestamp": "2025-11-25T21:53:59.224Z",
   "baseUrl": "https://www.steadyletters.com",
+  "authenticated": false,
   "tests": {
     "publicPages": [
       {
@@ -10,16 +11,16 @@
         "success": true,
         "status": 200,
         "statusText": "OK",
-        "duration": 430,
+        "duration": 192,
         "headers": {
           "access-control-allow-origin": "*",
-          "age": "120",
+          "age": "154",
           "cache-control": "public, max-age=0, must-revalidate",
           "content-disposition": "inline",
           "content-encoding": "br",
           "content-type": "text/html; charset=utf-8",
-          "date": "Tue, 25 Nov 2025 21:44:46 GMT",
-          "etag": "W/\"ffd86ca50b51dd9b9524db90335e782b\"",
+          "date": "Tue, 25 Nov 2025 21:53:59 GMT",
+          "etag": "W/\"9f415d6444fb25a04d4ce7bd15842fa5\"",
           "server": "Vercel",
           "strict-transport-security": "max-age=63072000",
           "transfer-encoding": "chunked",
@@ -28,7 +29,7 @@
           "x-nextjs-prerender": "1",
           "x-nextjs-stale-time": "300",
           "x-vercel-cache": "HIT",
-          "x-vercel-id": "iad1::4rn7q-1764107086128-57da557598d5"
+          "x-vercel-id": "iad1::ggqn5-1764107639684-cfa8ffba412b"
         },
         "data": {
           "error": "No JSON response",
@@ -43,16 +44,16 @@
         "success": true,
         "status": 200,
         "statusText": "OK",
-        "duration": 76,
+        "duration": 114,
         "headers": {
           "access-control-allow-origin": "*",
-          "age": "120",
+          "age": "154",
           "cache-control": "public, max-age=0, must-revalidate",
           "content-disposition": "inline",
           "content-encoding": "br",
           "content-type": "text/html; charset=utf-8",
-          "date": "Tue, 25 Nov 2025 21:44:46 GMT",
-          "etag": "W/\"bd19f17fa12f83b069705c6975356c3e\"",
+          "date": "Tue, 25 Nov 2025 21:53:59 GMT",
+          "etag": "W/\"8699876898540e664afb4b23d724f2ae\"",
           "server": "Vercel",
           "strict-transport-security": "max-age=63072000",
           "transfer-encoding": "chunked",
@@ -61,7 +62,7 @@
           "x-nextjs-prerender": "1",
           "x-nextjs-stale-time": "300",
           "x-vercel-cache": "HIT",
-          "x-vercel-id": "iad1::qfr66-1764107086251-2d9977ca1d91"
+          "x-vercel-id": "iad1::t9n8p-1764107639812-7c25c82d9ebf"
         },
         "data": {
           "error": "No JSON response",
@@ -76,16 +77,16 @@
         "success": true,
         "status": 200,
         "statusText": "OK",
-        "duration": 101,
+        "duration": 78,
         "headers": {
           "access-control-allow-origin": "*",
-          "age": "120",
+          "age": "154",
           "cache-control": "public, max-age=0, must-revalidate",
           "content-disposition": "inline",
           "content-encoding": "br",
           "content-type": "text/html; charset=utf-8",
-          "date": "Tue, 25 Nov 2025 21:44:46 GMT",
-          "etag": "W/\"455bf376be286f2c7fa9982a0946265a\"",
+          "date": "Tue, 25 Nov 2025 21:53:59 GMT",
+          "etag": "W/\"fe92410a7b2a8686b5858de003ebae65\"",
           "server": "Vercel",
           "strict-transport-security": "max-age=63072000",
           "transfer-encoding": "chunked",
@@ -94,7 +95,7 @@
           "x-nextjs-prerender": "1",
           "x-nextjs-stale-time": "300",
           "x-vercel-cache": "HIT",
-          "x-vercel-id": "iad1::gz8df-1764107086347-48933c2f8afc"
+          "x-vercel-id": "iad1::czz5t-1764107639927-0c3e12f9ebbf"
         },
         "data": {
           "error": "No JSON response",
@@ -109,16 +110,16 @@
         "success": true,
         "status": 200,
         "statusText": "OK",
-        "duration": 75,
+        "duration": 79,
         "headers": {
           "access-control-allow-origin": "*",
-          "age": "120",
+          "age": "154",
           "cache-control": "public, max-age=0, must-revalidate",
           "content-disposition": "inline",
           "content-encoding": "br",
           "content-type": "text/html; charset=utf-8",
-          "date": "Tue, 25 Nov 2025 21:44:46 GMT",
-          "etag": "W/\"30d47128c19d733f02441404abcc949c\"",
+          "date": "Tue, 25 Nov 2025 21:54:00 GMT",
+          "etag": "W/\"b3f2a3231d7de59d78d297c70bc9de4d\"",
           "server": "Vercel",
           "strict-transport-security": "max-age=63072000",
           "transfer-encoding": "chunked",
@@ -127,7 +128,7 @@
           "x-nextjs-prerender": "1",
           "x-nextjs-stale-time": "300",
           "x-vercel-cache": "HIT",
-          "x-vercel-id": "iad1::g67nd-1764107086434-4d8df03bfcde"
+          "x-vercel-id": "iad1::j2kdq-1764107640010-0ada101c927e"
         },
         "data": {
           "error": "No JSON response",
@@ -144,24 +145,24 @@
         "success": false,
         "status": 500,
         "statusText": "Internal Server Error",
-        "duration": 307,
+        "duration": 221,
         "headers": {
           "accept-ranges": "bytes",
           "access-control-allow-origin": "*",
-          "age": "121",
+          "age": "154",
           "cache-control": "public, max-age=0, must-revalidate",
           "content-disposition": "inline; filename=\"500\"",
           "content-encoding": "br",
-          "content-length": "1980",
+          "content-length": "1979",
           "content-type": "text/html; charset=utf-8",
-          "date": "Tue, 25 Nov 2025 21:44:46 GMT",
-          "etag": "\"caa28b43f8b86626b4f0be77d512042d\"",
-          "last-modified": "Tue, 25 Nov 2025 21:42:45 GMT",
+          "date": "Tue, 25 Nov 2025 21:54:00 GMT",
+          "etag": "\"b19e26a1e671536de3f92f56674647a4\"",
+          "last-modified": "Tue, 25 Nov 2025 21:51:26 GMT",
           "server": "Vercel",
           "strict-transport-security": "max-age=63072000",
           "x-matched-path": "/500",
           "x-vercel-cache": "MISS",
-          "x-vercel-id": "iad1::c7k7s-1764107086510-d33f32e30abb"
+          "x-vercel-id": "iad1::j2kdq-1764107640088-fe15e878089f"
         },
         "data": null,
         "error": {
@@ -177,24 +178,24 @@
         "success": false,
         "status": 500,
         "statusText": "Internal Server Error",
-        "duration": 278,
+        "duration": 184,
         "headers": {
           "accept-ranges": "bytes",
           "access-control-allow-origin": "*",
-          "age": "121",
+          "age": "154",
           "cache-control": "public, max-age=0, must-revalidate",
           "content-disposition": "inline; filename=\"500\"",
           "content-encoding": "br",
-          "content-length": "1980",
+          "content-length": "1979",
           "content-type": "text/html; charset=utf-8",
-          "date": "Tue, 25 Nov 2025 21:44:46 GMT",
-          "etag": "\"caa28b43f8b86626b4f0be77d512042d\"",
-          "last-modified": "Tue, 25 Nov 2025 21:42:45 GMT",
+          "date": "Tue, 25 Nov 2025 21:54:00 GMT",
+          "etag": "\"b19e26a1e671536de3f92f56674647a4\"",
+          "last-modified": "Tue, 25 Nov 2025 21:51:26 GMT",
           "server": "Vercel",
           "strict-transport-security": "max-age=63072000",
           "x-matched-path": "/500",
           "x-vercel-cache": "MISS",
-          "x-vercel-id": "iad1::56tnm-1764107086819-715272914985"
+          "x-vercel-id": "iad1::zr6l9-1764107640309-d53628690e28"
         },
         "data": null,
         "error": {
@@ -210,18 +211,18 @@
         "success": false,
         "status": 405,
         "statusText": "Method Not Allowed",
-        "duration": 262,
+        "duration": 201,
         "headers": {
           "cache-control": "public, max-age=0, must-revalidate",
           "content-disposition": "inline; filename=\"500\"",
           "content-type": "text/html; charset=utf-8",
-          "date": "Tue, 25 Nov 2025 21:44:47 GMT",
+          "date": "Tue, 25 Nov 2025 21:54:00 GMT",
           "server": "Vercel",
           "strict-transport-security": "max-age=63072000",
           "transfer-encoding": "chunked",
           "x-matched-path": "/500",
           "x-vercel-cache": "BYPASS",
-          "x-vercel-id": "iad1::sfjb4-1764107087100-d659a5b653a2"
+          "x-vercel-id": "iad1::8bd77-1764107640499-74100f819b1b"
         },
         "data": null,
         "error": {
@@ -237,24 +238,24 @@
         "success": false,
         "status": 500,
         "statusText": "Internal Server Error",
-        "duration": 386,
+        "duration": 374,
         "headers": {
           "accept-ranges": "bytes",
           "access-control-allow-origin": "*",
-          "age": "122",
+          "age": "154",
           "cache-control": "public, max-age=0, must-revalidate",
           "content-disposition": "inline; filename=\"500\"",
           "content-encoding": "br",
-          "content-length": "1980",
+          "content-length": "1979",
           "content-type": "text/html; charset=utf-8",
-          "date": "Tue, 25 Nov 2025 21:44:47 GMT",
-          "etag": "\"caa28b43f8b86626b4f0be77d512042d\"",
-          "last-modified": "Tue, 25 Nov 2025 21:42:45 GMT",
+          "date": "Tue, 25 Nov 2025 21:54:00 GMT",
+          "etag": "\"b19e26a1e671536de3f92f56674647a4\"",
+          "last-modified": "Tue, 25 Nov 2025 21:51:26 GMT",
           "server": "Vercel",
           "strict-transport-security": "max-age=63072000",
           "x-matched-path": "/500",
           "x-vercel-cache": "MISS",
-          "x-vercel-id": "iad1::n74wv-1764107087509-293f16d1ceb9"
+          "x-vercel-id": "iad1::8pktt-1764107640775-a776f47afabf"
         },
         "data": null,
         "error": {
@@ -270,24 +271,24 @@
         "success": false,
         "status": 500,
         "statusText": "Internal Server Error",
-        "duration": 292,
+        "duration": 306,
         "headers": {
           "accept-ranges": "bytes",
           "access-control-allow-origin": "*",
-          "age": "122",
+          "age": "155",
           "cache-control": "public, max-age=0, must-revalidate",
           "content-disposition": "inline; filename=\"500\"",
           "content-encoding": "br",
-          "content-length": "1980",
+          "content-length": "1979",
           "content-type": "text/html; charset=utf-8",
-          "date": "Tue, 25 Nov 2025 21:44:47 GMT",
-          "etag": "\"caa28b43f8b86626b4f0be77d512042d\"",
-          "last-modified": "Tue, 25 Nov 2025 21:42:45 GMT",
+          "date": "Tue, 25 Nov 2025 21:54:01 GMT",
+          "etag": "\"b19e26a1e671536de3f92f56674647a4\"",
+          "last-modified": "Tue, 25 Nov 2025 21:51:26 GMT",
           "server": "Vercel",
           "strict-transport-security": "max-age=63072000",
           "x-matched-path": "/500",
           "x-vercel-cache": "MISS",
-          "x-vercel-id": "iad1::5g8jr-1764107087750-1f540f304e75"
+          "x-vercel-id": "iad1::nctnw-1764107641067-c46d55f28a51"
         },
         "data": null,
         "error": {
@@ -303,18 +304,18 @@
         "success": false,
         "status": 405,
         "statusText": "Method Not Allowed",
-        "duration": 216,
+        "duration": 178,
         "headers": {
           "cache-control": "public, max-age=0, must-revalidate",
           "content-disposition": "inline; filename=\"500\"",
           "content-type": "text/html; charset=utf-8",
-          "date": "Tue, 25 Nov 2025 21:44:48 GMT",
+          "date": "Tue, 25 Nov 2025 21:54:01 GMT",
           "server": "Vercel",
           "strict-transport-security": "max-age=63072000",
           "transfer-encoding": "chunked",
           "x-matched-path": "/500",
           "x-vercel-cache": "BYPASS",
-          "x-vercel-id": "iad1::h8tnd-1764107088041-a981e443f692"
+          "x-vercel-id": "iad1::6jl6j-1764107641381-0ea020bdad74"
         },
         "data": null,
         "error": {
@@ -330,24 +331,24 @@
         "success": false,
         "status": 500,
         "statusText": "Internal Server Error",
-        "duration": 238,
+        "duration": 182,
         "headers": {
           "accept-ranges": "bytes",
           "access-control-allow-origin": "*",
-          "age": "122",
+          "age": "155",
           "cache-control": "public, max-age=0, must-revalidate",
           "content-disposition": "inline; filename=\"500\"",
           "content-encoding": "br",
-          "content-length": "1980",
+          "content-length": "1979",
           "content-type": "text/html; charset=utf-8",
-          "date": "Tue, 25 Nov 2025 21:44:48 GMT",
-          "etag": "\"caa28b43f8b86626b4f0be77d512042d\"",
-          "last-modified": "Tue, 25 Nov 2025 21:42:45 GMT",
+          "date": "Tue, 25 Nov 2025 21:54:01 GMT",
+          "etag": "\"b19e26a1e671536de3f92f56674647a4\"",
+          "last-modified": "Tue, 25 Nov 2025 21:51:26 GMT",
           "server": "Vercel",
           "strict-transport-security": "max-age=63072000",
           "x-matched-path": "/500",
           "x-vercel-cache": "MISS",
-          "x-vercel-id": "iad1::7z9n2-1764107088260-704ea286aa6b"
+          "x-vercel-id": "iad1::5cgmx-1764107641559-f049f84b3ff9"
         },
         "data": null,
         "error": {
@@ -363,24 +364,24 @@
         "success": false,
         "status": 500,
         "statusText": "Internal Server Error",
-        "duration": 253,
+        "duration": 192,
         "headers": {
           "accept-ranges": "bytes",
           "access-control-allow-origin": "*",
-          "age": "123",
+          "age": "155",
           "cache-control": "public, max-age=0, must-revalidate",
           "content-disposition": "inline; filename=\"500\"",
           "content-encoding": "br",
-          "content-length": "1980",
+          "content-length": "1979",
           "content-type": "text/html; charset=utf-8",
-          "date": "Tue, 25 Nov 2025 21:44:48 GMT",
-          "etag": "\"caa28b43f8b86626b4f0be77d512042d\"",
-          "last-modified": "Tue, 25 Nov 2025 21:42:45 GMT",
+          "date": "Tue, 25 Nov 2025 21:54:01 GMT",
+          "etag": "\"b19e26a1e671536de3f92f56674647a4\"",
+          "last-modified": "Tue, 25 Nov 2025 21:51:26 GMT",
           "server": "Vercel",
           "strict-transport-security": "max-age=63072000",
           "x-matched-path": "/500",
           "x-vercel-cache": "MISS",
-          "x-vercel-id": "iad1::jvkfm-1764107088497-9c8ab490a01d"
+          "x-vercel-id": "iad1::ggqn5-1764107641742-14a9eb1347b4"
         },
         "data": null,
         "error": {
@@ -396,18 +397,18 @@
         "success": false,
         "status": 405,
         "statusText": "Method Not Allowed",
-        "duration": 355,
+        "duration": 182,
         "headers": {
           "cache-control": "public, max-age=0, must-revalidate",
           "content-disposition": "inline; filename=\"500\"",
           "content-type": "text/html; charset=utf-8",
-          "date": "Tue, 25 Nov 2025 21:44:48 GMT",
+          "date": "Tue, 25 Nov 2025 21:54:02 GMT",
           "server": "Vercel",
           "strict-transport-security": "max-age=63072000",
           "transfer-encoding": "chunked",
           "x-matched-path": "/500",
           "x-vercel-cache": "BYPASS",
-          "x-vercel-id": "iad1::ss9ds-1764107088748-acd3da04a642"
+          "x-vercel-id": "iad1::2vd65-1764107641933-66856770286c"
         },
         "data": null,
         "error": {
@@ -423,18 +424,18 @@
         "success": false,
         "status": 405,
         "statusText": "Method Not Allowed",
-        "duration": 218,
+        "duration": 188,
         "headers": {
           "cache-control": "public, max-age=0, must-revalidate",
           "content-disposition": "inline; filename=\"500\"",
           "content-type": "text/html; charset=utf-8",
-          "date": "Tue, 25 Nov 2025 21:44:49 GMT",
+          "date": "Tue, 25 Nov 2025 21:54:02 GMT",
           "server": "Vercel",
           "strict-transport-security": "max-age=63072000",
           "transfer-encoding": "chunked",
           "x-matched-path": "/500",
           "x-vercel-cache": "BYPASS",
-          "x-vercel-id": "iad1::w8qjl-1764107089102-69e95fde5d92"
+          "x-vercel-id": "iad1::wlmpx-1764107642115-0d1693acb57e"
         },
         "data": null,
         "error": {
@@ -450,18 +451,18 @@
         "success": false,
         "status": 405,
         "statusText": "Method Not Allowed",
-        "duration": 205,
+        "duration": 191,
         "headers": {
           "cache-control": "public, max-age=0, must-revalidate",
           "content-disposition": "inline; filename=\"500\"",
           "content-type": "text/html; charset=utf-8",
-          "date": "Tue, 25 Nov 2025 21:44:49 GMT",
+          "date": "Tue, 25 Nov 2025 21:54:02 GMT",
           "server": "Vercel",
           "strict-transport-security": "max-age=63072000",
           "transfer-encoding": "chunked",
           "x-matched-path": "/500",
           "x-vercel-cache": "BYPASS",
-          "x-vercel-id": "iad1::sfjb4-1764107089323-adbf1b995a31"
+          "x-vercel-id": "iad1::wbx4x-1764107642302-2eaa37aebfe2"
         },
         "data": null,
         "error": {
@@ -477,18 +478,18 @@
         "success": false,
         "status": 405,
         "statusText": "Method Not Allowed",
-        "duration": 214,
+        "duration": 182,
         "headers": {
           "cache-control": "public, max-age=0, must-revalidate",
           "content-disposition": "inline; filename=\"500\"",
           "content-type": "text/html; charset=utf-8",
-          "date": "Tue, 25 Nov 2025 21:44:49 GMT",
+          "date": "Tue, 25 Nov 2025 21:54:02 GMT",
           "server": "Vercel",
           "strict-transport-security": "max-age=63072000",
           "transfer-encoding": "chunked",
           "x-matched-path": "/500",
           "x-vercel-cache": "BYPASS",
-          "x-vercel-id": "iad1::rf44k-1764107089529-1f0646c5074a"
+          "x-vercel-id": "iad1::75zph-1764107642493-2000dfb86385"
         },
         "data": null,
         "error": {
@@ -504,18 +505,18 @@
         "success": false,
         "status": 405,
         "statusText": "Method Not Allowed",
-        "duration": 257,
+        "duration": 234,
         "headers": {
           "cache-control": "public, max-age=0, must-revalidate",
           "content-disposition": "inline; filename=\"500\"",
           "content-type": "text/html; charset=utf-8",
-          "date": "Tue, 25 Nov 2025 21:44:49 GMT",
+          "date": "Tue, 25 Nov 2025 21:54:02 GMT",
           "server": "Vercel",
           "strict-transport-security": "max-age=63072000",
           "transfer-encoding": "chunked",
           "x-matched-path": "/500",
           "x-vercel-cache": "BYPASS",
-          "x-vercel-id": "iad1::wwp85-1764107089745-28064c4a9c68"
+          "x-vercel-id": "iad1::8bd77-1764107642676-55e0527a3687"
         },
         "data": null,
         "error": {
@@ -531,18 +532,18 @@
         "success": false,
         "status": 405,
         "statusText": "Method Not Allowed",
-        "duration": 233,
+        "duration": 200,
         "headers": {
           "cache-control": "public, max-age=0, must-revalidate",
           "content-disposition": "inline; filename=\"500\"",
           "content-type": "text/html; charset=utf-8",
-          "date": "Tue, 25 Nov 2025 21:44:50 GMT",
+          "date": "Tue, 25 Nov 2025 21:54:03 GMT",
           "server": "Vercel",
           "strict-transport-security": "max-age=63072000",
           "transfer-encoding": "chunked",
           "x-matched-path": "/500",
           "x-vercel-cache": "BYPASS",
-          "x-vercel-id": "iad1::d9bq8-1764107089998-cf6b4727025f"
+          "x-vercel-id": "iad1::75zph-1764107642910-dec4f7837aa3"
         },
         "data": null,
         "error": {
@@ -558,18 +559,18 @@
         "success": false,
         "status": 405,
         "statusText": "Method Not Allowed",
-        "duration": 222,
+        "duration": 291,
         "headers": {
           "cache-control": "public, max-age=0, must-revalidate",
           "content-disposition": "inline; filename=\"500\"",
           "content-type": "text/html; charset=utf-8",
-          "date": "Tue, 25 Nov 2025 21:44:50 GMT",
+          "date": "Tue, 25 Nov 2025 21:54:03 GMT",
           "server": "Vercel",
           "strict-transport-security": "max-age=63072000",
           "transfer-encoding": "chunked",
           "x-matched-path": "/500",
           "x-vercel-cache": "BYPASS",
-          "x-vercel-id": "iad1::sl79d-1764107090234-998b1b0971ce"
+          "x-vercel-id": "iad1::cwtf7-1764107643113-132a69e90180"
         },
         "data": null,
         "error": {
@@ -585,18 +586,18 @@
         "success": false,
         "status": 405,
         "statusText": "Method Not Allowed",
-        "duration": 368,
+        "duration": 200,
         "headers": {
           "cache-control": "public, max-age=0, must-revalidate",
           "content-disposition": "inline; filename=\"500\"",
           "content-type": "text/html; charset=utf-8",
-          "date": "Tue, 25 Nov 2025 21:44:50 GMT",
+          "date": "Tue, 25 Nov 2025 21:54:03 GMT",
           "server": "Vercel",
           "strict-transport-security": "max-age=63072000",
           "transfer-encoding": "chunked",
           "x-matched-path": "/500",
           "x-vercel-cache": "BYPASS",
-          "x-vercel-id": "iad1::rf44k-1764107090488-1b1830ed0083"
+          "x-vercel-id": "iad1::75zph-1764107643401-8d03e2e1fd32"
         },
         "data": null,
         "error": {
@@ -612,24 +613,24 @@
         "success": false,
         "status": 500,
         "statusText": "Internal Server Error",
-        "duration": 259,
+        "duration": 193,
         "headers": {
           "accept-ranges": "bytes",
           "access-control-allow-origin": "*",
-          "age": "125",
+          "age": "157",
           "cache-control": "public, max-age=0, must-revalidate",
           "content-disposition": "inline; filename=\"500\"",
           "content-encoding": "br",
-          "content-length": "1980",
+          "content-length": "1979",
           "content-type": "text/html; charset=utf-8",
-          "date": "Tue, 25 Nov 2025 21:44:50 GMT",
-          "etag": "\"caa28b43f8b86626b4f0be77d512042d\"",
-          "last-modified": "Tue, 25 Nov 2025 21:42:45 GMT",
+          "date": "Tue, 25 Nov 2025 21:54:03 GMT",
+          "etag": "\"b19e26a1e671536de3f92f56674647a4\"",
+          "last-modified": "Tue, 25 Nov 2025 21:51:26 GMT",
           "server": "Vercel",
           "strict-transport-security": "max-age=63072000",
           "x-matched-path": "/500",
           "x-vercel-cache": "MISS",
-          "x-vercel-id": "iad1::wwp85-1764107090827-2d2a7e37a0fc"
+          "x-vercel-id": "iad1::b4hx5-1764107643602-a3e9f614efb6"
         },
         "data": null,
         "error": {
@@ -645,18 +646,45 @@
         "success": false,
         "status": 405,
         "statusText": "Method Not Allowed",
-        "duration": 297,
+        "duration": 246,
         "headers": {
           "cache-control": "public, max-age=0, must-revalidate",
           "content-disposition": "inline; filename=\"500\"",
           "content-type": "text/html; charset=utf-8",
-          "date": "Tue, 25 Nov 2025 21:44:51 GMT",
+          "date": "Tue, 25 Nov 2025 21:54:03 GMT",
           "server": "Vercel",
           "strict-transport-security": "max-age=63072000",
           "transfer-encoding": "chunked",
           "x-matched-path": "/500",
           "x-vercel-cache": "BYPASS",
-          "x-vercel-id": "iad1::vnzgg-1764107091095-b9581c5f600a"
+          "x-vercel-id": "iad1::8bd77-1764107643793-8d039f86712e"
+        },
+        "data": null,
+        "error": {
+          "message": "No JSON response",
+          "status": 405,
+          "statusText": "Method Not Allowed"
+        }
+      },
+      {
+        "name": "Settings Run Tests",
+        "url": "https://www.steadyletters.com/api/settings/run-tests",
+        "method": "POST",
+        "success": false,
+        "status": 405,
+        "statusText": "Method Not Allowed",
+        "duration": 178,
+        "headers": {
+          "cache-control": "public, max-age=0, must-revalidate",
+          "content-disposition": "inline; filename=\"500\"",
+          "content-type": "text/html; charset=utf-8",
+          "date": "Tue, 25 Nov 2025 21:54:04 GMT",
+          "server": "Vercel",
+          "strict-transport-security": "max-age=63072000",
+          "transfer-encoding": "chunked",
+          "x-matched-path": "/500",
+          "x-vercel-cache": "BYPASS",
+          "x-vercel-id": "iad1::hl5mz-1764107644039-e1a77b7ea412"
         },
         "data": null,
         "error": {
@@ -668,9 +696,9 @@
     ]
   },
   "summary": {
-    "total": 22,
+    "total": 23,
     "passed": 4,
-    "failed": 18
+    "failed": 19
   },
   "grouped": {
     "passed": [
@@ -681,16 +709,16 @@
         "success": true,
         "status": 200,
         "statusText": "OK",
-        "duration": 430,
+        "duration": 192,
         "headers": {
           "access-control-allow-origin": "*",
-          "age": "120",
+          "age": "154",
           "cache-control": "public, max-age=0, must-revalidate",
           "content-disposition": "inline",
           "content-encoding": "br",
           "content-type": "text/html; charset=utf-8",
-          "date": "Tue, 25 Nov 2025 21:44:46 GMT",
-          "etag": "W/\"ffd86ca50b51dd9b9524db90335e782b\"",
+          "date": "Tue, 25 Nov 2025 21:53:59 GMT",
+          "etag": "W/\"9f415d6444fb25a04d4ce7bd15842fa5\"",
           "server": "Vercel",
           "strict-transport-security": "max-age=63072000",
           "transfer-encoding": "chunked",
@@ -699,7 +727,7 @@
           "x-nextjs-prerender": "1",
           "x-nextjs-stale-time": "300",
           "x-vercel-cache": "HIT",
-          "x-vercel-id": "iad1::4rn7q-1764107086128-57da557598d5"
+          "x-vercel-id": "iad1::ggqn5-1764107639684-cfa8ffba412b"
         },
         "data": {
           "error": "No JSON response",
@@ -714,16 +742,16 @@
         "success": true,
         "status": 200,
         "statusText": "OK",
-        "duration": 76,
+        "duration": 114,
         "headers": {
           "access-control-allow-origin": "*",
-          "age": "120",
+          "age": "154",
           "cache-control": "public, max-age=0, must-revalidate",
           "content-disposition": "inline",
           "content-encoding": "br",
           "content-type": "text/html; charset=utf-8",
-          "date": "Tue, 25 Nov 2025 21:44:46 GMT",
-          "etag": "W/\"bd19f17fa12f83b069705c6975356c3e\"",
+          "date": "Tue, 25 Nov 2025 21:53:59 GMT",
+          "etag": "W/\"8699876898540e664afb4b23d724f2ae\"",
           "server": "Vercel",
           "strict-transport-security": "max-age=63072000",
           "transfer-encoding": "chunked",
@@ -732,7 +760,7 @@
           "x-nextjs-prerender": "1",
           "x-nextjs-stale-time": "300",
           "x-vercel-cache": "HIT",
-          "x-vercel-id": "iad1::qfr66-1764107086251-2d9977ca1d91"
+          "x-vercel-id": "iad1::t9n8p-1764107639812-7c25c82d9ebf"
         },
         "data": {
           "error": "No JSON response",
@@ -747,16 +775,16 @@
         "success": true,
         "status": 200,
         "statusText": "OK",
-        "duration": 101,
+        "duration": 78,
         "headers": {
           "access-control-allow-origin": "*",
-          "age": "120",
+          "age": "154",
           "cache-control": "public, max-age=0, must-revalidate",
           "content-disposition": "inline",
           "content-encoding": "br",
           "content-type": "text/html; charset=utf-8",
-          "date": "Tue, 25 Nov 2025 21:44:46 GMT",
-          "etag": "W/\"455bf376be286f2c7fa9982a0946265a\"",
+          "date": "Tue, 25 Nov 2025 21:53:59 GMT",
+          "etag": "W/\"fe92410a7b2a8686b5858de003ebae65\"",
           "server": "Vercel",
           "strict-transport-security": "max-age=63072000",
           "transfer-encoding": "chunked",
@@ -765,7 +793,7 @@
           "x-nextjs-prerender": "1",
           "x-nextjs-stale-time": "300",
           "x-vercel-cache": "HIT",
-          "x-vercel-id": "iad1::gz8df-1764107086347-48933c2f8afc"
+          "x-vercel-id": "iad1::czz5t-1764107639927-0c3e12f9ebbf"
         },
         "data": {
           "error": "No JSON response",
@@ -780,16 +808,16 @@
         "success": true,
         "status": 200,
         "statusText": "OK",
-        "duration": 75,
+        "duration": 79,
         "headers": {
           "access-control-allow-origin": "*",
-          "age": "120",
+          "age": "154",
           "cache-control": "public, max-age=0, must-revalidate",
           "content-disposition": "inline",
           "content-encoding": "br",
           "content-type": "text/html; charset=utf-8",
-          "date": "Tue, 25 Nov 2025 21:44:46 GMT",
-          "etag": "W/\"30d47128c19d733f02441404abcc949c\"",
+          "date": "Tue, 25 Nov 2025 21:54:00 GMT",
+          "etag": "W/\"b3f2a3231d7de59d78d297c70bc9de4d\"",
           "server": "Vercel",
           "strict-transport-security": "max-age=63072000",
           "transfer-encoding": "chunked",
@@ -798,7 +826,7 @@
           "x-nextjs-prerender": "1",
           "x-nextjs-stale-time": "300",
           "x-vercel-cache": "HIT",
-          "x-vercel-id": "iad1::g67nd-1764107086434-4d8df03bfcde"
+          "x-vercel-id": "iad1::j2kdq-1764107640010-0ada101c927e"
         },
         "data": {
           "error": "No JSON response",
@@ -815,24 +843,24 @@
         "success": false,
         "status": 500,
         "statusText": "Internal Server Error",
-        "duration": 307,
+        "duration": 221,
         "headers": {
           "accept-ranges": "bytes",
           "access-control-allow-origin": "*",
-          "age": "121",
+          "age": "154",
           "cache-control": "public, max-age=0, must-revalidate",
           "content-disposition": "inline; filename=\"500\"",
           "content-encoding": "br",
-          "content-length": "1980",
+          "content-length": "1979",
           "content-type": "text/html; charset=utf-8",
-          "date": "Tue, 25 Nov 2025 21:44:46 GMT",
-          "etag": "\"caa28b43f8b86626b4f0be77d512042d\"",
-          "last-modified": "Tue, 25 Nov 2025 21:42:45 GMT",
+          "date": "Tue, 25 Nov 2025 21:54:00 GMT",
+          "etag": "\"b19e26a1e671536de3f92f56674647a4\"",
+          "last-modified": "Tue, 25 Nov 2025 21:51:26 GMT",
           "server": "Vercel",
           "strict-transport-security": "max-age=63072000",
           "x-matched-path": "/500",
           "x-vercel-cache": "MISS",
-          "x-vercel-id": "iad1::c7k7s-1764107086510-d33f32e30abb"
+          "x-vercel-id": "iad1::j2kdq-1764107640088-fe15e878089f"
         },
         "data": null,
         "error": {
@@ -848,24 +876,24 @@
         "success": false,
         "status": 500,
         "statusText": "Internal Server Error",
-        "duration": 278,
+        "duration": 184,
         "headers": {
           "accept-ranges": "bytes",
           "access-control-allow-origin": "*",
-          "age": "121",
+          "age": "154",
           "cache-control": "public, max-age=0, must-revalidate",
           "content-disposition": "inline; filename=\"500\"",
           "content-encoding": "br",
-          "content-length": "1980",
+          "content-length": "1979",
           "content-type": "text/html; charset=utf-8",
-          "date": "Tue, 25 Nov 2025 21:44:46 GMT",
-          "etag": "\"caa28b43f8b86626b4f0be77d512042d\"",
-          "last-modified": "Tue, 25 Nov 2025 21:42:45 GMT",
+          "date": "Tue, 25 Nov 2025 21:54:00 GMT",
+          "etag": "\"b19e26a1e671536de3f92f56674647a4\"",
+          "last-modified": "Tue, 25 Nov 2025 21:51:26 GMT",
           "server": "Vercel",
           "strict-transport-security": "max-age=63072000",
           "x-matched-path": "/500",
           "x-vercel-cache": "MISS",
-          "x-vercel-id": "iad1::56tnm-1764107086819-715272914985"
+          "x-vercel-id": "iad1::zr6l9-1764107640309-d53628690e28"
         },
         "data": null,
         "error": {
@@ -881,18 +909,18 @@
         "success": false,
         "status": 405,
         "statusText": "Method Not Allowed",
-        "duration": 262,
+        "duration": 201,
         "headers": {
           "cache-control": "public, max-age=0, must-revalidate",
           "content-disposition": "inline; filename=\"500\"",
           "content-type": "text/html; charset=utf-8",
-          "date": "Tue, 25 Nov 2025 21:44:47 GMT",
+          "date": "Tue, 25 Nov 2025 21:54:00 GMT",
           "server": "Vercel",
           "strict-transport-security": "max-age=63072000",
           "transfer-encoding": "chunked",
           "x-matched-path": "/500",
           "x-vercel-cache": "BYPASS",
-          "x-vercel-id": "iad1::sfjb4-1764107087100-d659a5b653a2"
+          "x-vercel-id": "iad1::8bd77-1764107640499-74100f819b1b"
         },
         "data": null,
         "error": {
@@ -908,24 +936,24 @@
         "success": false,
         "status": 500,
         "statusText": "Internal Server Error",
-        "duration": 386,
+        "duration": 374,
         "headers": {
           "accept-ranges": "bytes",
           "access-control-allow-origin": "*",
-          "age": "122",
+          "age": "154",
           "cache-control": "public, max-age=0, must-revalidate",
           "content-disposition": "inline; filename=\"500\"",
           "content-encoding": "br",
-          "content-length": "1980",
+          "content-length": "1979",
           "content-type": "text/html; charset=utf-8",
-          "date": "Tue, 25 Nov 2025 21:44:47 GMT",
-          "etag": "\"caa28b43f8b86626b4f0be77d512042d\"",
-          "last-modified": "Tue, 25 Nov 2025 21:42:45 GMT",
+          "date": "Tue, 25 Nov 2025 21:54:00 GMT",
+          "etag": "\"b19e26a1e671536de3f92f56674647a4\"",
+          "last-modified": "Tue, 25 Nov 2025 21:51:26 GMT",
           "server": "Vercel",
           "strict-transport-security": "max-age=63072000",
           "x-matched-path": "/500",
           "x-vercel-cache": "MISS",
-          "x-vercel-id": "iad1::n74wv-1764107087509-293f16d1ceb9"
+          "x-vercel-id": "iad1::8pktt-1764107640775-a776f47afabf"
         },
         "data": null,
         "error": {
@@ -941,24 +969,24 @@
         "success": false,
         "status": 500,
         "statusText": "Internal Server Error",
-        "duration": 292,
+        "duration": 306,
         "headers": {
           "accept-ranges": "bytes",
           "access-control-allow-origin": "*",
-          "age": "122",
+          "age": "155",
           "cache-control": "public, max-age=0, must-revalidate",
           "content-disposition": "inline; filename=\"500\"",
           "content-encoding": "br",
-          "content-length": "1980",
+          "content-length": "1979",
           "content-type": "text/html; charset=utf-8",
-          "date": "Tue, 25 Nov 2025 21:44:47 GMT",
-          "etag": "\"caa28b43f8b86626b4f0be77d512042d\"",
-          "last-modified": "Tue, 25 Nov 2025 21:42:45 GMT",
+          "date": "Tue, 25 Nov 2025 21:54:01 GMT",
+          "etag": "\"b19e26a1e671536de3f92f56674647a4\"",
+          "last-modified": "Tue, 25 Nov 2025 21:51:26 GMT",
           "server": "Vercel",
           "strict-transport-security": "max-age=63072000",
           "x-matched-path": "/500",
           "x-vercel-cache": "MISS",
-          "x-vercel-id": "iad1::5g8jr-1764107087750-1f540f304e75"
+          "x-vercel-id": "iad1::nctnw-1764107641067-c46d55f28a51"
         },
         "data": null,
         "error": {
@@ -974,18 +1002,18 @@
         "success": false,
         "status": 405,
         "statusText": "Method Not Allowed",
-        "duration": 216,
+        "duration": 178,
         "headers": {
           "cache-control": "public, max-age=0, must-revalidate",
           "content-disposition": "inline; filename=\"500\"",
           "content-type": "text/html; charset=utf-8",
-          "date": "Tue, 25 Nov 2025 21:44:48 GMT",
+          "date": "Tue, 25 Nov 2025 21:54:01 GMT",
           "server": "Vercel",
           "strict-transport-security": "max-age=63072000",
           "transfer-encoding": "chunked",
           "x-matched-path": "/500",
           "x-vercel-cache": "BYPASS",
-          "x-vercel-id": "iad1::h8tnd-1764107088041-a981e443f692"
+          "x-vercel-id": "iad1::6jl6j-1764107641381-0ea020bdad74"
         },
         "data": null,
         "error": {
@@ -1001,24 +1029,24 @@
         "success": false,
         "status": 500,
         "statusText": "Internal Server Error",
-        "duration": 238,
+        "duration": 182,
         "headers": {
           "accept-ranges": "bytes",
           "access-control-allow-origin": "*",
-          "age": "122",
+          "age": "155",
           "cache-control": "public, max-age=0, must-revalidate",
           "content-disposition": "inline; filename=\"500\"",
           "content-encoding": "br",
-          "content-length": "1980",
+          "content-length": "1979",
           "content-type": "text/html; charset=utf-8",
-          "date": "Tue, 25 Nov 2025 21:44:48 GMT",
-          "etag": "\"caa28b43f8b86626b4f0be77d512042d\"",
-          "last-modified": "Tue, 25 Nov 2025 21:42:45 GMT",
+          "date": "Tue, 25 Nov 2025 21:54:01 GMT",
+          "etag": "\"b19e26a1e671536de3f92f56674647a4\"",
+          "last-modified": "Tue, 25 Nov 2025 21:51:26 GMT",
           "server": "Vercel",
           "strict-transport-security": "max-age=63072000",
           "x-matched-path": "/500",
           "x-vercel-cache": "MISS",
-          "x-vercel-id": "iad1::7z9n2-1764107088260-704ea286aa6b"
+          "x-vercel-id": "iad1::5cgmx-1764107641559-f049f84b3ff9"
         },
         "data": null,
         "error": {
@@ -1034,24 +1062,24 @@
         "success": false,
         "status": 500,
         "statusText": "Internal Server Error",
-        "duration": 253,
+        "duration": 192,
         "headers": {
           "accept-ranges": "bytes",
           "access-control-allow-origin": "*",
-          "age": "123",
+          "age": "155",
           "cache-control": "public, max-age=0, must-revalidate",
           "content-disposition": "inline; filename=\"500\"",
           "content-encoding": "br",
-          "content-length": "1980",
+          "content-length": "1979",
           "content-type": "text/html; charset=utf-8",
-          "date": "Tue, 25 Nov 2025 21:44:48 GMT",
-          "etag": "\"caa28b43f8b86626b4f0be77d512042d\"",
-          "last-modified": "Tue, 25 Nov 2025 21:42:45 GMT",
+          "date": "Tue, 25 Nov 2025 21:54:01 GMT",
+          "etag": "\"b19e26a1e671536de3f92f56674647a4\"",
+          "last-modified": "Tue, 25 Nov 2025 21:51:26 GMT",
           "server": "Vercel",
           "strict-transport-security": "max-age=63072000",
           "x-matched-path": "/500",
           "x-vercel-cache": "MISS",
-          "x-vercel-id": "iad1::jvkfm-1764107088497-9c8ab490a01d"
+          "x-vercel-id": "iad1::ggqn5-1764107641742-14a9eb1347b4"
         },
         "data": null,
         "error": {
@@ -1067,18 +1095,18 @@
         "success": false,
         "status": 405,
         "statusText": "Method Not Allowed",
-        "duration": 355,
+        "duration": 182,
         "headers": {
           "cache-control": "public, max-age=0, must-revalidate",
           "content-disposition": "inline; filename=\"500\"",
           "content-type": "text/html; charset=utf-8",
-          "date": "Tue, 25 Nov 2025 21:44:48 GMT",
+          "date": "Tue, 25 Nov 2025 21:54:02 GMT",
           "server": "Vercel",
           "strict-transport-security": "max-age=63072000",
           "transfer-encoding": "chunked",
           "x-matched-path": "/500",
           "x-vercel-cache": "BYPASS",
-          "x-vercel-id": "iad1::ss9ds-1764107088748-acd3da04a642"
+          "x-vercel-id": "iad1::2vd65-1764107641933-66856770286c"
         },
         "data": null,
         "error": {
@@ -1094,18 +1122,18 @@
         "success": false,
         "status": 405,
         "statusText": "Method Not Allowed",
-        "duration": 218,
+        "duration": 188,
         "headers": {
           "cache-control": "public, max-age=0, must-revalidate",
           "content-disposition": "inline; filename=\"500\"",
           "content-type": "text/html; charset=utf-8",
-          "date": "Tue, 25 Nov 2025 21:44:49 GMT",
+          "date": "Tue, 25 Nov 2025 21:54:02 GMT",
           "server": "Vercel",
           "strict-transport-security": "max-age=63072000",
           "transfer-encoding": "chunked",
           "x-matched-path": "/500",
           "x-vercel-cache": "BYPASS",
-          "x-vercel-id": "iad1::w8qjl-1764107089102-69e95fde5d92"
+          "x-vercel-id": "iad1::wlmpx-1764107642115-0d1693acb57e"
         },
         "data": null,
         "error": {
@@ -1121,18 +1149,18 @@
         "success": false,
         "status": 405,
         "statusText": "Method Not Allowed",
-        "duration": 205,
+        "duration": 191,
         "headers": {
           "cache-control": "public, max-age=0, must-revalidate",
           "content-disposition": "inline; filename=\"500\"",
           "content-type": "text/html; charset=utf-8",
-          "date": "Tue, 25 Nov 2025 21:44:49 GMT",
+          "date": "Tue, 25 Nov 2025 21:54:02 GMT",
           "server": "Vercel",
           "strict-transport-security": "max-age=63072000",
           "transfer-encoding": "chunked",
           "x-matched-path": "/500",
           "x-vercel-cache": "BYPASS",
-          "x-vercel-id": "iad1::sfjb4-1764107089323-adbf1b995a31"
+          "x-vercel-id": "iad1::wbx4x-1764107642302-2eaa37aebfe2"
         },
         "data": null,
         "error": {
@@ -1148,18 +1176,18 @@
         "success": false,
         "status": 405,
         "statusText": "Method Not Allowed",
-        "duration": 214,
+        "duration": 182,
         "headers": {
           "cache-control": "public, max-age=0, must-revalidate",
           "content-disposition": "inline; filename=\"500\"",
           "content-type": "text/html; charset=utf-8",
-          "date": "Tue, 25 Nov 2025 21:44:49 GMT",
+          "date": "Tue, 25 Nov 2025 21:54:02 GMT",
           "server": "Vercel",
           "strict-transport-security": "max-age=63072000",
           "transfer-encoding": "chunked",
           "x-matched-path": "/500",
           "x-vercel-cache": "BYPASS",
-          "x-vercel-id": "iad1::rf44k-1764107089529-1f0646c5074a"
+          "x-vercel-id": "iad1::75zph-1764107642493-2000dfb86385"
         },
         "data": null,
         "error": {
@@ -1175,18 +1203,18 @@
         "success": false,
         "status": 405,
         "statusText": "Method Not Allowed",
-        "duration": 257,
+        "duration": 234,
         "headers": {
           "cache-control": "public, max-age=0, must-revalidate",
           "content-disposition": "inline; filename=\"500\"",
           "content-type": "text/html; charset=utf-8",
-          "date": "Tue, 25 Nov 2025 21:44:49 GMT",
+          "date": "Tue, 25 Nov 2025 21:54:02 GMT",
           "server": "Vercel",
           "strict-transport-security": "max-age=63072000",
           "transfer-encoding": "chunked",
           "x-matched-path": "/500",
           "x-vercel-cache": "BYPASS",
-          "x-vercel-id": "iad1::wwp85-1764107089745-28064c4a9c68"
+          "x-vercel-id": "iad1::8bd77-1764107642676-55e0527a3687"
         },
         "data": null,
         "error": {
@@ -1202,18 +1230,18 @@
         "success": false,
         "status": 405,
         "statusText": "Method Not Allowed",
-        "duration": 233,
+        "duration": 200,
         "headers": {
           "cache-control": "public, max-age=0, must-revalidate",
           "content-disposition": "inline; filename=\"500\"",
           "content-type": "text/html; charset=utf-8",
-          "date": "Tue, 25 Nov 2025 21:44:50 GMT",
+          "date": "Tue, 25 Nov 2025 21:54:03 GMT",
           "server": "Vercel",
           "strict-transport-security": "max-age=63072000",
           "transfer-encoding": "chunked",
           "x-matched-path": "/500",
           "x-vercel-cache": "BYPASS",
-          "x-vercel-id": "iad1::d9bq8-1764107089998-cf6b4727025f"
+          "x-vercel-id": "iad1::75zph-1764107642910-dec4f7837aa3"
         },
         "data": null,
         "error": {
@@ -1229,18 +1257,18 @@
         "success": false,
         "status": 405,
         "statusText": "Method Not Allowed",
-        "duration": 222,
+        "duration": 291,
         "headers": {
           "cache-control": "public, max-age=0, must-revalidate",
           "content-disposition": "inline; filename=\"500\"",
           "content-type": "text/html; charset=utf-8",
-          "date": "Tue, 25 Nov 2025 21:44:50 GMT",
+          "date": "Tue, 25 Nov 2025 21:54:03 GMT",
           "server": "Vercel",
           "strict-transport-security": "max-age=63072000",
           "transfer-encoding": "chunked",
           "x-matched-path": "/500",
           "x-vercel-cache": "BYPASS",
-          "x-vercel-id": "iad1::sl79d-1764107090234-998b1b0971ce"
+          "x-vercel-id": "iad1::cwtf7-1764107643113-132a69e90180"
         },
         "data": null,
         "error": {
@@ -1256,18 +1284,18 @@
         "success": false,
         "status": 405,
         "statusText": "Method Not Allowed",
-        "duration": 368,
+        "duration": 200,
         "headers": {
           "cache-control": "public, max-age=0, must-revalidate",
           "content-disposition": "inline; filename=\"500\"",
           "content-type": "text/html; charset=utf-8",
-          "date": "Tue, 25 Nov 2025 21:44:50 GMT",
+          "date": "Tue, 25 Nov 2025 21:54:03 GMT",
           "server": "Vercel",
           "strict-transport-security": "max-age=63072000",
           "transfer-encoding": "chunked",
           "x-matched-path": "/500",
           "x-vercel-cache": "BYPASS",
-          "x-vercel-id": "iad1::rf44k-1764107090488-1b1830ed0083"
+          "x-vercel-id": "iad1::75zph-1764107643401-8d03e2e1fd32"
         },
         "data": null,
         "error": {
@@ -1283,24 +1311,24 @@
         "success": false,
         "status": 500,
         "statusText": "Internal Server Error",
-        "duration": 259,
+        "duration": 193,
         "headers": {
           "accept-ranges": "bytes",
           "access-control-allow-origin": "*",
-          "age": "125",
+          "age": "157",
           "cache-control": "public, max-age=0, must-revalidate",
           "content-disposition": "inline; filename=\"500\"",
           "content-encoding": "br",
-          "content-length": "1980",
+          "content-length": "1979",
           "content-type": "text/html; charset=utf-8",
-          "date": "Tue, 25 Nov 2025 21:44:50 GMT",
-          "etag": "\"caa28b43f8b86626b4f0be77d512042d\"",
-          "last-modified": "Tue, 25 Nov 2025 21:42:45 GMT",
+          "date": "Tue, 25 Nov 2025 21:54:03 GMT",
+          "etag": "\"b19e26a1e671536de3f92f56674647a4\"",
+          "last-modified": "Tue, 25 Nov 2025 21:51:26 GMT",
           "server": "Vercel",
           "strict-transport-security": "max-age=63072000",
           "x-matched-path": "/500",
           "x-vercel-cache": "MISS",
-          "x-vercel-id": "iad1::wwp85-1764107090827-2d2a7e37a0fc"
+          "x-vercel-id": "iad1::b4hx5-1764107643602-a3e9f614efb6"
         },
         "data": null,
         "error": {
@@ -1316,18 +1344,45 @@
         "success": false,
         "status": 405,
         "statusText": "Method Not Allowed",
-        "duration": 297,
+        "duration": 246,
         "headers": {
           "cache-control": "public, max-age=0, must-revalidate",
           "content-disposition": "inline; filename=\"500\"",
           "content-type": "text/html; charset=utf-8",
-          "date": "Tue, 25 Nov 2025 21:44:51 GMT",
+          "date": "Tue, 25 Nov 2025 21:54:03 GMT",
           "server": "Vercel",
           "strict-transport-security": "max-age=63072000",
           "transfer-encoding": "chunked",
           "x-matched-path": "/500",
           "x-vercel-cache": "BYPASS",
-          "x-vercel-id": "iad1::vnzgg-1764107091095-b9581c5f600a"
+          "x-vercel-id": "iad1::8bd77-1764107643793-8d039f86712e"
+        },
+        "data": null,
+        "error": {
+          "message": "No JSON response",
+          "status": 405,
+          "statusText": "Method Not Allowed"
+        }
+      },
+      {
+        "name": "Settings Run Tests",
+        "url": "https://www.steadyletters.com/api/settings/run-tests",
+        "method": "POST",
+        "success": false,
+        "status": 405,
+        "statusText": "Method Not Allowed",
+        "duration": 178,
+        "headers": {
+          "cache-control": "public, max-age=0, must-revalidate",
+          "content-disposition": "inline; filename=\"500\"",
+          "content-type": "text/html; charset=utf-8",
+          "date": "Tue, 25 Nov 2025 21:54:04 GMT",
+          "server": "Vercel",
+          "strict-transport-security": "max-age=63072000",
+          "transfer-encoding": "chunked",
+          "x-matched-path": "/500",
+          "x-vercel-cache": "BYPASS",
+          "x-vercel-id": "iad1::hl5mz-1764107644039-e1a77b7ea412"
         },
         "data": null,
         "error": {
@@ -1346,16 +1401,16 @@
           "success": true,
           "status": 200,
           "statusText": "OK",
-          "duration": 430,
+          "duration": 192,
           "headers": {
             "access-control-allow-origin": "*",
-            "age": "120",
+            "age": "154",
             "cache-control": "public, max-age=0, must-revalidate",
             "content-disposition": "inline",
             "content-encoding": "br",
             "content-type": "text/html; charset=utf-8",
-            "date": "Tue, 25 Nov 2025 21:44:46 GMT",
-            "etag": "W/\"ffd86ca50b51dd9b9524db90335e782b\"",
+            "date": "Tue, 25 Nov 2025 21:53:59 GMT",
+            "etag": "W/\"9f415d6444fb25a04d4ce7bd15842fa5\"",
             "server": "Vercel",
             "strict-transport-security": "max-age=63072000",
             "transfer-encoding": "chunked",
@@ -1364,7 +1419,7 @@
             "x-nextjs-prerender": "1",
             "x-nextjs-stale-time": "300",
             "x-vercel-cache": "HIT",
-            "x-vercel-id": "iad1::4rn7q-1764107086128-57da557598d5"
+            "x-vercel-id": "iad1::ggqn5-1764107639684-cfa8ffba412b"
           },
           "data": {
             "error": "No JSON response",
@@ -1379,16 +1434,16 @@
           "success": true,
           "status": 200,
           "statusText": "OK",
-          "duration": 76,
+          "duration": 114,
           "headers": {
             "access-control-allow-origin": "*",
-            "age": "120",
+            "age": "154",
             "cache-control": "public, max-age=0, must-revalidate",
             "content-disposition": "inline",
             "content-encoding": "br",
             "content-type": "text/html; charset=utf-8",
-            "date": "Tue, 25 Nov 2025 21:44:46 GMT",
-            "etag": "W/\"bd19f17fa12f83b069705c6975356c3e\"",
+            "date": "Tue, 25 Nov 2025 21:53:59 GMT",
+            "etag": "W/\"8699876898540e664afb4b23d724f2ae\"",
             "server": "Vercel",
             "strict-transport-security": "max-age=63072000",
             "transfer-encoding": "chunked",
@@ -1397,7 +1452,7 @@
             "x-nextjs-prerender": "1",
             "x-nextjs-stale-time": "300",
             "x-vercel-cache": "HIT",
-            "x-vercel-id": "iad1::qfr66-1764107086251-2d9977ca1d91"
+            "x-vercel-id": "iad1::t9n8p-1764107639812-7c25c82d9ebf"
           },
           "data": {
             "error": "No JSON response",
@@ -1412,16 +1467,16 @@
           "success": true,
           "status": 200,
           "statusText": "OK",
-          "duration": 101,
+          "duration": 78,
           "headers": {
             "access-control-allow-origin": "*",
-            "age": "120",
+            "age": "154",
             "cache-control": "public, max-age=0, must-revalidate",
             "content-disposition": "inline",
             "content-encoding": "br",
             "content-type": "text/html; charset=utf-8",
-            "date": "Tue, 25 Nov 2025 21:44:46 GMT",
-            "etag": "W/\"455bf376be286f2c7fa9982a0946265a\"",
+            "date": "Tue, 25 Nov 2025 21:53:59 GMT",
+            "etag": "W/\"fe92410a7b2a8686b5858de003ebae65\"",
             "server": "Vercel",
             "strict-transport-security": "max-age=63072000",
             "transfer-encoding": "chunked",
@@ -1430,7 +1485,7 @@
             "x-nextjs-prerender": "1",
             "x-nextjs-stale-time": "300",
             "x-vercel-cache": "HIT",
-            "x-vercel-id": "iad1::gz8df-1764107086347-48933c2f8afc"
+            "x-vercel-id": "iad1::czz5t-1764107639927-0c3e12f9ebbf"
           },
           "data": {
             "error": "No JSON response",
@@ -1445,16 +1500,16 @@
           "success": true,
           "status": 200,
           "statusText": "OK",
-          "duration": 75,
+          "duration": 79,
           "headers": {
             "access-control-allow-origin": "*",
-            "age": "120",
+            "age": "154",
             "cache-control": "public, max-age=0, must-revalidate",
             "content-disposition": "inline",
             "content-encoding": "br",
             "content-type": "text/html; charset=utf-8",
-            "date": "Tue, 25 Nov 2025 21:44:46 GMT",
-            "etag": "W/\"30d47128c19d733f02441404abcc949c\"",
+            "date": "Tue, 25 Nov 2025 21:54:00 GMT",
+            "etag": "W/\"b3f2a3231d7de59d78d297c70bc9de4d\"",
             "server": "Vercel",
             "strict-transport-security": "max-age=63072000",
             "transfer-encoding": "chunked",
@@ -1463,7 +1518,7 @@
             "x-nextjs-prerender": "1",
             "x-nextjs-stale-time": "300",
             "x-vercel-cache": "HIT",
-            "x-vercel-id": "iad1::g67nd-1764107086434-4d8df03bfcde"
+            "x-vercel-id": "iad1::j2kdq-1764107640010-0ada101c927e"
           },
           "data": {
             "error": "No JSON response",
@@ -1472,6 +1527,7 @@
           "error": null
         }
       ],
+      "201": [],
       "400": [],
       "401": [],
       "404": [],
@@ -1483,18 +1539,18 @@
           "success": false,
           "status": 405,
           "statusText": "Method Not Allowed",
-          "duration": 262,
+          "duration": 201,
           "headers": {
             "cache-control": "public, max-age=0, must-revalidate",
             "content-disposition": "inline; filename=\"500\"",
             "content-type": "text/html; charset=utf-8",
-            "date": "Tue, 25 Nov 2025 21:44:47 GMT",
+            "date": "Tue, 25 Nov 2025 21:54:00 GMT",
             "server": "Vercel",
             "strict-transport-security": "max-age=63072000",
             "transfer-encoding": "chunked",
             "x-matched-path": "/500",
             "x-vercel-cache": "BYPASS",
-            "x-vercel-id": "iad1::sfjb4-1764107087100-d659a5b653a2"
+            "x-vercel-id": "iad1::8bd77-1764107640499-74100f819b1b"
           },
           "data": null,
           "error": {
@@ -1510,18 +1566,18 @@
           "success": false,
           "status": 405,
           "statusText": "Method Not Allowed",
-          "duration": 216,
+          "duration": 178,
           "headers": {
             "cache-control": "public, max-age=0, must-revalidate",
             "content-disposition": "inline; filename=\"500\"",
             "content-type": "text/html; charset=utf-8",
-            "date": "Tue, 25 Nov 2025 21:44:48 GMT",
+            "date": "Tue, 25 Nov 2025 21:54:01 GMT",
             "server": "Vercel",
             "strict-transport-security": "max-age=63072000",
             "transfer-encoding": "chunked",
             "x-matched-path": "/500",
             "x-vercel-cache": "BYPASS",
-            "x-vercel-id": "iad1::h8tnd-1764107088041-a981e443f692"
+            "x-vercel-id": "iad1::6jl6j-1764107641381-0ea020bdad74"
           },
           "data": null,
           "error": {
@@ -1537,18 +1593,18 @@
           "success": false,
           "status": 405,
           "statusText": "Method Not Allowed",
-          "duration": 355,
+          "duration": 182,
           "headers": {
             "cache-control": "public, max-age=0, must-revalidate",
             "content-disposition": "inline; filename=\"500\"",
             "content-type": "text/html; charset=utf-8",
-            "date": "Tue, 25 Nov 2025 21:44:48 GMT",
+            "date": "Tue, 25 Nov 2025 21:54:02 GMT",
             "server": "Vercel",
             "strict-transport-security": "max-age=63072000",
             "transfer-encoding": "chunked",
             "x-matched-path": "/500",
             "x-vercel-cache": "BYPASS",
-            "x-vercel-id": "iad1::ss9ds-1764107088748-acd3da04a642"
+            "x-vercel-id": "iad1::2vd65-1764107641933-66856770286c"
           },
           "data": null,
           "error": {
@@ -1564,18 +1620,18 @@
           "success": false,
           "status": 405,
           "statusText": "Method Not Allowed",
-          "duration": 218,
+          "duration": 188,
           "headers": {
             "cache-control": "public, max-age=0, must-revalidate",
             "content-disposition": "inline; filename=\"500\"",
             "content-type": "text/html; charset=utf-8",
-            "date": "Tue, 25 Nov 2025 21:44:49 GMT",
+            "date": "Tue, 25 Nov 2025 21:54:02 GMT",
             "server": "Vercel",
             "strict-transport-security": "max-age=63072000",
             "transfer-encoding": "chunked",
             "x-matched-path": "/500",
             "x-vercel-cache": "BYPASS",
-            "x-vercel-id": "iad1::w8qjl-1764107089102-69e95fde5d92"
+            "x-vercel-id": "iad1::wlmpx-1764107642115-0d1693acb57e"
           },
           "data": null,
           "error": {
@@ -1591,18 +1647,18 @@
           "success": false,
           "status": 405,
           "statusText": "Method Not Allowed",
-          "duration": 205,
+          "duration": 191,
           "headers": {
             "cache-control": "public, max-age=0, must-revalidate",
             "content-disposition": "inline; filename=\"500\"",
             "content-type": "text/html; charset=utf-8",
-            "date": "Tue, 25 Nov 2025 21:44:49 GMT",
+            "date": "Tue, 25 Nov 2025 21:54:02 GMT",
             "server": "Vercel",
             "strict-transport-security": "max-age=63072000",
             "transfer-encoding": "chunked",
             "x-matched-path": "/500",
             "x-vercel-cache": "BYPASS",
-            "x-vercel-id": "iad1::sfjb4-1764107089323-adbf1b995a31"
+            "x-vercel-id": "iad1::wbx4x-1764107642302-2eaa37aebfe2"
           },
           "data": null,
           "error": {
@@ -1618,18 +1674,18 @@
           "success": false,
           "status": 405,
           "statusText": "Method Not Allowed",
-          "duration": 214,
+          "duration": 182,
           "headers": {
             "cache-control": "public, max-age=0, must-revalidate",
             "content-disposition": "inline; filename=\"500\"",
             "content-type": "text/html; charset=utf-8",
-            "date": "Tue, 25 Nov 2025 21:44:49 GMT",
+            "date": "Tue, 25 Nov 2025 21:54:02 GMT",
             "server": "Vercel",
             "strict-transport-security": "max-age=63072000",
             "transfer-encoding": "chunked",
             "x-matched-path": "/500",
             "x-vercel-cache": "BYPASS",
-            "x-vercel-id": "iad1::rf44k-1764107089529-1f0646c5074a"
+            "x-vercel-id": "iad1::75zph-1764107642493-2000dfb86385"
           },
           "data": null,
           "error": {
@@ -1645,18 +1701,18 @@
           "success": false,
           "status": 405,
           "statusText": "Method Not Allowed",
-          "duration": 257,
+          "duration": 234,
           "headers": {
             "cache-control": "public, max-age=0, must-revalidate",
             "content-disposition": "inline; filename=\"500\"",
             "content-type": "text/html; charset=utf-8",
-            "date": "Tue, 25 Nov 2025 21:44:49 GMT",
+            "date": "Tue, 25 Nov 2025 21:54:02 GMT",
             "server": "Vercel",
             "strict-transport-security": "max-age=63072000",
             "transfer-encoding": "chunked",
             "x-matched-path": "/500",
             "x-vercel-cache": "BYPASS",
-            "x-vercel-id": "iad1::wwp85-1764107089745-28064c4a9c68"
+            "x-vercel-id": "iad1::8bd77-1764107642676-55e0527a3687"
           },
           "data": null,
           "error": {
@@ -1672,18 +1728,18 @@
           "success": false,
           "status": 405,
           "statusText": "Method Not Allowed",
-          "duration": 233,
+          "duration": 200,
           "headers": {
             "cache-control": "public, max-age=0, must-revalidate",
             "content-disposition": "inline; filename=\"500\"",
             "content-type": "text/html; charset=utf-8",
-            "date": "Tue, 25 Nov 2025 21:44:50 GMT",
+            "date": "Tue, 25 Nov 2025 21:54:03 GMT",
             "server": "Vercel",
             "strict-transport-security": "max-age=63072000",
             "transfer-encoding": "chunked",
             "x-matched-path": "/500",
             "x-vercel-cache": "BYPASS",
-            "x-vercel-id": "iad1::d9bq8-1764107089998-cf6b4727025f"
+            "x-vercel-id": "iad1::75zph-1764107642910-dec4f7837aa3"
           },
           "data": null,
           "error": {
@@ -1699,18 +1755,18 @@
           "success": false,
           "status": 405,
           "statusText": "Method Not Allowed",
-          "duration": 222,
+          "duration": 291,
           "headers": {
             "cache-control": "public, max-age=0, must-revalidate",
             "content-disposition": "inline; filename=\"500\"",
             "content-type": "text/html; charset=utf-8",
-            "date": "Tue, 25 Nov 2025 21:44:50 GMT",
+            "date": "Tue, 25 Nov 2025 21:54:03 GMT",
             "server": "Vercel",
             "strict-transport-security": "max-age=63072000",
             "transfer-encoding": "chunked",
             "x-matched-path": "/500",
             "x-vercel-cache": "BYPASS",
-            "x-vercel-id": "iad1::sl79d-1764107090234-998b1b0971ce"
+            "x-vercel-id": "iad1::cwtf7-1764107643113-132a69e90180"
           },
           "data": null,
           "error": {
@@ -1726,18 +1782,18 @@
           "success": false,
           "status": 405,
           "statusText": "Method Not Allowed",
-          "duration": 368,
+          "duration": 200,
           "headers": {
             "cache-control": "public, max-age=0, must-revalidate",
             "content-disposition": "inline; filename=\"500\"",
             "content-type": "text/html; charset=utf-8",
-            "date": "Tue, 25 Nov 2025 21:44:50 GMT",
+            "date": "Tue, 25 Nov 2025 21:54:03 GMT",
             "server": "Vercel",
             "strict-transport-security": "max-age=63072000",
             "transfer-encoding": "chunked",
             "x-matched-path": "/500",
             "x-vercel-cache": "BYPASS",
-            "x-vercel-id": "iad1::rf44k-1764107090488-1b1830ed0083"
+            "x-vercel-id": "iad1::75zph-1764107643401-8d03e2e1fd32"
           },
           "data": null,
           "error": {
@@ -1753,18 +1809,45 @@
           "success": false,
           "status": 405,
           "statusText": "Method Not Allowed",
-          "duration": 297,
+          "duration": 246,
           "headers": {
             "cache-control": "public, max-age=0, must-revalidate",
             "content-disposition": "inline; filename=\"500\"",
             "content-type": "text/html; charset=utf-8",
-            "date": "Tue, 25 Nov 2025 21:44:51 GMT",
+            "date": "Tue, 25 Nov 2025 21:54:03 GMT",
             "server": "Vercel",
             "strict-transport-security": "max-age=63072000",
             "transfer-encoding": "chunked",
             "x-matched-path": "/500",
             "x-vercel-cache": "BYPASS",
-            "x-vercel-id": "iad1::vnzgg-1764107091095-b9581c5f600a"
+            "x-vercel-id": "iad1::8bd77-1764107643793-8d039f86712e"
+          },
+          "data": null,
+          "error": {
+            "message": "No JSON response",
+            "status": 405,
+            "statusText": "Method Not Allowed"
+          }
+        },
+        {
+          "name": "Settings Run Tests",
+          "url": "https://www.steadyletters.com/api/settings/run-tests",
+          "method": "POST",
+          "success": false,
+          "status": 405,
+          "statusText": "Method Not Allowed",
+          "duration": 178,
+          "headers": {
+            "cache-control": "public, max-age=0, must-revalidate",
+            "content-disposition": "inline; filename=\"500\"",
+            "content-type": "text/html; charset=utf-8",
+            "date": "Tue, 25 Nov 2025 21:54:04 GMT",
+            "server": "Vercel",
+            "strict-transport-security": "max-age=63072000",
+            "transfer-encoding": "chunked",
+            "x-matched-path": "/500",
+            "x-vercel-cache": "BYPASS",
+            "x-vercel-id": "iad1::hl5mz-1764107644039-e1a77b7ea412"
           },
           "data": null,
           "error": {
@@ -1782,24 +1865,24 @@
           "success": false,
           "status": 500,
           "statusText": "Internal Server Error",
-          "duration": 307,
+          "duration": 221,
           "headers": {
             "accept-ranges": "bytes",
             "access-control-allow-origin": "*",
-            "age": "121",
+            "age": "154",
             "cache-control": "public, max-age=0, must-revalidate",
             "content-disposition": "inline; filename=\"500\"",
             "content-encoding": "br",
-            "content-length": "1980",
+            "content-length": "1979",
             "content-type": "text/html; charset=utf-8",
-            "date": "Tue, 25 Nov 2025 21:44:46 GMT",
-            "etag": "\"caa28b43f8b86626b4f0be77d512042d\"",
-            "last-modified": "Tue, 25 Nov 2025 21:42:45 GMT",
+            "date": "Tue, 25 Nov 2025 21:54:00 GMT",
+            "etag": "\"b19e26a1e671536de3f92f56674647a4\"",
+            "last-modified": "Tue, 25 Nov 2025 21:51:26 GMT",
             "server": "Vercel",
             "strict-transport-security": "max-age=63072000",
             "x-matched-path": "/500",
             "x-vercel-cache": "MISS",
-            "x-vercel-id": "iad1::c7k7s-1764107086510-d33f32e30abb"
+            "x-vercel-id": "iad1::j2kdq-1764107640088-fe15e878089f"
           },
           "data": null,
           "error": {
@@ -1815,24 +1898,24 @@
           "success": false,
           "status": 500,
           "statusText": "Internal Server Error",
-          "duration": 278,
+          "duration": 184,
           "headers": {
             "accept-ranges": "bytes",
             "access-control-allow-origin": "*",
-            "age": "121",
+            "age": "154",
             "cache-control": "public, max-age=0, must-revalidate",
             "content-disposition": "inline; filename=\"500\"",
             "content-encoding": "br",
-            "content-length": "1980",
+            "content-length": "1979",
             "content-type": "text/html; charset=utf-8",
-            "date": "Tue, 25 Nov 2025 21:44:46 GMT",
-            "etag": "\"caa28b43f8b86626b4f0be77d512042d\"",
-            "last-modified": "Tue, 25 Nov 2025 21:42:45 GMT",
+            "date": "Tue, 25 Nov 2025 21:54:00 GMT",
+            "etag": "\"b19e26a1e671536de3f92f56674647a4\"",
+            "last-modified": "Tue, 25 Nov 2025 21:51:26 GMT",
             "server": "Vercel",
             "strict-transport-security": "max-age=63072000",
             "x-matched-path": "/500",
             "x-vercel-cache": "MISS",
-            "x-vercel-id": "iad1::56tnm-1764107086819-715272914985"
+            "x-vercel-id": "iad1::zr6l9-1764107640309-d53628690e28"
           },
           "data": null,
           "error": {
@@ -1848,24 +1931,24 @@
           "success": false,
           "status": 500,
           "statusText": "Internal Server Error",
-          "duration": 386,
+          "duration": 374,
           "headers": {
             "accept-ranges": "bytes",
             "access-control-allow-origin": "*",
-            "age": "122",
+            "age": "154",
             "cache-control": "public, max-age=0, must-revalidate",
             "content-disposition": "inline; filename=\"500\"",
             "content-encoding": "br",
-            "content-length": "1980",
+            "content-length": "1979",
             "content-type": "text/html; charset=utf-8",
-            "date": "Tue, 25 Nov 2025 21:44:47 GMT",
-            "etag": "\"caa28b43f8b86626b4f0be77d512042d\"",
-            "last-modified": "Tue, 25 Nov 2025 21:42:45 GMT",
+            "date": "Tue, 25 Nov 2025 21:54:00 GMT",
+            "etag": "\"b19e26a1e671536de3f92f56674647a4\"",
+            "last-modified": "Tue, 25 Nov 2025 21:51:26 GMT",
             "server": "Vercel",
             "strict-transport-security": "max-age=63072000",
             "x-matched-path": "/500",
             "x-vercel-cache": "MISS",
-            "x-vercel-id": "iad1::n74wv-1764107087509-293f16d1ceb9"
+            "x-vercel-id": "iad1::8pktt-1764107640775-a776f47afabf"
           },
           "data": null,
           "error": {
@@ -1881,24 +1964,24 @@
           "success": false,
           "status": 500,
           "statusText": "Internal Server Error",
-          "duration": 292,
+          "duration": 306,
           "headers": {
             "accept-ranges": "bytes",
             "access-control-allow-origin": "*",
-            "age": "122",
+            "age": "155",
             "cache-control": "public, max-age=0, must-revalidate",
             "content-disposition": "inline; filename=\"500\"",
             "content-encoding": "br",
-            "content-length": "1980",
+            "content-length": "1979",
             "content-type": "text/html; charset=utf-8",
-            "date": "Tue, 25 Nov 2025 21:44:47 GMT",
-            "etag": "\"caa28b43f8b86626b4f0be77d512042d\"",
-            "last-modified": "Tue, 25 Nov 2025 21:42:45 GMT",
+            "date": "Tue, 25 Nov 2025 21:54:01 GMT",
+            "etag": "\"b19e26a1e671536de3f92f56674647a4\"",
+            "last-modified": "Tue, 25 Nov 2025 21:51:26 GMT",
             "server": "Vercel",
             "strict-transport-security": "max-age=63072000",
             "x-matched-path": "/500",
             "x-vercel-cache": "MISS",
-            "x-vercel-id": "iad1::5g8jr-1764107087750-1f540f304e75"
+            "x-vercel-id": "iad1::nctnw-1764107641067-c46d55f28a51"
           },
           "data": null,
           "error": {
@@ -1914,24 +1997,24 @@
           "success": false,
           "status": 500,
           "statusText": "Internal Server Error",
-          "duration": 238,
+          "duration": 182,
           "headers": {
             "accept-ranges": "bytes",
             "access-control-allow-origin": "*",
-            "age": "122",
+            "age": "155",
             "cache-control": "public, max-age=0, must-revalidate",
             "content-disposition": "inline; filename=\"500\"",
             "content-encoding": "br",
-            "content-length": "1980",
+            "content-length": "1979",
             "content-type": "text/html; charset=utf-8",
-            "date": "Tue, 25 Nov 2025 21:44:48 GMT",
-            "etag": "\"caa28b43f8b86626b4f0be77d512042d\"",
-            "last-modified": "Tue, 25 Nov 2025 21:42:45 GMT",
+            "date": "Tue, 25 Nov 2025 21:54:01 GMT",
+            "etag": "\"b19e26a1e671536de3f92f56674647a4\"",
+            "last-modified": "Tue, 25 Nov 2025 21:51:26 GMT",
             "server": "Vercel",
             "strict-transport-security": "max-age=63072000",
             "x-matched-path": "/500",
             "x-vercel-cache": "MISS",
-            "x-vercel-id": "iad1::7z9n2-1764107088260-704ea286aa6b"
+            "x-vercel-id": "iad1::5cgmx-1764107641559-f049f84b3ff9"
           },
           "data": null,
           "error": {
@@ -1947,24 +2030,24 @@
           "success": false,
           "status": 500,
           "statusText": "Internal Server Error",
-          "duration": 253,
+          "duration": 192,
           "headers": {
             "accept-ranges": "bytes",
             "access-control-allow-origin": "*",
-            "age": "123",
+            "age": "155",
             "cache-control": "public, max-age=0, must-revalidate",
             "content-disposition": "inline; filename=\"500\"",
             "content-encoding": "br",
-            "content-length": "1980",
+            "content-length": "1979",
             "content-type": "text/html; charset=utf-8",
-            "date": "Tue, 25 Nov 2025 21:44:48 GMT",
-            "etag": "\"caa28b43f8b86626b4f0be77d512042d\"",
-            "last-modified": "Tue, 25 Nov 2025 21:42:45 GMT",
+            "date": "Tue, 25 Nov 2025 21:54:01 GMT",
+            "etag": "\"b19e26a1e671536de3f92f56674647a4\"",
+            "last-modified": "Tue, 25 Nov 2025 21:51:26 GMT",
             "server": "Vercel",
             "strict-transport-security": "max-age=63072000",
             "x-matched-path": "/500",
             "x-vercel-cache": "MISS",
-            "x-vercel-id": "iad1::jvkfm-1764107088497-9c8ab490a01d"
+            "x-vercel-id": "iad1::ggqn5-1764107641742-14a9eb1347b4"
           },
           "data": null,
           "error": {
@@ -1980,24 +2063,24 @@
           "success": false,
           "status": 500,
           "statusText": "Internal Server Error",
-          "duration": 259,
+          "duration": 193,
           "headers": {
             "accept-ranges": "bytes",
             "access-control-allow-origin": "*",
-            "age": "125",
+            "age": "157",
             "cache-control": "public, max-age=0, must-revalidate",
             "content-disposition": "inline; filename=\"500\"",
             "content-encoding": "br",
-            "content-length": "1980",
+            "content-length": "1979",
             "content-type": "text/html; charset=utf-8",
-            "date": "Tue, 25 Nov 2025 21:44:50 GMT",
-            "etag": "\"caa28b43f8b86626b4f0be77d512042d\"",
-            "last-modified": "Tue, 25 Nov 2025 21:42:45 GMT",
+            "date": "Tue, 25 Nov 2025 21:54:03 GMT",
+            "etag": "\"b19e26a1e671536de3f92f56674647a4\"",
+            "last-modified": "Tue, 25 Nov 2025 21:51:26 GMT",
             "server": "Vercel",
             "strict-transport-security": "max-age=63072000",
             "x-matched-path": "/500",
             "x-vercel-cache": "MISS",
-            "x-vercel-id": "iad1::wwp85-1764107090827-2d2a7e37a0fc"
+            "x-vercel-id": "iad1::b4hx5-1764107643602-a3e9f614efb6"
           },
           "data": null,
           "error": {

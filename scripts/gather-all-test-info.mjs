@@ -3,9 +3,14 @@
 /**
  * Gather All Test Information
  * Collects comprehensive test data from deployed site
+ * Supports authentication for testing protected endpoints
  */
 
 const BASE_URL = process.env.PRODUCTION_URL || 'https://www.steadyletters.com';
+const EMAIL = process.env.TEST_EMAIL;
+const PASSWORD = process.env.TEST_PASSWORD;
+const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL || 'https://jibnaxhixzbuizscucbs.supabase.co';
+const SUPABASE_KEY = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
 
 const colors = {
     reset: '\x1b[0m',
@@ -20,11 +25,85 @@ function log(message, color = 'reset') {
     console.log(`${colors[color]}${message}${colors.reset}`);
 }
 
+let authCookies = {};
+
+async function authenticate() {
+    if (!EMAIL || !PASSWORD || !SUPABASE_KEY) {
+        log('⚠️  No credentials provided - will test unauthenticated endpoints only', 'yellow');
+        return null;
+    }
+
+    log('\n🔐 Authenticating...', 'blue');
+    
+    try {
+        // Use Supabase signInWithPassword endpoint
+        const response = await fetch(`${SUPABASE_URL}/auth/v1/token?grant_type=password`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'apikey': SUPABASE_KEY,
+            },
+            body: JSON.stringify({
+                email: EMAIL,
+                password: PASSWORD,
+            }),
+        });
+
+        if (!response.ok) {
+            const errorText = await response.text();
+            let errorMsg = errorText;
+            try {
+                const errorJson = JSON.parse(errorText);
+                errorMsg = errorJson.message || errorJson.error_description || errorText;
+            } catch {}
+            log(`❌ Authentication failed: ${response.status} - ${errorMsg}`, 'red');
+            log('💡 Note: Testing will continue without authentication', 'yellow');
+            return null;
+        }
+
+        const data = await response.json();
+        log('✅ Authentication successful', 'green');
+        
+        // Extract all cookies from response headers
+        const setCookieHeaders = response.headers.getSetCookie?.() || [];
+        for (const cookie of setCookieHeaders) {
+            const [nameValue] = cookie.split(';');
+            const [name, value] = nameValue.split('=');
+            if (name && value) {
+                authCookies[name.trim()] = value.trim();
+            }
+        }
+        
+        // Build cookie string for requests
+        const cookieString = Object.entries(authCookies)
+            .map(([name, value]) => `${name}=${value}`)
+            .join('; ');
+        
+        log(`📝 Got ${Object.keys(authCookies).length} auth cookies`, 'gray');
+        
+        return { accessToken: data.access_token, cookies: cookieString };
+    } catch (error) {
+        log(`❌ Authentication error: ${error.message}`, 'red');
+        log('💡 Note: Testing will continue without authentication', 'yellow');
+        return null;
+    }
+}
+
 async function testEndpoint(name, url, options = {}) {
     const startTime = Date.now();
     try {
+        // Add auth cookies if available
+        const headers = { ...options.headers };
+        if (authCookies && Object.keys(authCookies).length > 0) {
+            const cookieString = Object.entries(authCookies)
+                .map(([name, value]) => `${name}=${value}`)
+                .join('; ');
+            headers['Cookie'] = cookieString;
+        }
+        
         const response = await fetch(url, {
             ...options,
+            headers,
             signal: AbortSignal.timeout(10000),
         });
         const duration = Date.now() - startTime;
@@ -70,13 +149,22 @@ async function testEndpoint(name, url, options = {}) {
 
 async function gatherAllTests() {
     log('📊 Gathering All Test Information', 'blue');
-    log(`📍 Target: ${BASE_URL}\n`, 'gray');
+    log(`📍 Target: ${BASE_URL}`, 'gray');
+    if (EMAIL) {
+        log(`👤 Authenticating as: ${EMAIL}`, 'gray');
+    }
+    log('', 'gray');
 
     const allResults = {
         timestamp: new Date().toISOString(),
         baseUrl: BASE_URL,
+        authenticated: false,
         tests: {},
     };
+
+    // Authenticate if credentials provided
+    const authResult = await authenticate();
+    allResults.authenticated = !!authResult;
 
     // Public Pages
     log('Testing Public Pages...', 'yellow');
@@ -92,8 +180,8 @@ async function gatherAllTests() {
         allResults.tests.publicPages.push(await testEndpoint(page.name, `${BASE_URL}${page.path}`));
     }
 
-    // API Endpoints (Unauthenticated)
-    log('\nTesting API Endpoints (Unauthenticated)...', 'yellow');
+    // API Endpoints
+    log('\nTesting API Endpoints...', 'yellow');
     const apiEndpoints = [
         { path: '/api/health', name: 'Health Check', method: 'GET' },
         { path: '/api/handwriting-styles', name: 'Handwriting Styles', method: 'GET' },
@@ -113,6 +201,7 @@ async function gatherAllTests() {
         { path: '/api/stripe/checkout', name: 'Stripe Checkout', method: 'POST', body: { priceId: 'test' } },
         { path: '/api/stripe/portal', name: 'Stripe Portal', method: 'GET' },
         { path: '/api/post-deploy', name: 'Post-Deploy', method: 'POST', body: {} },
+        { path: '/api/settings/run-tests', name: 'Settings Run Tests', method: 'POST', body: {} },
     ];
 
     allResults.tests.apiEndpoints = [];
@@ -147,6 +236,7 @@ async function gatherAllTests() {
         failed: allTests.filter(t => !t.success),
         byStatus: {
             200: allTests.filter(t => t.status === 200),
+            201: allTests.filter(t => t.status === 201),
             400: allTests.filter(t => t.status === 400),
             401: allTests.filter(t => t.status === 401),
             404: allTests.filter(t => t.status === 404),
@@ -167,6 +257,7 @@ async function gatherAllTests() {
     log(`Total: ${total}`, 'gray');
     log(`✅ Passed: ${passed}`, 'green');
     log(`❌ Failed: ${failed}`, 'red');
+    log(`🔐 Authenticated: ${allResults.authenticated ? 'Yes' : 'No'}`, allResults.authenticated ? 'green' : 'yellow');
     log('============================================================', 'gray');
 
     log('\n📊 By Status Code:', 'blue');
@@ -177,13 +268,16 @@ async function gatherAllTests() {
     });
 
     log(`\n💾 Full results saved to ${resultsFile}`, 'blue');
-    log(`\n🔍 Failed Tests:`, 'red');
-    allResults.grouped.failed.forEach(test => {
-        log(`  ❌ ${test.name} (${test.status || 'ERROR'}): ${test.error?.message || 'Unknown error'}`, 'red');
-    });
+    
+    if (failed > 0) {
+        log(`\n🔍 Failed Tests:`, 'red');
+        allResults.grouped.failed.forEach(test => {
+            const statusInfo = test.status ? ` (${test.status})` : '';
+            log(`  ❌ ${test.name}${statusInfo}: ${test.error?.message || 'Unknown error'}`, 'red');
+        });
+    }
 
     return allResults;
 }
 
 gatherAllTests().catch(console.error);
-
