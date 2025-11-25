@@ -16,7 +16,10 @@
     "test:e2e:local": "playwright test --project=local",
     "test:e2e:production": "TEST_ENV=production playwright test --project=production",
     "test:e2e:both": "playwright test --project=local && TEST_ENV=production playwright test --project=production",
-    "test:all": "npm test && npm run test:e2e:local"
+    "test:all": "npm test && npm run test:e2e:local",
+    "test:production-diagnostics": "PRODUCTION_URL=https://www.steadyletters.com playwright test tests/e2e/production-diagnostics.spec.ts",
+    "check:env": "node scripts/check-production-env.mjs",
+    "diagnose": "npm run check:env && npm run test:production-diagnostics"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.2.2",

@@ -89,10 +89,22 @@ export async function POST(request: NextRequest) {
         });
 
         return NextResponse.json({ letter });
-    } catch (error) {
+    } catch (error: any) {
         console.error('Failed to generate letter:', error);
+        
+        // Provide more detailed error in development
+        const errorMessage = process.env.NODE_ENV === 'development'
+            ? error.message || 'Failed to generate letter'
+            : 'Failed to generate letter. Please try again.';
+        
         return NextResponse.json(
-            { error: 'Failed to generate letter. Please try again.' },
+            { 
+                error: errorMessage,
+                ...(process.env.NODE_ENV === 'development' && { 
+                    details: error.stack,
+                    type: error.constructor?.name 
+                })
+            },
             { status: 500 }
         );
     }

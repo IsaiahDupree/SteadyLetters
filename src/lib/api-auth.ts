@@ -29,7 +29,12 @@ export async function getAuthenticatedUser(request?: NextRequest) {
 
     const { data: { user }, error } = await supabase.auth.getUser();
     
-    if (error || !user) {
+    if (error) {
+        console.error('Auth error in getAuthenticatedUser:', error);
+        return null;
+    }
+    
+    if (!user) {
         return null;
     }
 

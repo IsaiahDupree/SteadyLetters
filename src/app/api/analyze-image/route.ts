@@ -118,10 +118,22 @@ export async function POST(request: NextRequest) {
         return NextResponse.json({
             analysis,
         });
-    } catch (error) {
+    } catch (error: any) {
         console.error('Image analysis error:', error);
+        
+        // Provide more detailed error in development
+        const errorMessage = process.env.NODE_ENV === 'development'
+            ? error.message || 'Failed to analyze image'
+            : 'Failed to analyze image. Please try again.';
+        
         return NextResponse.json(
-            { error: 'Failed to analyze image. Please try again.' },
+            { 
+                error: errorMessage,
+                ...(process.env.NODE_ENV === 'development' && { 
+                    details: error.stack,
+                    type: error.constructor?.name 
+                })
+            },
             { status: 500 }
         );
     }
