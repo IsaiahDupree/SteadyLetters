@@ -12,7 +12,7 @@ import {
     PRODUCT_CATALOG
 } from '@/lib/thanks-io';
 import { STRIPE_PLANS } from '@/lib/pricing-tiers';
-import { trackUsage } from '@/lib/usage';
+import { prisma } from '@/lib/prisma';
 
 export async function POST(request: NextRequest) {
     try {
@@ -135,8 +135,18 @@ export async function POST(request: NextRequest) {
                 );
         }
 
-        // Track usage
-        await trackUsage(user.id, 'lettersSent', recipients.length);
+        // Track usage - increment lettersSent counter
+        await prisma.userUsage.upsert({
+            where: { userId: user.id },
+            update: {
+                lettersSent: { increment: recipients.length },
+            },
+            create: {
+                userId: user.id,
+                tier: 'FREE',
+                lettersSent: recipients.length,
+            },
+        });
 
         return NextResponse.json({
             success: true,
