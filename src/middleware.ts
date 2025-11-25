@@ -87,25 +87,14 @@ export async function middleware(request: NextRequest) {
     return response;
 }
 
+// No matcher - let all requests through, but use early return for /api routes
+// This is the most reliable approach for Next.js/Vercel
 export const config = {
     matcher: [
         /*
-         * Only match page routes, not API routes or static assets
-         * This prevents middleware from running on /api/* routes entirely
-         * Combined with early return check for defense-in-depth
+         * Match all paths except static files
+         * API routes are handled by early return in middleware function
          */
-        '/',
-        '/login',
-        '/signup',
-        '/dashboard/:path*',
-        '/generate/:path*',
-        '/billing/:path*',
-        '/orders/:path*',
-        '/recipients/:path*',
-        '/templates/:path*',
-        '/send/:path*',
-        '/settings/:path*',
-        '/privacy',
-        '/terms',
+        '/((?!_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)',
     ],
 };
