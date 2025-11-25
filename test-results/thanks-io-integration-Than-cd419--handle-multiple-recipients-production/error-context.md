@@ -1,0 +1,57 @@
+# Page snapshot
+
+```yaml
+- generic [active] [ref=e1]:
+  - navigation [ref=e2]:
+    - generic [ref=e3]:
+      - link "SteadyLetters Logo Steady Letters" [ref=e4] [cursor=pointer]:
+        - /url: /
+        - generic [ref=e5]:
+          - img "SteadyLetters Logo" [ref=e6]
+          - generic [ref=e7]:
+            - generic [ref=e8]: Steady
+            - generic [ref=e9]: Letters
+      - generic [ref=e11]:
+        - link "Sign In" [ref=e12] [cursor=pointer]:
+          - /url: /login
+        - link "Sign Up" [ref=e13] [cursor=pointer]:
+          - /url: /signup
+  - main [ref=e14]:
+    - generic [ref=e16]:
+      - generic [ref=e17]:
+        - generic [ref=e18]: Welcome Back
+        - generic [ref=e19]: Log in to your SteadyLetters account
+      - generic [ref=e21]:
+        - generic [ref=e22]: Invalid login credentials
+        - generic [ref=e23]:
+          - generic [ref=e24]: Email
+          - textbox "Email" [ref=e25]:
+            - /placeholder: you@example.com
+            - text: testuser@kindletters.io
+        - generic [ref=e26]:
+          - generic [ref=e27]: Password
+          - textbox "Password" [ref=e28]:
+            - /placeholder: ••••••••
+            - text: testpassword123
+        - button "Log In" [ref=e29]
+        - paragraph [ref=e30]:
+          - text: Don't have an account?
+          - link "Sign up" [ref=e31] [cursor=pointer]:
+            - /url: /signup
+  - contentinfo [ref=e32]:
+    - generic [ref=e34]:
+      - link "SteadyLetters Logo Steady Letters" [ref=e35] [cursor=pointer]:
+        - /url: /
+        - generic [ref=e36]:
+          - img "SteadyLetters Logo" [ref=e37]
+          - generic [ref=e38]:
+            - generic [ref=e39]: Steady
+            - generic [ref=e40]: Letters
+      - generic [ref=e42]: © 2025 SteadyLetters. All rights reserved.
+      - generic [ref=e43]:
+        - link "Privacy Policy" [ref=e44] [cursor=pointer]:
+          - /url: /privacy
+        - link "Terms of Service" [ref=e45] [cursor=pointer]:
+          - /url: /terms
+  - alert [ref=e46]
+```
