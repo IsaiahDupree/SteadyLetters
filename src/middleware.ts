@@ -90,17 +90,22 @@ export async function middleware(request: NextRequest) {
 export const config = {
     matcher: [
         /*
-         * Match all request paths except for the ones starting with:
-         * - /api (API routes - MUST be excluded via early return in middleware function)
-         * - _next/static (static files)
-         * - _next/image (image optimization files)
-         * - favicon.ico (favicon file)
-         * - site.webmanifest (manifest file)
-         * - logo.png and other image files
-         * 
-         * Note: We use early return in middleware function to skip /api routes
-         * because the matcher pattern cannot reliably exclude them
+         * Only match page routes, not API routes or static assets
+         * This prevents middleware from running on /api/* routes entirely
+         * Combined with early return check for defense-in-depth
          */
-        '/((?!_next/static|_next/image|favicon.ico|site.webmanifest|logo.png|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)',
+        '/',
+        '/login',
+        '/signup',
+        '/dashboard/:path*',
+        '/generate/:path*',
+        '/billing/:path*',
+        '/orders/:path*',
+        '/recipients/:path*',
+        '/templates/:path*',
+        '/send/:path*',
+        '/settings/:path*',
+        '/privacy',
+        '/terms',
     ],
 };
