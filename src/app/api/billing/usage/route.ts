@@ -129,14 +129,14 @@ export async function GET(request: NextRequest) {
             },
             // Proxies for now as DB schema update is pending
             voiceTranscriptions: {
-                used: usage.letterGenerations,
+                used: usage.voiceTranscriptions,
                 limit: limits.voice,
-                percentage: calculatePercentage(usage.letterGenerations, limits.voice),
+                percentage: calculatePercentage(usage.voiceTranscriptions, limits.voice),
             },
             imageAnalyses: {
-                used: usage.imageGenerations,
+                used: usage.imageAnalyses,
                 limit: limits.analysis,
-                percentage: calculatePercentage(usage.imageGenerations, limits.analysis),
+                percentage: calculatePercentage(usage.imageAnalyses, limits.analysis),
             },
         };
 

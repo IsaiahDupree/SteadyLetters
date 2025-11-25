@@ -44,10 +44,13 @@ export async function POST(request: NextRequest) {
             });
 
             // Create initial UserUsage record
+            const now = new Date();
+            const resetAt = new Date(now.getFullYear(), now.getMonth() + 1, 1);
             await prisma.userUsage.create({
                 data: {
                     userId: user.id,
                     tier: 'FREE',
+                    resetAt,
                 },
             });
         }

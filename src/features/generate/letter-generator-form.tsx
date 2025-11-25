@@ -25,6 +25,7 @@ import { VoiceRecorder } from '@/components/voice-recorder';
 import { ImageUpload } from '@/components/image-upload';
 import { EnhancedLetterResult } from './enhanced-letter-result';
 import type { Tone, Occasion } from '@/lib/types';
+import { EXAMPLE_TEMPLATES, type ExampleTemplate } from '@/lib/example-templates';
 
 const tones: { value: Tone; label: string }[] = [
     { value: 'formal', label: 'Formal' },
@@ -121,8 +122,17 @@ export function LetterGeneratorForm() {
         }
     };
 
-    const handleNext = () => {
-        if (step < totalSteps) setStep(step + 1);
+    const handleNext = async () => {
+        // If we're on step 1 and have context, generate the letter first
+        if (step === 1 && context.trim() && !generatedLetter) {
+            await handleGenerate();
+            // Only move to step 2 if generation was successful
+            if (generatedLetter) {
+                setStep(2);
+            }
+        } else if (step < totalSteps) {
+            setStep(step + 1);
+        }
     };
 
     const handleBack = () => {
@@ -173,6 +183,35 @@ export function LetterGeneratorForm() {
                     <CardContent className="space-y-6 relative min-h-[400px]">
                         {step === 1 && (
                             <div className="space-y-6 animate-in slide-in-from-left-4 fade-in duration-300">
+                                {/* Example Templates */}
+                                <div className="space-y-3 p-4 rounded-xl bg-gradient-to-br from-primary/5 to-violet-500/5 border border-primary/20">
+                                    <Label className="text-base font-medium flex items-center gap-2">
+                                        <span className="flex h-6 w-6 items-center justify-center rounded-full bg-primary/10 text-primary text-xs">0</span>
+                                        Load Example Template
+                                    </Label>
+                                    <div className="grid grid-cols-2 gap-2 max-h-[200px] overflow-y-auto">
+                                        {EXAMPLE_TEMPLATES.slice(0, 6).map((template) => (
+                                            <Button
+                                                key={template.id}
+                                                variant="outline"
+                                                size="sm"
+                                                onClick={() => {
+                                                    setContext(template.context);
+                                                    setTone(template.tone);
+                                                    setOccasion(template.occasion);
+                                                    setLetterLength(template.length);
+                                                }}
+                                                className="h-auto py-2 px-3 text-left justify-start hover:bg-primary/10 hover:border-primary/50 transition-all"
+                                            >
+                                                <div className="flex flex-col items-start gap-0.5">
+                                                    <span className="text-xs font-medium">{template.name}</span>
+                                                    <span className="text-[10px] text-muted-foreground line-clamp-1">{template.description}</span>
+                                                </div>
+                                            </Button>
+                                        ))}
+                                    </div>
+                                </div>
+
                                 <div className="space-y-3 p-4 rounded-xl bg-muted/30 border border-muted/40 transition-colors hover:bg-muted/50 group">
                                     <Label className="text-base font-medium flex items-center gap-2">
                                         <span className="flex h-6 w-6 items-center justify-center rounded-full bg-primary/10 text-primary text-xs">1</span>
@@ -320,10 +359,17 @@ export function LetterGeneratorForm() {
                             {step < totalSteps ? (
                                 <Button
                                     onClick={handleNext}
-                                    disabled={!isStep1Valid}
+                                    disabled={!isStep1Valid || loading}
                                     className="flex-1 bg-primary hover:bg-primary/90"
                                 >
-                                    Next Step
+                                    {loading ? (
+                                        <span className="flex items-center gap-2">
+                                            <span className="h-4 w-4 animate-spin rounded-full border-2 border-current border-t-transparent" />
+                                            Generating...
+                                        </span>
+                                    ) : (
+                                        'Generate & Next Step'
+                                    )}
                                 </Button>
                             ) : (
                                 <Button

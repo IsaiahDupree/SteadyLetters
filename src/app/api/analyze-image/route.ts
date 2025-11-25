@@ -52,8 +52,11 @@ export async function POST(request: NextRequest) {
         });
 
         if (!usage) {
+            // Calculate next month's 1st day for resetAt
+            const now = new Date();
+            const resetAt = new Date(now.getFullYear(), now.getMonth() + 1, 1);
             usage = await prisma.userUsage.create({
-                data: { userId, tier: 'FREE' },
+                data: { userId, tier: 'FREE', resetAt },
             });
         }
 
@@ -103,6 +106,14 @@ export async function POST(request: NextRequest) {
         });
 
         const analysis = response.choices[0].message.content || '';
+
+        // Increment usage counter
+        await prisma.userUsage.update({
+            where: { userId },
+            data: {
+                imageAnalyses: { increment: 1 },
+            },
+        });
 
         // Track event
         await trackEvent({

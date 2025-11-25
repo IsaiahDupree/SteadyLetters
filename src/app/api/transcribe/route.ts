@@ -53,8 +53,11 @@ export async function POST(request: NextRequest) {
         });
 
         if (!usage) {
+            // Calculate next month's 1st day for resetAt
+            const now = new Date();
+            const resetAt = new Date(now.getFullYear(), now.getMonth() + 1, 1);
             usage = await prisma.userUsage.create({
-                data: { userId, tier: 'FREE' },
+                data: { userId, tier: 'FREE', resetAt },
             });
         }
 
@@ -80,6 +83,14 @@ export async function POST(request: NextRequest) {
             model: 'whisper-1',
             language: 'en',
             response_format: 'json',
+        });
+
+        // Increment usage counter
+        await prisma.userUsage.update({
+            where: { userId },
+            data: {
+                voiceTranscriptions: { increment: 1 },
+            },
         });
 
         // Track event

@@ -26,6 +26,7 @@ import {
 } from '@/components/ui/tabs';
 import { Wand2, Image as ImageIcon, Send, DollarSign } from 'lucide-react';
 import { HandwritingStyle, ProductType, PostcardSize, PRODUCT_CATALOG, getPostcardPrice } from '@/lib/thanks-io';
+import { ColorPicker } from '@/components/ui/color-picker';
 
 // Card styles for Thanks.io API
 const cardStyles = [
@@ -331,6 +332,25 @@ export function EnhancedLetterResult({
                                             ))}
                                         </SelectContent>
                                     </Select>
+                                </CardContent>
+                            </Card>
+
+                            {/* Handwriting Color Picker */}
+                            <Card>
+                                <CardHeader>
+                                    <CardTitle>Handwriting Color</CardTitle>
+                                    <CardDescription>
+                                        Choose the color of the handwritten text
+                                    </CardDescription>
+                                </CardHeader>
+                                <CardContent>
+                                    <ColorPicker
+                                        value={handwritingColor}
+                                        onChange={setHandwritingColor}
+                                        label=""
+                                        colors={['blue', 'black', 'green', 'purple', 'red']}
+                                        allowCustom={true}
+                                    />
                                 </CardContent>
                             </Card>
 

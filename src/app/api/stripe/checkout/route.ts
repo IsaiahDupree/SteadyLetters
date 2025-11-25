@@ -37,12 +37,15 @@ export async function POST(request: NextRequest) {
         });
 
         // Ensure UserUsage exists
+        const now = new Date();
+        const resetAt = new Date(now.getFullYear(), now.getMonth() + 1, 1);
         await prisma.userUsage.upsert({
             where: { userId: user.id },
             update: {}, // No update needed if exists
             create: {
                 userId: user.id,
                 tier: 'FREE',
+                resetAt,
             },
         });
 

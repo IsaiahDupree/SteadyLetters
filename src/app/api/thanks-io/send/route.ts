@@ -9,7 +9,8 @@ import {
     PostcardSize,
     Recipient,
     getProductsForTier,
-    PRODUCT_CATALOG
+    PRODUCT_CATALOG,
+    getPostcardPrice,
 } from '@/lib/thanks-io';
 import { STRIPE_PLANS } from '@/lib/pricing-tiers';
 import { prisma } from '@/lib/prisma';
@@ -133,17 +134,73 @@ export async function POST(request: NextRequest) {
                 );
         }
 
-        // Track usage - increment lettersSent counter
-        await prisma.userUsage.upsert({
+        // Calculate cost based on product type
+        let costPerItem = 0;
+        switch (productType as ProductType) {
+            case 'postcard':
+                costPerItem = getPostcardPrice(postcardSize || '4x6');
+                break;
+            case 'letter':
+                costPerItem = PRODUCT_CATALOG.letter.basePrice;
+                break;
+            case 'greeting':
+                costPerItem = PRODUCT_CATALOG.greeting.basePrice;
+                break;
+            case 'windowless_letter':
+                costPerItem = PRODUCT_CATALOG.windowless_letter.basePrice;
+                break;
+            case 'giftcard':
+                costPerItem = PRODUCT_CATALOG.giftcard.basePrice;
+                // Note: Gift card value would be added separately if provided
+                break;
+        }
+
+        const totalCost = costPerItem * recipients.length;
+
+        // Get or create user usage record
+        let usage = await prisma.userUsage.findUnique({
             where: { userId: user.id },
-            update: {
-                lettersSent: { increment: recipients.length },
-            },
-            create: {
-                userId: user.id,
-                tier: 'FREE',
-                lettersSent: recipients.length,
-            },
+        });
+
+        if (!usage) {
+            usage = await prisma.userUsage.create({
+                data: {
+                    userId: user.id,
+                    tier: 'FREE',
+                    resetAt: new Date(),
+                },
+            });
+        }
+
+        // Prepare update data for product-specific tracking
+        const updateData: any = {
+            lettersSent: { increment: recipients.length }, // Keep for backward compatibility
+            totalSpent: { increment: totalCost },
+        };
+
+        // Update product-specific counter
+        switch (productType as ProductType) {
+            case 'postcard':
+                updateData.postcardsSent = { increment: recipients.length };
+                break;
+            case 'letter':
+                updateData.lettersSentStandard = { increment: recipients.length };
+                break;
+            case 'greeting':
+                updateData.greetingCardsSent = { increment: recipients.length };
+                break;
+            case 'windowless_letter':
+                updateData.windowlessLettersSent = { increment: recipients.length };
+                break;
+            case 'giftcard':
+                updateData.giftCardsSent = { increment: recipients.length };
+                break;
+        }
+
+        // Track usage - update product-specific counters and total cost
+        await prisma.userUsage.update({
+            where: { userId: user.id },
+            data: updateData,
         });
 
         return NextResponse.json({
