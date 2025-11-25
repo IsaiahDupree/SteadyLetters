@@ -87,14 +87,14 @@ export async function middleware(request: NextRequest) {
     return response;
 }
 
-// No matcher - let all requests through, but use early return for /api routes
-// This is the most reliable approach for Next.js/Vercel
+// Use inverted matching - specify what NOT to match
+// Vercel/Next.js Edge Runtime requires this explicit approach
 export const config = {
     matcher: [
         /*
-         * Match all paths except static files
-         * API routes are handled by early return in middleware function
+         * Use negative patterns to exclude /api routes
+         * Format: Match everything EXCEPT these patterns
          */
-        '/((?!_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)',
+        '/((?!_next/static|_next/image|_next/webpack-hmr|favicon\\.ico|api/).*)',
     ],
 };
