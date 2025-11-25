@@ -18,20 +18,18 @@ export async function GET(request: NextRequest) {
             );
         }
 
-        // Get user with subscription and usage data
-        const dbUser = await prisma.user.findUnique({
+        // Ensure user exists in Prisma (upsert to handle race conditions)
+        const dbUser = await prisma.user.upsert({
             where: { id: user.id },
+            update: {},
+            create: {
+                id: user.id,
+                email: user.email || '',
+            },
             include: {
                 usage: true,
             },
         });
-
-        if (!dbUser) {
-            return NextResponse.json(
-                { error: 'User not found' },
-                { status: 404 }
-            );
-        }
 
         // Get or create usage record
         let usage = dbUser.usage;
@@ -40,8 +38,10 @@ export async function GET(request: NextRequest) {
             const now = new Date();
             const nextMonth = new Date(now.getFullYear(), now.getMonth() + 1, 1);
 
-            usage = await prisma.userUsage.create({
-                data: {
+            usage = await prisma.userUsage.upsert({
+                where: { userId: user.id },
+                update: {},
+                create: {
                     userId: user.id,
                     tier: 'FREE',
                     resetAt: nextMonth,
@@ -155,8 +155,25 @@ export async function GET(request: NextRequest) {
         });
     } catch (error: any) {
         console.error('Get usage error:', error);
+        console.error('Error details:', {
+            message: error.message,
+            code: error.code,
+            name: error.name,
+            stack: process.env.NODE_ENV === 'development' ? error.stack : undefined,
+        });
+        
+        const errorMessage = process.env.NODE_ENV === 'development'
+            ? error.message || 'Failed to fetch usage data'
+            : 'Failed to fetch usage data';
+        
         return NextResponse.json(
-            { error: 'Failed to fetch usage data' },
+            { 
+                error: errorMessage,
+                ...(process.env.NODE_ENV === 'development' && { 
+                    details: error.message,
+                    code: error.code,
+                })
+            },
             { status: 500 }
         );
     }

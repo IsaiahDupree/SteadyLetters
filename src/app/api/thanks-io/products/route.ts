@@ -15,9 +15,14 @@ export async function GET(request: NextRequest) {
             );
         }
 
-        // Get user's subscription tier from database
-        const dbUser = await prisma.user.findUnique({
+        // Ensure user exists in Prisma (upsert to handle race conditions)
+        const dbUser = await prisma.user.upsert({
             where: { id: user.id },
+            update: {},
+            create: {
+                id: user.id,
+                email: user.email || '',
+            },
             select: { stripePriceId: true },
         });
 
@@ -44,10 +49,25 @@ export async function GET(request: NextRequest) {
             products: availableProducts,
             allProducts: PRODUCT_CATALOG,
         });
-    } catch (error) {
+    } catch (error: any) {
         console.error('Error fetching products:', error);
+        console.error('Error details:', {
+            message: error.message,
+            code: error.code,
+            name: error.name,
+        });
+        
+        const errorMessage = process.env.NODE_ENV === 'development'
+            ? error.message || 'Failed to fetch products'
+            : 'Failed to fetch products';
+        
         return NextResponse.json(
-            { error: 'Failed to fetch products' },
+            { 
+                error: errorMessage,
+                ...(process.env.NODE_ENV === 'development' && { 
+                    details: error.message,
+                })
+            },
             { status: 500 }
         );
     }

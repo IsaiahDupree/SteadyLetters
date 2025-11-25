@@ -1,0 +1,2012 @@
+{
+  "timestamp": "2025-11-25T21:29:37.377Z",
+  "baseUrl": "https://www.steadyletters.com",
+  "tests": {
+    "publicPages": [
+      {
+        "name": "Homepage",
+        "url": "https://www.steadyletters.com/",
+        "method": "GET",
+        "success": true,
+        "status": 200,
+        "statusText": "OK",
+        "duration": 362,
+        "headers": {
+          "access-control-allow-origin": "*",
+          "age": "594",
+          "cache-control": "public, max-age=0, must-revalidate",
+          "content-disposition": "inline",
+          "content-encoding": "br",
+          "content-type": "text/html; charset=utf-8",
+          "date": "Tue, 25 Nov 2025 21:29:37 GMT",
+          "etag": "W/\"950041d8d15dcca9641b9f584f2987e7\"",
+          "server": "Vercel",
+          "strict-transport-security": "max-age=63072000",
+          "transfer-encoding": "chunked",
+          "vary": "rsc, next-router-state-tree, next-router-prefetch, next-router-segment-prefetch",
+          "x-matched-path": "/",
+          "x-nextjs-prerender": "1",
+          "x-nextjs-stale-time": "300",
+          "x-vercel-cache": "HIT",
+          "x-vercel-id": "iad1::6rtsx-1764106177691-71d51f57b577"
+        },
+        "data": {
+          "error": "No JSON response",
+          "statusText": "OK"
+        },
+        "error": null
+      },
+      {
+        "name": "Pricing",
+        "url": "https://www.steadyletters.com/pricing",
+        "method": "GET",
+        "success": true,
+        "status": 200,
+        "statusText": "OK",
+        "duration": 79,
+        "headers": {
+          "access-control-allow-origin": "*",
+          "age": "593",
+          "cache-control": "public, max-age=0, must-revalidate",
+          "content-disposition": "inline",
+          "content-encoding": "br",
+          "content-type": "text/html; charset=utf-8",
+          "date": "Tue, 25 Nov 2025 21:29:37 GMT",
+          "etag": "W/\"7ad2a1406ce22c6e793472be5e065fe2\"",
+          "server": "Vercel",
+          "strict-transport-security": "max-age=63072000",
+          "transfer-encoding": "chunked",
+          "vary": "rsc, next-router-state-tree, next-router-prefetch, next-router-segment-prefetch",
+          "x-matched-path": "/pricing",
+          "x-nextjs-prerender": "1",
+          "x-nextjs-stale-time": "300",
+          "x-vercel-cache": "HIT",
+          "x-vercel-id": "iad1::lv4mv-1764106177807-08e92278d1ba"
+        },
+        "data": {
+          "error": "No JSON response",
+          "statusText": "OK"
+        },
+        "error": null
+      },
+      {
+        "name": "Login",
+        "url": "https://www.steadyletters.com/login",
+        "method": "GET",
+        "success": true,
+        "status": 200,
+        "statusText": "OK",
+        "duration": 81,
+        "headers": {
+          "access-control-allow-origin": "*",
+          "age": "593",
+          "cache-control": "public, max-age=0, must-revalidate",
+          "content-disposition": "inline",
+          "content-encoding": "br",
+          "content-type": "text/html; charset=utf-8",
+          "date": "Tue, 25 Nov 2025 21:29:37 GMT",
+          "etag": "W/\"94babf30b3afaf3444e209a2a68a0352\"",
+          "server": "Vercel",
+          "strict-transport-security": "max-age=63072000",
+          "transfer-encoding": "chunked",
+          "vary": "rsc, next-router-state-tree, next-router-prefetch, next-router-segment-prefetch",
+          "x-matched-path": "/login",
+          "x-nextjs-prerender": "1",
+          "x-nextjs-stale-time": "300",
+          "x-vercel-cache": "HIT",
+          "x-vercel-id": "iad1::fc4l2-1764106177890-4a252cdfbb48"
+        },
+        "data": {
+          "error": "No JSON response",
+          "statusText": "OK"
+        },
+        "error": null
+      },
+      {
+        "name": "Signup",
+        "url": "https://www.steadyletters.com/signup",
+        "method": "GET",
+        "success": true,
+        "status": 200,
+        "statusText": "OK",
+        "duration": 88,
+        "headers": {
+          "access-control-allow-origin": "*",
+          "age": "592",
+          "cache-control": "public, max-age=0, must-revalidate",
+          "content-disposition": "inline",
+          "content-encoding": "br",
+          "content-type": "text/html; charset=utf-8",
+          "date": "Tue, 25 Nov 2025 21:29:37 GMT",
+          "etag": "W/\"d90ca4a284403e5a7a547abb1a0c2dd4\"",
+          "server": "Vercel",
+          "strict-transport-security": "max-age=63072000",
+          "transfer-encoding": "chunked",
+          "vary": "rsc, next-router-state-tree, next-router-prefetch, next-router-segment-prefetch",
+          "x-matched-path": "/signup",
+          "x-nextjs-prerender": "1",
+          "x-nextjs-stale-time": "300",
+          "x-vercel-cache": "HIT",
+          "x-vercel-id": "iad1::lv4mv-1764106177971-14db02ea3f86"
+        },
+        "data": {
+          "error": "No JSON response",
+          "statusText": "OK"
+        },
+        "error": null
+      }
+    ],
+    "apiEndpoints": [
+      {
+        "name": "Health Check",
+        "url": "https://www.steadyletters.com/api/health",
+        "method": "GET",
+        "success": false,
+        "status": 500,
+        "statusText": "Internal Server Error",
+        "duration": 231,
+        "headers": {
+          "accept-ranges": "bytes",
+          "access-control-allow-origin": "*",
+          "age": "697",
+          "cache-control": "public, max-age=0, must-revalidate",
+          "content-disposition": "inline; filename=\"500\"",
+          "content-encoding": "br",
+          "content-length": "1978",
+          "content-type": "text/html; charset=utf-8",
+          "date": "Tue, 25 Nov 2025 21:29:38 GMT",
+          "etag": "\"25b7dc214459c892b5166734ed3c57e1\"",
+          "last-modified": "Tue, 25 Nov 2025 21:18:00 GMT",
+          "server": "Vercel",
+          "strict-transport-security": "max-age=63072000",
+          "x-matched-path": "/500",
+          "x-vercel-cache": "MISS",
+          "x-vercel-id": "iad1::6rtsx-1764106178063-21b4d2ee7a75"
+        },
+        "data": null,
+        "error": {
+          "message": "No JSON response",
+          "status": 500,
+          "statusText": "Internal Server Error"
+        }
+      },
+      {
+        "name": "Handwriting Styles",
+        "url": "https://www.steadyletters.com/api/handwriting-styles",
+        "method": "GET",
+        "success": false,
+        "status": 500,
+        "statusText": "Internal Server Error",
+        "duration": 264,
+        "headers": {
+          "accept-ranges": "bytes",
+          "access-control-allow-origin": "*",
+          "age": "698",
+          "cache-control": "public, max-age=0, must-revalidate",
+          "content-disposition": "inline; filename=\"500\"",
+          "content-encoding": "br",
+          "content-length": "1978",
+          "content-type": "text/html; charset=utf-8",
+          "date": "Tue, 25 Nov 2025 21:29:38 GMT",
+          "etag": "\"25b7dc214459c892b5166734ed3c57e1\"",
+          "last-modified": "Tue, 25 Nov 2025 21:18:00 GMT",
+          "server": "Vercel",
+          "strict-transport-security": "max-age=63072000",
+          "x-matched-path": "/500",
+          "x-vercel-cache": "MISS",
+          "x-vercel-id": "iad1::84lb4-1764106178302-df91c2c3d316"
+        },
+        "data": null,
+        "error": {
+          "message": "No JSON response",
+          "status": 500,
+          "statusText": "Internal Server Error"
+        }
+      },
+      {
+        "name": "Auth Sync User",
+        "url": "https://www.steadyletters.com/api/auth/sync-user",
+        "method": "POST",
+        "success": false,
+        "status": 405,
+        "statusText": "Method Not Allowed",
+        "duration": 223,
+        "headers": {
+          "cache-control": "public, max-age=0, must-revalidate",
+          "content-disposition": "inline; filename=\"500\"",
+          "content-type": "text/html; charset=utf-8",
+          "date": "Tue, 25 Nov 2025 21:29:38 GMT",
+          "server": "Vercel",
+          "strict-transport-security": "max-age=63072000",
+          "transfer-encoding": "chunked",
+          "x-matched-path": "/500",
+          "x-vercel-cache": "BYPASS",
+          "x-vercel-id": "iad1::m548s-1764106178580-490124b3a90d"
+        },
+        "data": null,
+        "error": {
+          "message": "No JSON response",
+          "status": 405,
+          "statusText": "Method Not Allowed"
+        }
+      },
+      {
+        "name": "Billing Usage",
+        "url": "https://www.steadyletters.com/api/billing/usage",
+        "method": "GET",
+        "success": false,
+        "status": 500,
+        "statusText": "Internal Server Error",
+        "duration": 371,
+        "headers": {
+          "accept-ranges": "bytes",
+          "access-control-allow-origin": "*",
+          "age": "698",
+          "cache-control": "public, max-age=0, must-revalidate",
+          "content-disposition": "inline; filename=\"500\"",
+          "content-encoding": "br",
+          "content-length": "1978",
+          "content-type": "text/html; charset=utf-8",
+          "date": "Tue, 25 Nov 2025 21:29:38 GMT",
+          "etag": "\"25b7dc214459c892b5166734ed3c57e1\"",
+          "last-modified": "Tue, 25 Nov 2025 21:18:00 GMT",
+          "server": "Vercel",
+          "strict-transport-security": "max-age=63072000",
+          "x-matched-path": "/500",
+          "x-vercel-cache": "MISS",
+          "x-vercel-id": "iad1::slfvk-1764106178941-1e37976327ea"
+        },
+        "data": null,
+        "error": {
+          "message": "No JSON response",
+          "status": 500,
+          "statusText": "Internal Server Error"
+        }
+      },
+      {
+        "name": "Orders GET",
+        "url": "https://www.steadyletters.com/api/orders",
+        "method": "GET",
+        "success": false,
+        "status": 500,
+        "statusText": "Internal Server Error",
+        "duration": 213,
+        "headers": {
+          "accept-ranges": "bytes",
+          "access-control-allow-origin": "*",
+          "age": "699",
+          "cache-control": "public, max-age=0, must-revalidate",
+          "content-disposition": "inline; filename=\"500\"",
+          "content-encoding": "br",
+          "content-length": "1978",
+          "content-type": "text/html; charset=utf-8",
+          "date": "Tue, 25 Nov 2025 21:29:39 GMT",
+          "etag": "\"25b7dc214459c892b5166734ed3c57e1\"",
+          "last-modified": "Tue, 25 Nov 2025 21:18:00 GMT",
+          "server": "Vercel",
+          "strict-transport-security": "max-age=63072000",
+          "x-matched-path": "/500",
+          "x-vercel-cache": "MISS",
+          "x-vercel-id": "iad1::fc4l2-1764106179173-29858302e50a"
+        },
+        "data": null,
+        "error": {
+          "message": "No JSON response",
+          "status": 500,
+          "statusText": "Internal Server Error"
+        }
+      },
+      {
+        "name": "Orders POST",
+        "url": "https://www.steadyletters.com/api/orders",
+        "method": "POST",
+        "success": false,
+        "status": 405,
+        "statusText": "Method Not Allowed",
+        "duration": 244,
+        "headers": {
+          "cache-control": "public, max-age=0, must-revalidate",
+          "content-disposition": "inline; filename=\"500\"",
+          "content-type": "text/html; charset=utf-8",
+          "date": "Tue, 25 Nov 2025 21:29:39 GMT",
+          "server": "Vercel",
+          "strict-transport-security": "max-age=63072000",
+          "transfer-encoding": "chunked",
+          "x-matched-path": "/500",
+          "x-vercel-cache": "BYPASS",
+          "x-vercel-id": "iad1::6bx86-1764106179396-57c322ecc0ac"
+        },
+        "data": null,
+        "error": {
+          "message": "No JSON response",
+          "status": 405,
+          "statusText": "Method Not Allowed"
+        }
+      },
+      {
+        "name": "Thanks.io Products",
+        "url": "https://www.steadyletters.com/api/thanks-io/products",
+        "method": "GET",
+        "success": false,
+        "status": 500,
+        "statusText": "Internal Server Error",
+        "duration": 228,
+        "headers": {
+          "accept-ranges": "bytes",
+          "access-control-allow-origin": "*",
+          "age": "699",
+          "cache-control": "public, max-age=0, must-revalidate",
+          "content-disposition": "inline; filename=\"500\"",
+          "content-encoding": "br",
+          "content-length": "1978",
+          "content-type": "text/html; charset=utf-8",
+          "date": "Tue, 25 Nov 2025 21:29:39 GMT",
+          "etag": "\"25b7dc214459c892b5166734ed3c57e1\"",
+          "last-modified": "Tue, 25 Nov 2025 21:18:00 GMT",
+          "server": "Vercel",
+          "strict-transport-security": "max-age=63072000",
+          "x-matched-path": "/500",
+          "x-vercel-cache": "MISS",
+          "x-vercel-id": "iad1::jnmkx-1764106179637-37fe2f2a74ca"
+        },
+        "data": null,
+        "error": {
+          "message": "No JSON response",
+          "status": 500,
+          "statusText": "Internal Server Error"
+        }
+      },
+      {
+        "name": "Thanks.io Styles",
+        "url": "https://www.steadyletters.com/api/thanks-io/styles",
+        "method": "GET",
+        "success": false,
+        "status": 500,
+        "statusText": "Internal Server Error",
+        "duration": 222,
+        "headers": {
+          "accept-ranges": "bytes",
+          "access-control-allow-origin": "*",
+          "age": "699",
+          "cache-control": "public, max-age=0, must-revalidate",
+          "content-disposition": "inline; filename=\"500\"",
+          "content-encoding": "br",
+          "content-length": "1978",
+          "content-type": "text/html; charset=utf-8",
+          "date": "Tue, 25 Nov 2025 21:29:39 GMT",
+          "etag": "\"25b7dc214459c892b5166734ed3c57e1\"",
+          "last-modified": "Tue, 25 Nov 2025 21:18:00 GMT",
+          "server": "Vercel",
+          "strict-transport-security": "max-age=63072000",
+          "x-matched-path": "/500",
+          "x-vercel-cache": "MISS",
+          "x-vercel-id": "iad1::5ngql-1764106179903-6388716ff13e"
+        },
+        "data": null,
+        "error": {
+          "message": "No JSON response",
+          "status": 500,
+          "statusText": "Internal Server Error"
+        }
+      },
+      {
+        "name": "Thanks.io Send",
+        "url": "https://www.steadyletters.com/api/thanks-io/send",
+        "method": "POST",
+        "success": false,
+        "status": 405,
+        "statusText": "Method Not Allowed",
+        "duration": 262,
+        "headers": {
+          "cache-control": "public, max-age=0, must-revalidate",
+          "content-disposition": "inline; filename=\"500\"",
+          "content-type": "text/html; charset=utf-8",
+          "date": "Tue, 25 Nov 2025 21:29:40 GMT",
+          "server": "Vercel",
+          "strict-transport-security": "max-age=63072000",
+          "transfer-encoding": "chunked",
+          "x-matched-path": "/500",
+          "x-vercel-cache": "BYPASS",
+          "x-vercel-id": "iad1::fc4l2-1764106180119-53d05b0ca3e7"
+        },
+        "data": null,
+        "error": {
+          "message": "No JSON response",
+          "status": 405,
+          "statusText": "Method Not Allowed"
+        }
+      },
+      {
+        "name": "Transcribe",
+        "url": "https://www.steadyletters.com/api/transcribe",
+        "method": "POST",
+        "success": false,
+        "status": 405,
+        "statusText": "Method Not Allowed",
+        "duration": 234,
+        "headers": {
+          "cache-control": "public, max-age=0, must-revalidate",
+          "content-disposition": "inline; filename=\"500\"",
+          "content-type": "text/html; charset=utf-8",
+          "date": "Tue, 25 Nov 2025 21:29:40 GMT",
+          "server": "Vercel",
+          "strict-transport-security": "max-age=63072000",
+          "transfer-encoding": "chunked",
+          "x-matched-path": "/500",
+          "x-vercel-cache": "BYPASS",
+          "x-vercel-id": "iad1::ndqhh-1764106180379-df4c82ddedfc"
+        },
+        "data": null,
+        "error": {
+          "message": "No JSON response",
+          "status": 405,
+          "statusText": "Method Not Allowed"
+        }
+      },
+      {
+        "name": "Analyze Image",
+        "url": "https://www.steadyletters.com/api/analyze-image",
+        "method": "POST",
+        "success": false,
+        "status": 405,
+        "statusText": "Method Not Allowed",
+        "duration": 471,
+        "headers": {
+          "cache-control": "public, max-age=0, must-revalidate",
+          "content-disposition": "inline; filename=\"500\"",
+          "content-type": "text/html; charset=utf-8",
+          "date": "Tue, 25 Nov 2025 21:29:40 GMT",
+          "server": "Vercel",
+          "strict-transport-security": "max-age=63072000",
+          "transfer-encoding": "chunked",
+          "x-matched-path": "/500",
+          "x-vercel-cache": "BYPASS",
+          "x-vercel-id": "iad1::fvqwx-1764106180615-b73238a37bdd"
+        },
+        "data": null,
+        "error": {
+          "message": "No JSON response",
+          "status": 405,
+          "statusText": "Method Not Allowed"
+        }
+      },
+      {
+        "name": "Generate Letter",
+        "url": "https://www.steadyletters.com/api/generate/letter",
+        "method": "POST",
+        "success": false,
+        "status": 405,
+        "statusText": "Method Not Allowed",
+        "duration": 809,
+        "headers": {
+          "cache-control": "public, max-age=0, must-revalidate",
+          "content-disposition": "inline; filename=\"500\"",
+          "content-type": "text/html; charset=utf-8",
+          "date": "Tue, 25 Nov 2025 21:29:41 GMT",
+          "server": "Vercel",
+          "strict-transport-security": "max-age=63072000",
+          "transfer-encoding": "chunked",
+          "x-matched-path": "/500",
+          "x-vercel-cache": "BYPASS",
+          "x-vercel-id": "iad1::2vg4b-1764106181084-e8029097e0a8"
+        },
+        "data": null,
+        "error": {
+          "message": "No JSON response",
+          "status": 405,
+          "statusText": "Method Not Allowed"
+        }
+      },
+      {
+        "name": "Generate Card Image",
+        "url": "https://www.steadyletters.com/api/generate/card-image",
+        "method": "POST",
+        "success": false,
+        "status": 405,
+        "statusText": "Method Not Allowed",
+        "duration": 875,
+        "headers": {
+          "cache-control": "public, max-age=0, must-revalidate",
+          "content-disposition": "inline; filename=\"500\"",
+          "content-type": "text/html; charset=utf-8",
+          "date": "Tue, 25 Nov 2025 21:29:41 GMT",
+          "server": "Vercel",
+          "strict-transport-security": "max-age=63072000",
+          "transfer-encoding": "chunked",
+          "x-matched-path": "/500",
+          "x-vercel-cache": "BYPASS",
+          "x-vercel-id": "iad1::5ngql-1764106181899-c6719a3cb46a"
+        },
+        "data": null,
+        "error": {
+          "message": "No JSON response",
+          "status": 405,
+          "statusText": "Method Not Allowed"
+        }
+      },
+      {
+        "name": "Generate Images",
+        "url": "https://www.steadyletters.com/api/generate/images",
+        "method": "POST",
+        "success": false,
+        "status": 405,
+        "statusText": "Method Not Allowed",
+        "duration": 458,
+        "headers": {
+          "cache-control": "public, max-age=0, must-revalidate",
+          "content-disposition": "inline; filename=\"500\"",
+          "content-type": "text/html; charset=utf-8",
+          "date": "Tue, 25 Nov 2025 21:29:42 GMT",
+          "server": "Vercel",
+          "strict-transport-security": "max-age=63072000",
+          "transfer-encoding": "chunked",
+          "x-matched-path": "/500",
+          "x-vercel-cache": "BYPASS",
+          "x-vercel-id": "iad1::2vg4b-1764106182787-291ac66385e5"
+        },
+        "data": null,
+        "error": {
+          "message": "No JSON response",
+          "status": 405,
+          "statusText": "Method Not Allowed"
+        }
+      },
+      {
+        "name": "Extract Address",
+        "url": "https://www.steadyletters.com/api/extract-address",
+        "method": "POST",
+        "success": false,
+        "status": 405,
+        "statusText": "Method Not Allowed",
+        "duration": 328,
+        "headers": {
+          "cache-control": "public, max-age=0, must-revalidate",
+          "content-disposition": "inline; filename=\"500\"",
+          "content-type": "text/html; charset=utf-8",
+          "date": "Tue, 25 Nov 2025 21:29:43 GMT",
+          "server": "Vercel",
+          "strict-transport-security": "max-age=63072000",
+          "transfer-encoding": "chunked",
+          "x-matched-path": "/500",
+          "x-vercel-cache": "BYPASS",
+          "x-vercel-id": "iad1::fvqwc-1764106183244-c56437a88479"
+        },
+        "data": null,
+        "error": {
+          "message": "No JSON response",
+          "status": 405,
+          "statusText": "Method Not Allowed"
+        }
+      },
+      {
+        "name": "Stripe Checkout",
+        "url": "https://www.steadyletters.com/api/stripe/checkout",
+        "method": "POST",
+        "success": false,
+        "status": 405,
+        "statusText": "Method Not Allowed",
+        "duration": 682,
+        "headers": {
+          "cache-control": "public, max-age=0, must-revalidate",
+          "content-disposition": "inline; filename=\"500\"",
+          "content-type": "text/html; charset=utf-8",
+          "date": "Tue, 25 Nov 2025 21:29:43 GMT",
+          "server": "Vercel",
+          "strict-transport-security": "max-age=63072000",
+          "transfer-encoding": "chunked",
+          "x-matched-path": "/500",
+          "x-vercel-cache": "BYPASS",
+          "x-vercel-id": "iad1::22qlr-1764106183588-c5d58e74b6c8"
+        },
+        "data": null,
+        "error": {
+          "message": "No JSON response",
+          "status": 405,
+          "statusText": "Method Not Allowed"
+        }
+      },
+      {
+        "name": "Stripe Portal",
+        "url": "https://www.steadyletters.com/api/stripe/portal",
+        "method": "GET",
+        "success": false,
+        "status": 500,
+        "statusText": "Internal Server Error",
+        "duration": 401,
+        "headers": {
+          "accept-ranges": "bytes",
+          "access-control-allow-origin": "*",
+          "age": "704",
+          "cache-control": "public, max-age=0, must-revalidate",
+          "content-disposition": "inline; filename=\"500\"",
+          "content-encoding": "br",
+          "content-length": "1978",
+          "content-type": "text/html; charset=utf-8",
+          "date": "Tue, 25 Nov 2025 21:29:44 GMT",
+          "etag": "\"25b7dc214459c892b5166734ed3c57e1\"",
+          "last-modified": "Tue, 25 Nov 2025 21:18:00 GMT",
+          "server": "Vercel",
+          "strict-transport-security": "max-age=63072000",
+          "x-matched-path": "/500",
+          "x-vercel-cache": "MISS",
+          "x-vercel-id": "iad1::699km-1764106184240-f24aaaca272a"
+        },
+        "data": null,
+        "error": {
+          "message": "No JSON response",
+          "status": 500,
+          "statusText": "Internal Server Error"
+        }
+      },
+      {
+        "name": "Post-Deploy",
+        "url": "https://www.steadyletters.com/api/post-deploy",
+        "method": "POST",
+        "success": false,
+        "status": 405,
+        "statusText": "Method Not Allowed",
+        "duration": 230,
+        "headers": {
+          "cache-control": "public, max-age=0, must-revalidate",
+          "content-disposition": "inline; filename=\"500\"",
+          "content-type": "text/html; charset=utf-8",
+          "date": "Tue, 25 Nov 2025 21:29:44 GMT",
+          "server": "Vercel",
+          "strict-transport-security": "max-age=63072000",
+          "transfer-encoding": "chunked",
+          "x-matched-path": "/500",
+          "x-vercel-cache": "BYPASS",
+          "x-vercel-id": "iad1::6rtsx-1764106184878-7d8cb819111d"
+        },
+        "data": null,
+        "error": {
+          "message": "No JSON response",
+          "status": 405,
+          "statusText": "Method Not Allowed"
+        }
+      }
+    ]
+  },
+  "summary": {
+    "total": 22,
+    "passed": 4,
+    "failed": 18
+  },
+  "grouped": {
+    "passed": [
+      {
+        "name": "Homepage",
+        "url": "https://www.steadyletters.com/",
+        "method": "GET",
+        "success": true,
+        "status": 200,
+        "statusText": "OK",
+        "duration": 362,
+        "headers": {
+          "access-control-allow-origin": "*",
+          "age": "594",
+          "cache-control": "public, max-age=0, must-revalidate",
+          "content-disposition": "inline",
+          "content-encoding": "br",
+          "content-type": "text/html; charset=utf-8",
+          "date": "Tue, 25 Nov 2025 21:29:37 GMT",
+          "etag": "W/\"950041d8d15dcca9641b9f584f2987e7\"",
+          "server": "Vercel",
+          "strict-transport-security": "max-age=63072000",
+          "transfer-encoding": "chunked",
+          "vary": "rsc, next-router-state-tree, next-router-prefetch, next-router-segment-prefetch",
+          "x-matched-path": "/",
+          "x-nextjs-prerender": "1",
+          "x-nextjs-stale-time": "300",
+          "x-vercel-cache": "HIT",
+          "x-vercel-id": "iad1::6rtsx-1764106177691-71d51f57b577"
+        },
+        "data": {
+          "error": "No JSON response",
+          "statusText": "OK"
+        },
+        "error": null
+      },
+      {
+        "name": "Pricing",
+        "url": "https://www.steadyletters.com/pricing",
+        "method": "GET",
+        "success": true,
+        "status": 200,
+        "statusText": "OK",
+        "duration": 79,
+        "headers": {
+          "access-control-allow-origin": "*",
+          "age": "593",
+          "cache-control": "public, max-age=0, must-revalidate",
+          "content-disposition": "inline",
+          "content-encoding": "br",
+          "content-type": "text/html; charset=utf-8",
+          "date": "Tue, 25 Nov 2025 21:29:37 GMT",
+          "etag": "W/\"7ad2a1406ce22c6e793472be5e065fe2\"",
+          "server": "Vercel",
+          "strict-transport-security": "max-age=63072000",
+          "transfer-encoding": "chunked",
+          "vary": "rsc, next-router-state-tree, next-router-prefetch, next-router-segment-prefetch",
+          "x-matched-path": "/pricing",
+          "x-nextjs-prerender": "1",
+          "x-nextjs-stale-time": "300",
+          "x-vercel-cache": "HIT",
+          "x-vercel-id": "iad1::lv4mv-1764106177807-08e92278d1ba"
+        },
+        "data": {
+          "error": "No JSON response",
+          "statusText": "OK"
+        },
+        "error": null
+      },
+      {
+        "name": "Login",
+        "url": "https://www.steadyletters.com/login",
+        "method": "GET",
+        "success": true,
+        "status": 200,
+        "statusText": "OK",
+        "duration": 81,
+        "headers": {
+          "access-control-allow-origin": "*",
+          "age": "593",
+          "cache-control": "public, max-age=0, must-revalidate",
+          "content-disposition": "inline",
+          "content-encoding": "br",
+          "content-type": "text/html; charset=utf-8",
+          "date": "Tue, 25 Nov 2025 21:29:37 GMT",
+          "etag": "W/\"94babf30b3afaf3444e209a2a68a0352\"",
+          "server": "Vercel",
+          "strict-transport-security": "max-age=63072000",
+          "transfer-encoding": "chunked",
+          "vary": "rsc, next-router-state-tree, next-router-prefetch, next-router-segment-prefetch",
+          "x-matched-path": "/login",
+          "x-nextjs-prerender": "1",
+          "x-nextjs-stale-time": "300",
+          "x-vercel-cache": "HIT",
+          "x-vercel-id": "iad1::fc4l2-1764106177890-4a252cdfbb48"
+        },
+        "data": {
+          "error": "No JSON response",
+          "statusText": "OK"
+        },
+        "error": null
+      },
+      {
+        "name": "Signup",
+        "url": "https://www.steadyletters.com/signup",
+        "method": "GET",
+        "success": true,
+        "status": 200,
+        "statusText": "OK",
+        "duration": 88,
+        "headers": {
+          "access-control-allow-origin": "*",
+          "age": "592",
+          "cache-control": "public, max-age=0, must-revalidate",
+          "content-disposition": "inline",
+          "content-encoding": "br",
+          "content-type": "text/html; charset=utf-8",
+          "date": "Tue, 25 Nov 2025 21:29:37 GMT",
+          "etag": "W/\"d90ca4a284403e5a7a547abb1a0c2dd4\"",
+          "server": "Vercel",
+          "strict-transport-security": "max-age=63072000",
+          "transfer-encoding": "chunked",
+          "vary": "rsc, next-router-state-tree, next-router-prefetch, next-router-segment-prefetch",
+          "x-matched-path": "/signup",
+          "x-nextjs-prerender": "1",
+          "x-nextjs-stale-time": "300",
+          "x-vercel-cache": "HIT",
+          "x-vercel-id": "iad1::lv4mv-1764106177971-14db02ea3f86"
+        },
+        "data": {
+          "error": "No JSON response",
+          "statusText": "OK"
+        },
+        "error": null
+      }
+    ],
+    "failed": [
+      {
+        "name": "Health Check",
+        "url": "https://www.steadyletters.com/api/health",
+        "method": "GET",
+        "success": false,
+        "status": 500,
+        "statusText": "Internal Server Error",
+        "duration": 231,
+        "headers": {
+          "accept-ranges": "bytes",
+          "access-control-allow-origin": "*",
+          "age": "697",
+          "cache-control": "public, max-age=0, must-revalidate",
+          "content-disposition": "inline; filename=\"500\"",
+          "content-encoding": "br",
+          "content-length": "1978",
+          "content-type": "text/html; charset=utf-8",
+          "date": "Tue, 25 Nov 2025 21:29:38 GMT",
+          "etag": "\"25b7dc214459c892b5166734ed3c57e1\"",
+          "last-modified": "Tue, 25 Nov 2025 21:18:00 GMT",
+          "server": "Vercel",
+          "strict-transport-security": "max-age=63072000",
+          "x-matched-path": "/500",
+          "x-vercel-cache": "MISS",
+          "x-vercel-id": "iad1::6rtsx-1764106178063-21b4d2ee7a75"
+        },
+        "data": null,
+        "error": {
+          "message": "No JSON response",
+          "status": 500,
+          "statusText": "Internal Server Error"
+        }
+      },
+      {
+        "name": "Handwriting Styles",
+        "url": "https://www.steadyletters.com/api/handwriting-styles",
+        "method": "GET",
+        "success": false,
+        "status": 500,
+        "statusText": "Internal Server Error",
+        "duration": 264,
+        "headers": {
+          "accept-ranges": "bytes",
+          "access-control-allow-origin": "*",
+          "age": "698",
+          "cache-control": "public, max-age=0, must-revalidate",
+          "content-disposition": "inline; filename=\"500\"",
+          "content-encoding": "br",
+          "content-length": "1978",
+          "content-type": "text/html; charset=utf-8",
+          "date": "Tue, 25 Nov 2025 21:29:38 GMT",
+          "etag": "\"25b7dc214459c892b5166734ed3c57e1\"",
+          "last-modified": "Tue, 25 Nov 2025 21:18:00 GMT",
+          "server": "Vercel",
+          "strict-transport-security": "max-age=63072000",
+          "x-matched-path": "/500",
+          "x-vercel-cache": "MISS",
+          "x-vercel-id": "iad1::84lb4-1764106178302-df91c2c3d316"
+        },
+        "data": null,
+        "error": {
+          "message": "No JSON response",
+          "status": 500,
+          "statusText": "Internal Server Error"
+        }
+      },
+      {
+        "name": "Auth Sync User",
+        "url": "https://www.steadyletters.com/api/auth/sync-user",
+        "method": "POST",
+        "success": false,
+        "status": 405,
+        "statusText": "Method Not Allowed",
+        "duration": 223,
+        "headers": {
+          "cache-control": "public, max-age=0, must-revalidate",
+          "content-disposition": "inline; filename=\"500\"",
+          "content-type": "text/html; charset=utf-8",
+          "date": "Tue, 25 Nov 2025 21:29:38 GMT",
+          "server": "Vercel",
+          "strict-transport-security": "max-age=63072000",
+          "transfer-encoding": "chunked",
+          "x-matched-path": "/500",
+          "x-vercel-cache": "BYPASS",
+          "x-vercel-id": "iad1::m548s-1764106178580-490124b3a90d"
+        },
+        "data": null,
+        "error": {
+          "message": "No JSON response",
+          "status": 405,
+          "statusText": "Method Not Allowed"
+        }
+      },
+      {
+        "name": "Billing Usage",
+        "url": "https://www.steadyletters.com/api/billing/usage",
+        "method": "GET",
+        "success": false,
+        "status": 500,
+        "statusText": "Internal Server Error",
+        "duration": 371,
+        "headers": {
+          "accept-ranges": "bytes",
+          "access-control-allow-origin": "*",
+          "age": "698",
+          "cache-control": "public, max-age=0, must-revalidate",
+          "content-disposition": "inline; filename=\"500\"",
+          "content-encoding": "br",
+          "content-length": "1978",
+          "content-type": "text/html; charset=utf-8",
+          "date": "Tue, 25 Nov 2025 21:29:38 GMT",
+          "etag": "\"25b7dc214459c892b5166734ed3c57e1\"",
+          "last-modified": "Tue, 25 Nov 2025 21:18:00 GMT",
+          "server": "Vercel",
+          "strict-transport-security": "max-age=63072000",
+          "x-matched-path": "/500",
+          "x-vercel-cache": "MISS",
+          "x-vercel-id": "iad1::slfvk-1764106178941-1e37976327ea"
+        },
+        "data": null,
+        "error": {
+          "message": "No JSON response",
+          "status": 500,
+          "statusText": "Internal Server Error"
+        }
+      },
+      {
+        "name": "Orders GET",
+        "url": "https://www.steadyletters.com/api/orders",
+        "method": "GET",
+        "success": false,
+        "status": 500,
+        "statusText": "Internal Server Error",
+        "duration": 213,
+        "headers": {
+          "accept-ranges": "bytes",
+          "access-control-allow-origin": "*",
+          "age": "699",
+          "cache-control": "public, max-age=0, must-revalidate",
+          "content-disposition": "inline; filename=\"500\"",
+          "content-encoding": "br",
+          "content-length": "1978",
+          "content-type": "text/html; charset=utf-8",
+          "date": "Tue, 25 Nov 2025 21:29:39 GMT",
+          "etag": "\"25b7dc214459c892b5166734ed3c57e1\"",
+          "last-modified": "Tue, 25 Nov 2025 21:18:00 GMT",
+          "server": "Vercel",
+          "strict-transport-security": "max-age=63072000",
+          "x-matched-path": "/500",
+          "x-vercel-cache": "MISS",
+          "x-vercel-id": "iad1::fc4l2-1764106179173-29858302e50a"
+        },
+        "data": null,
+        "error": {
+          "message": "No JSON response",
+          "status": 500,
+          "statusText": "Internal Server Error"
+        }
+      },
+      {
+        "name": "Orders POST",
+        "url": "https://www.steadyletters.com/api/orders",
+        "method": "POST",
+        "success": false,
+        "status": 405,
+        "statusText": "Method Not Allowed",
+        "duration": 244,
+        "headers": {
+          "cache-control": "public, max-age=0, must-revalidate",
+          "content-disposition": "inline; filename=\"500\"",
+          "content-type": "text/html; charset=utf-8",
+          "date": "Tue, 25 Nov 2025 21:29:39 GMT",
+          "server": "Vercel",
+          "strict-transport-security": "max-age=63072000",
+          "transfer-encoding": "chunked",
+          "x-matched-path": "/500",
+          "x-vercel-cache": "BYPASS",
+          "x-vercel-id": "iad1::6bx86-1764106179396-57c322ecc0ac"
+        },
+        "data": null,
+        "error": {
+          "message": "No JSON response",
+          "status": 405,
+          "statusText": "Method Not Allowed"
+        }
+      },
+      {
+        "name": "Thanks.io Products",
+        "url": "https://www.steadyletters.com/api/thanks-io/products",
+        "method": "GET",
+        "success": false,
+        "status": 500,
+        "statusText": "Internal Server Error",
+        "duration": 228,
+        "headers": {
+          "accept-ranges": "bytes",
+          "access-control-allow-origin": "*",
+          "age": "699",
+          "cache-control": "public, max-age=0, must-revalidate",
+          "content-disposition": "inline; filename=\"500\"",
+          "content-encoding": "br",
+          "content-length": "1978",
+          "content-type": "text/html; charset=utf-8",
+          "date": "Tue, 25 Nov 2025 21:29:39 GMT",
+          "etag": "\"25b7dc214459c892b5166734ed3c57e1\"",
+          "last-modified": "Tue, 25 Nov 2025 21:18:00 GMT",
+          "server": "Vercel",
+          "strict-transport-security": "max-age=63072000",
+          "x-matched-path": "/500",
+          "x-vercel-cache": "MISS",
+          "x-vercel-id": "iad1::jnmkx-1764106179637-37fe2f2a74ca"
+        },
+        "data": null,
+        "error": {
+          "message": "No JSON response",
+          "status": 500,
+          "statusText": "Internal Server Error"
+        }
+      },
+      {
+        "name": "Thanks.io Styles",
+        "url": "https://www.steadyletters.com/api/thanks-io/styles",
+        "method": "GET",
+        "success": false,
+        "status": 500,
+        "statusText": "Internal Server Error",
+        "duration": 222,
+        "headers": {
+          "accept-ranges": "bytes",
+          "access-control-allow-origin": "*",
+          "age": "699",
+          "cache-control": "public, max-age=0, must-revalidate",
+          "content-disposition": "inline; filename=\"500\"",
+          "content-encoding": "br",
+          "content-length": "1978",
+          "content-type": "text/html; charset=utf-8",
+          "date": "Tue, 25 Nov 2025 21:29:39 GMT",
+          "etag": "\"25b7dc214459c892b5166734ed3c57e1\"",
+          "last-modified": "Tue, 25 Nov 2025 21:18:00 GMT",
+          "server": "Vercel",
+          "strict-transport-security": "max-age=63072000",
+          "x-matched-path": "/500",
+          "x-vercel-cache": "MISS",
+          "x-vercel-id": "iad1::5ngql-1764106179903-6388716ff13e"
+        },
+        "data": null,
+        "error": {
+          "message": "No JSON response",
+          "status": 500,
+          "statusText": "Internal Server Error"
+        }
+      },
+      {
+        "name": "Thanks.io Send",
+        "url": "https://www.steadyletters.com/api/thanks-io/send",
+        "method": "POST",
+        "success": false,
+        "status": 405,
+        "statusText": "Method Not Allowed",
+        "duration": 262,
+        "headers": {
+          "cache-control": "public, max-age=0, must-revalidate",
+          "content-disposition": "inline; filename=\"500\"",
+          "content-type": "text/html; charset=utf-8",
+          "date": "Tue, 25 Nov 2025 21:29:40 GMT",
+          "server": "Vercel",
+          "strict-transport-security": "max-age=63072000",
+          "transfer-encoding": "chunked",
+          "x-matched-path": "/500",
+          "x-vercel-cache": "BYPASS",
+          "x-vercel-id": "iad1::fc4l2-1764106180119-53d05b0ca3e7"
+        },
+        "data": null,
+        "error": {
+          "message": "No JSON response",
+          "status": 405,
+          "statusText": "Method Not Allowed"
+        }
+      },
+      {
+        "name": "Transcribe",
+        "url": "https://www.steadyletters.com/api/transcribe",
+        "method": "POST",
+        "success": false,
+        "status": 405,
+        "statusText": "Method Not Allowed",
+        "duration": 234,
+        "headers": {
+          "cache-control": "public, max-age=0, must-revalidate",
+          "content-disposition": "inline; filename=\"500\"",
+          "content-type": "text/html; charset=utf-8",
+          "date": "Tue, 25 Nov 2025 21:29:40 GMT",
+          "server": "Vercel",
+          "strict-transport-security": "max-age=63072000",
+          "transfer-encoding": "chunked",
+          "x-matched-path": "/500",
+          "x-vercel-cache": "BYPASS",
+          "x-vercel-id": "iad1::ndqhh-1764106180379-df4c82ddedfc"
+        },
+        "data": null,
+        "error": {
+          "message": "No JSON response",
+          "status": 405,
+          "statusText": "Method Not Allowed"
+        }
+      },
+      {
+        "name": "Analyze Image",
+        "url": "https://www.steadyletters.com/api/analyze-image",
+        "method": "POST",
+        "success": false,
+        "status": 405,
+        "statusText": "Method Not Allowed",
+        "duration": 471,
+        "headers": {
+          "cache-control": "public, max-age=0, must-revalidate",
+          "content-disposition": "inline; filename=\"500\"",
+          "content-type": "text/html; charset=utf-8",
+          "date": "Tue, 25 Nov 2025 21:29:40 GMT",
+          "server": "Vercel",
+          "strict-transport-security": "max-age=63072000",
+          "transfer-encoding": "chunked",
+          "x-matched-path": "/500",
+          "x-vercel-cache": "BYPASS",
+          "x-vercel-id": "iad1::fvqwx-1764106180615-b73238a37bdd"
+        },
+        "data": null,
+        "error": {
+          "message": "No JSON response",
+          "status": 405,
+          "statusText": "Method Not Allowed"
+        }
+      },
+      {
+        "name": "Generate Letter",
+        "url": "https://www.steadyletters.com/api/generate/letter",
+        "method": "POST",
+        "success": false,
+        "status": 405,
+        "statusText": "Method Not Allowed",
+        "duration": 809,
+        "headers": {
+          "cache-control": "public, max-age=0, must-revalidate",
+          "content-disposition": "inline; filename=\"500\"",
+          "content-type": "text/html; charset=utf-8",
+          "date": "Tue, 25 Nov 2025 21:29:41 GMT",
+          "server": "Vercel",
+          "strict-transport-security": "max-age=63072000",
+          "transfer-encoding": "chunked",
+          "x-matched-path": "/500",
+          "x-vercel-cache": "BYPASS",
+          "x-vercel-id": "iad1::2vg4b-1764106181084-e8029097e0a8"
+        },
+        "data": null,
+        "error": {
+          "message": "No JSON response",
+          "status": 405,
+          "statusText": "Method Not Allowed"
+        }
+      },
+      {
+        "name": "Generate Card Image",
+        "url": "https://www.steadyletters.com/api/generate/card-image",
+        "method": "POST",
+        "success": false,
+        "status": 405,
+        "statusText": "Method Not Allowed",
+        "duration": 875,
+        "headers": {
+          "cache-control": "public, max-age=0, must-revalidate",
+          "content-disposition": "inline; filename=\"500\"",
+          "content-type": "text/html; charset=utf-8",
+          "date": "Tue, 25 Nov 2025 21:29:41 GMT",
+          "server": "Vercel",
+          "strict-transport-security": "max-age=63072000",
+          "transfer-encoding": "chunked",
+          "x-matched-path": "/500",
+          "x-vercel-cache": "BYPASS",
+          "x-vercel-id": "iad1::5ngql-1764106181899-c6719a3cb46a"
+        },
+        "data": null,
+        "error": {
+          "message": "No JSON response",
+          "status": 405,
+          "statusText": "Method Not Allowed"
+        }
+      },
+      {
+        "name": "Generate Images",
+        "url": "https://www.steadyletters.com/api/generate/images",
+        "method": "POST",
+        "success": false,
+        "status": 405,
+        "statusText": "Method Not Allowed",
+        "duration": 458,
+        "headers": {
+          "cache-control": "public, max-age=0, must-revalidate",
+          "content-disposition": "inline; filename=\"500\"",
+          "content-type": "text/html; charset=utf-8",
+          "date": "Tue, 25 Nov 2025 21:29:42 GMT",
+          "server": "Vercel",
+          "strict-transport-security": "max-age=63072000",
+          "transfer-encoding": "chunked",
+          "x-matched-path": "/500",
+          "x-vercel-cache": "BYPASS",
+          "x-vercel-id": "iad1::2vg4b-1764106182787-291ac66385e5"
+        },
+        "data": null,
+        "error": {
+          "message": "No JSON response",
+          "status": 405,
+          "statusText": "Method Not Allowed"
+        }
+      },
+      {
+        "name": "Extract Address",
+        "url": "https://www.steadyletters.com/api/extract-address",
+        "method": "POST",
+        "success": false,
+        "status": 405,
+        "statusText": "Method Not Allowed",
+        "duration": 328,
+        "headers": {
+          "cache-control": "public, max-age=0, must-revalidate",
+          "content-disposition": "inline; filename=\"500\"",
+          "content-type": "text/html; charset=utf-8",
+          "date": "Tue, 25 Nov 2025 21:29:43 GMT",
+          "server": "Vercel",
+          "strict-transport-security": "max-age=63072000",
+          "transfer-encoding": "chunked",
+          "x-matched-path": "/500",
+          "x-vercel-cache": "BYPASS",
+          "x-vercel-id": "iad1::fvqwc-1764106183244-c56437a88479"
+        },
+        "data": null,
+        "error": {
+          "message": "No JSON response",
+          "status": 405,
+          "statusText": "Method Not Allowed"
+        }
+      },
+      {
+        "name": "Stripe Checkout",
+        "url": "https://www.steadyletters.com/api/stripe/checkout",
+        "method": "POST",
+        "success": false,
+        "status": 405,
+        "statusText": "Method Not Allowed",
+        "duration": 682,
+        "headers": {
+          "cache-control": "public, max-age=0, must-revalidate",
+          "content-disposition": "inline; filename=\"500\"",
+          "content-type": "text/html; charset=utf-8",
+          "date": "Tue, 25 Nov 2025 21:29:43 GMT",
+          "server": "Vercel",
+          "strict-transport-security": "max-age=63072000",
+          "transfer-encoding": "chunked",
+          "x-matched-path": "/500",
+          "x-vercel-cache": "BYPASS",
+          "x-vercel-id": "iad1::22qlr-1764106183588-c5d58e74b6c8"
+        },
+        "data": null,
+        "error": {
+          "message": "No JSON response",
+          "status": 405,
+          "statusText": "Method Not Allowed"
+        }
+      },
+      {
+        "name": "Stripe Portal",
+        "url": "https://www.steadyletters.com/api/stripe/portal",
+        "method": "GET",
+        "success": false,
+        "status": 500,
+        "statusText": "Internal Server Error",
+        "duration": 401,
+        "headers": {
+          "accept-ranges": "bytes",
+          "access-control-allow-origin": "*",
+          "age": "704",
+          "cache-control": "public, max-age=0, must-revalidate",
+          "content-disposition": "inline; filename=\"500\"",
+          "content-encoding": "br",
+          "content-length": "1978",
+          "content-type": "text/html; charset=utf-8",
+          "date": "Tue, 25 Nov 2025 21:29:44 GMT",
+          "etag": "\"25b7dc214459c892b5166734ed3c57e1\"",
+          "last-modified": "Tue, 25 Nov 2025 21:18:00 GMT",
+          "server": "Vercel",
+          "strict-transport-security": "max-age=63072000",
+          "x-matched-path": "/500",
+          "x-vercel-cache": "MISS",
+          "x-vercel-id": "iad1::699km-1764106184240-f24aaaca272a"
+        },
+        "data": null,
+        "error": {
+          "message": "No JSON response",
+          "status": 500,
+          "statusText": "Internal Server Error"
+        }
+      },
+      {
+        "name": "Post-Deploy",
+        "url": "https://www.steadyletters.com/api/post-deploy",
+        "method": "POST",
+        "success": false,
+        "status": 405,
+        "statusText": "Method Not Allowed",
+        "duration": 230,
+        "headers": {
+          "cache-control": "public, max-age=0, must-revalidate",
+          "content-disposition": "inline; filename=\"500\"",
+          "content-type": "text/html; charset=utf-8",
+          "date": "Tue, 25 Nov 2025 21:29:44 GMT",
+          "server": "Vercel",
+          "strict-transport-security": "max-age=63072000",
+          "transfer-encoding": "chunked",
+          "x-matched-path": "/500",
+          "x-vercel-cache": "BYPASS",
+          "x-vercel-id": "iad1::6rtsx-1764106184878-7d8cb819111d"
+        },
+        "data": null,
+        "error": {
+          "message": "No JSON response",
+          "status": 405,
+          "statusText": "Method Not Allowed"
+        }
+      }
+    ],
+    "byStatus": {
+      "200": [
+        {
+          "name": "Homepage",
+          "url": "https://www.steadyletters.com/",
+          "method": "GET",
+          "success": true,
+          "status": 200,
+          "statusText": "OK",
+          "duration": 362,
+          "headers": {
+            "access-control-allow-origin": "*",
+            "age": "594",
+            "cache-control": "public, max-age=0, must-revalidate",
+            "content-disposition": "inline",
+            "content-encoding": "br",
+            "content-type": "text/html; charset=utf-8",
+            "date": "Tue, 25 Nov 2025 21:29:37 GMT",
+            "etag": "W/\"950041d8d15dcca9641b9f584f2987e7\"",
+            "server": "Vercel",
+            "strict-transport-security": "max-age=63072000",
+            "transfer-encoding": "chunked",
+            "vary": "rsc, next-router-state-tree, next-router-prefetch, next-router-segment-prefetch",
+            "x-matched-path": "/",
+            "x-nextjs-prerender": "1",
+            "x-nextjs-stale-time": "300",
+            "x-vercel-cache": "HIT",
+            "x-vercel-id": "iad1::6rtsx-1764106177691-71d51f57b577"
+          },
+          "data": {
+            "error": "No JSON response",
+            "statusText": "OK"
+          },
+          "error": null
+        },
+        {
+          "name": "Pricing",
+          "url": "https://www.steadyletters.com/pricing",
+          "method": "GET",
+          "success": true,
+          "status": 200,
+          "statusText": "OK",
+          "duration": 79,
+          "headers": {
+            "access-control-allow-origin": "*",
+            "age": "593",
+            "cache-control": "public, max-age=0, must-revalidate",
+            "content-disposition": "inline",
+            "content-encoding": "br",
+            "content-type": "text/html; charset=utf-8",
+            "date": "Tue, 25 Nov 2025 21:29:37 GMT",
+            "etag": "W/\"7ad2a1406ce22c6e793472be5e065fe2\"",
+            "server": "Vercel",
+            "strict-transport-security": "max-age=63072000",
+            "transfer-encoding": "chunked",
+            "vary": "rsc, next-router-state-tree, next-router-prefetch, next-router-segment-prefetch",
+            "x-matched-path": "/pricing",
+            "x-nextjs-prerender": "1",
+            "x-nextjs-stale-time": "300",
+            "x-vercel-cache": "HIT",
+            "x-vercel-id": "iad1::lv4mv-1764106177807-08e92278d1ba"
+          },
+          "data": {
+            "error": "No JSON response",
+            "statusText": "OK"
+          },
+          "error": null
+        },
+        {
+          "name": "Login",
+          "url": "https://www.steadyletters.com/login",
+          "method": "GET",
+          "success": true,
+          "status": 200,
+          "statusText": "OK",
+          "duration": 81,
+          "headers": {
+            "access-control-allow-origin": "*",
+            "age": "593",
+            "cache-control": "public, max-age=0, must-revalidate",
+            "content-disposition": "inline",
+            "content-encoding": "br",
+            "content-type": "text/html; charset=utf-8",
+            "date": "Tue, 25 Nov 2025 21:29:37 GMT",
+            "etag": "W/\"94babf30b3afaf3444e209a2a68a0352\"",
+            "server": "Vercel",
+            "strict-transport-security": "max-age=63072000",
+            "transfer-encoding": "chunked",
+            "vary": "rsc, next-router-state-tree, next-router-prefetch, next-router-segment-prefetch",
+            "x-matched-path": "/login",
+            "x-nextjs-prerender": "1",
+            "x-nextjs-stale-time": "300",
+            "x-vercel-cache": "HIT",
+            "x-vercel-id": "iad1::fc4l2-1764106177890-4a252cdfbb48"
+          },
+          "data": {
+            "error": "No JSON response",
+            "statusText": "OK"
+          },
+          "error": null
+        },
+        {
+          "name": "Signup",
+          "url": "https://www.steadyletters.com/signup",
+          "method": "GET",
+          "success": true,
+          "status": 200,
+          "statusText": "OK",
+          "duration": 88,
+          "headers": {
+            "access-control-allow-origin": "*",
+            "age": "592",
+            "cache-control": "public, max-age=0, must-revalidate",
+            "content-disposition": "inline",
+            "content-encoding": "br",
+            "content-type": "text/html; charset=utf-8",
+            "date": "Tue, 25 Nov 2025 21:29:37 GMT",
+            "etag": "W/\"d90ca4a284403e5a7a547abb1a0c2dd4\"",
+            "server": "Vercel",
+            "strict-transport-security": "max-age=63072000",
+            "transfer-encoding": "chunked",
+            "vary": "rsc, next-router-state-tree, next-router-prefetch, next-router-segment-prefetch",
+            "x-matched-path": "/signup",
+            "x-nextjs-prerender": "1",
+            "x-nextjs-stale-time": "300",
+            "x-vercel-cache": "HIT",
+            "x-vercel-id": "iad1::lv4mv-1764106177971-14db02ea3f86"
+          },
+          "data": {
+            "error": "No JSON response",
+            "statusText": "OK"
+          },
+          "error": null
+        }
+      ],
+      "400": [],
+      "401": [],
+      "404": [],
+      "405": [
+        {
+          "name": "Auth Sync User",
+          "url": "https://www.steadyletters.com/api/auth/sync-user",
+          "method": "POST",
+          "success": false,
+          "status": 405,
+          "statusText": "Method Not Allowed",
+          "duration": 223,
+          "headers": {
+            "cache-control": "public, max-age=0, must-revalidate",
+            "content-disposition": "inline; filename=\"500\"",
+            "content-type": "text/html; charset=utf-8",
+            "date": "Tue, 25 Nov 2025 21:29:38 GMT",
+            "server": "Vercel",
+            "strict-transport-security": "max-age=63072000",
+            "transfer-encoding": "chunked",
+            "x-matched-path": "/500",
+            "x-vercel-cache": "BYPASS",
+            "x-vercel-id": "iad1::m548s-1764106178580-490124b3a90d"
+          },
+          "data": null,
+          "error": {
+            "message": "No JSON response",
+            "status": 405,
+            "statusText": "Method Not Allowed"
+          }
+        },
+        {
+          "name": "Orders POST",
+          "url": "https://www.steadyletters.com/api/orders",
+          "method": "POST",
+          "success": false,
+          "status": 405,
+          "statusText": "Method Not Allowed",
+          "duration": 244,
+          "headers": {
+            "cache-control": "public, max-age=0, must-revalidate",
+            "content-disposition": "inline; filename=\"500\"",
+            "content-type": "text/html; charset=utf-8",
+            "date": "Tue, 25 Nov 2025 21:29:39 GMT",
+            "server": "Vercel",
+            "strict-transport-security": "max-age=63072000",
+            "transfer-encoding": "chunked",
+            "x-matched-path": "/500",
+            "x-vercel-cache": "BYPASS",
+            "x-vercel-id": "iad1::6bx86-1764106179396-57c322ecc0ac"
+          },
+          "data": null,
+          "error": {
+            "message": "No JSON response",
+            "status": 405,
+            "statusText": "Method Not Allowed"
+          }
+        },
+        {
+          "name": "Thanks.io Send",
+          "url": "https://www.steadyletters.com/api/thanks-io/send",
+          "method": "POST",
+          "success": false,
+          "status": 405,
+          "statusText": "Method Not Allowed",
+          "duration": 262,
+          "headers": {
+            "cache-control": "public, max-age=0, must-revalidate",
+            "content-disposition": "inline; filename=\"500\"",
+            "content-type": "text/html; charset=utf-8",
+            "date": "Tue, 25 Nov 2025 21:29:40 GMT",
+            "server": "Vercel",
+            "strict-transport-security": "max-age=63072000",
+            "transfer-encoding": "chunked",
+            "x-matched-path": "/500",
+            "x-vercel-cache": "BYPASS",
+            "x-vercel-id": "iad1::fc4l2-1764106180119-53d05b0ca3e7"
+          },
+          "data": null,
+          "error": {
+            "message": "No JSON response",
+            "status": 405,
+            "statusText": "Method Not Allowed"
+          }
+        },
+        {
+          "name": "Transcribe",
+          "url": "https://www.steadyletters.com/api/transcribe",
+          "method": "POST",
+          "success": false,
+          "status": 405,
+          "statusText": "Method Not Allowed",
+          "duration": 234,
+          "headers": {
+            "cache-control": "public, max-age=0, must-revalidate",
+            "content-disposition": "inline; filename=\"500\"",
+            "content-type": "text/html; charset=utf-8",
+            "date": "Tue, 25 Nov 2025 21:29:40 GMT",
+            "server": "Vercel",
+            "strict-transport-security": "max-age=63072000",
+            "transfer-encoding": "chunked",
+            "x-matched-path": "/500",
+            "x-vercel-cache": "BYPASS",
+            "x-vercel-id": "iad1::ndqhh-1764106180379-df4c82ddedfc"
+          },
+          "data": null,
+          "error": {
+            "message": "No JSON response",
+            "status": 405,
+            "statusText": "Method Not Allowed"
+          }
+        },
+        {
+          "name": "Analyze Image",
+          "url": "https://www.steadyletters.com/api/analyze-image",
+          "method": "POST",
+          "success": false,
+          "status": 405,
+          "statusText": "Method Not Allowed",
+          "duration": 471,
+          "headers": {
+            "cache-control": "public, max-age=0, must-revalidate",
+            "content-disposition": "inline; filename=\"500\"",
+            "content-type": "text/html; charset=utf-8",
+            "date": "Tue, 25 Nov 2025 21:29:40 GMT",
+            "server": "Vercel",
+            "strict-transport-security": "max-age=63072000",
+            "transfer-encoding": "chunked",
+            "x-matched-path": "/500",
+            "x-vercel-cache": "BYPASS",
+            "x-vercel-id": "iad1::fvqwx-1764106180615-b73238a37bdd"
+          },
+          "data": null,
+          "error": {
+            "message": "No JSON response",
+            "status": 405,
+            "statusText": "Method Not Allowed"
+          }
+        },
+        {
+          "name": "Generate Letter",
+          "url": "https://www.steadyletters.com/api/generate/letter",
+          "method": "POST",
+          "success": false,
+          "status": 405,
+          "statusText": "Method Not Allowed",
+          "duration": 809,
+          "headers": {
+            "cache-control": "public, max-age=0, must-revalidate",
+            "content-disposition": "inline; filename=\"500\"",
+            "content-type": "text/html; charset=utf-8",
+            "date": "Tue, 25 Nov 2025 21:29:41 GMT",
+            "server": "Vercel",
+            "strict-transport-security": "max-age=63072000",
+            "transfer-encoding": "chunked",
+            "x-matched-path": "/500",
+            "x-vercel-cache": "BYPASS",
+            "x-vercel-id": "iad1::2vg4b-1764106181084-e8029097e0a8"
+          },
+          "data": null,
+          "error": {
+            "message": "No JSON response",
+            "status": 405,
+            "statusText": "Method Not Allowed"
+          }
+        },
+        {
+          "name": "Generate Card Image",
+          "url": "https://www.steadyletters.com/api/generate/card-image",
+          "method": "POST",
+          "success": false,
+          "status": 405,
+          "statusText": "Method Not Allowed",
+          "duration": 875,
+          "headers": {
+            "cache-control": "public, max-age=0, must-revalidate",
+            "content-disposition": "inline; filename=\"500\"",
+            "content-type": "text/html; charset=utf-8",
+            "date": "Tue, 25 Nov 2025 21:29:41 GMT",
+            "server": "Vercel",
+            "strict-transport-security": "max-age=63072000",
+            "transfer-encoding": "chunked",
+            "x-matched-path": "/500",
+            "x-vercel-cache": "BYPASS",
+            "x-vercel-id": "iad1::5ngql-1764106181899-c6719a3cb46a"
+          },
+          "data": null,
+          "error": {
+            "message": "No JSON response",
+            "status": 405,
+            "statusText": "Method Not Allowed"
+          }
+        },
+        {
+          "name": "Generate Images",
+          "url": "https://www.steadyletters.com/api/generate/images",
+          "method": "POST",
+          "success": false,
+          "status": 405,
+          "statusText": "Method Not Allowed",
+          "duration": 458,
+          "headers": {
+            "cache-control": "public, max-age=0, must-revalidate",
+            "content-disposition": "inline; filename=\"500\"",
+            "content-type": "text/html; charset=utf-8",
+            "date": "Tue, 25 Nov 2025 21:29:42 GMT",
+            "server": "Vercel",
+            "strict-transport-security": "max-age=63072000",
+            "transfer-encoding": "chunked",
+            "x-matched-path": "/500",
+            "x-vercel-cache": "BYPASS",
+            "x-vercel-id": "iad1::2vg4b-1764106182787-291ac66385e5"
+          },
+          "data": null,
+          "error": {
+            "message": "No JSON response",
+            "status": 405,
+            "statusText": "Method Not Allowed"
+          }
+        },
+        {
+          "name": "Extract Address",
+          "url": "https://www.steadyletters.com/api/extract-address",
+          "method": "POST",
+          "success": false,
+          "status": 405,
+          "statusText": "Method Not Allowed",
+          "duration": 328,
+          "headers": {
+            "cache-control": "public, max-age=0, must-revalidate",
+            "content-disposition": "inline; filename=\"500\"",
+            "content-type": "text/html; charset=utf-8",
+            "date": "Tue, 25 Nov 2025 21:29:43 GMT",
+            "server": "Vercel",
+            "strict-transport-security": "max-age=63072000",
+            "transfer-encoding": "chunked",
+            "x-matched-path": "/500",
+            "x-vercel-cache": "BYPASS",
+            "x-vercel-id": "iad1::fvqwc-1764106183244-c56437a88479"
+          },
+          "data": null,
+          "error": {
+            "message": "No JSON response",
+            "status": 405,
+            "statusText": "Method Not Allowed"
+          }
+        },
+        {
+          "name": "Stripe Checkout",
+          "url": "https://www.steadyletters.com/api/stripe/checkout",
+          "method": "POST",
+          "success": false,
+          "status": 405,
+          "statusText": "Method Not Allowed",
+          "duration": 682,
+          "headers": {
+            "cache-control": "public, max-age=0, must-revalidate",
+            "content-disposition": "inline; filename=\"500\"",
+            "content-type": "text/html; charset=utf-8",
+            "date": "Tue, 25 Nov 2025 21:29:43 GMT",
+            "server": "Vercel",
+            "strict-transport-security": "max-age=63072000",
+            "transfer-encoding": "chunked",
+            "x-matched-path": "/500",
+            "x-vercel-cache": "BYPASS",
+            "x-vercel-id": "iad1::22qlr-1764106183588-c5d58e74b6c8"
+          },
+          "data": null,
+          "error": {
+            "message": "No JSON response",
+            "status": 405,
+            "statusText": "Method Not Allowed"
+          }
+        },
+        {
+          "name": "Post-Deploy",
+          "url": "https://www.steadyletters.com/api/post-deploy",
+          "method": "POST",
+          "success": false,
+          "status": 405,
+          "statusText": "Method Not Allowed",
+          "duration": 230,
+          "headers": {
+            "cache-control": "public, max-age=0, must-revalidate",
+            "content-disposition": "inline; filename=\"500\"",
+            "content-type": "text/html; charset=utf-8",
+            "date": "Tue, 25 Nov 2025 21:29:44 GMT",
+            "server": "Vercel",
+            "strict-transport-security": "max-age=63072000",
+            "transfer-encoding": "chunked",
+            "x-matched-path": "/500",
+            "x-vercel-cache": "BYPASS",
+            "x-vercel-id": "iad1::6rtsx-1764106184878-7d8cb819111d"
+          },
+          "data": null,
+          "error": {
+            "message": "No JSON response",
+            "status": 405,
+            "statusText": "Method Not Allowed"
+          }
+        }
+      ],
+      "500": [
+        {
+          "name": "Health Check",
+          "url": "https://www.steadyletters.com/api/health",
+          "method": "GET",
+          "success": false,
+          "status": 500,
+          "statusText": "Internal Server Error",
+          "duration": 231,
+          "headers": {
+            "accept-ranges": "bytes",
+            "access-control-allow-origin": "*",
+            "age": "697",
+            "cache-control": "public, max-age=0, must-revalidate",
+            "content-disposition": "inline; filename=\"500\"",
+            "content-encoding": "br",
+            "content-length": "1978",
+            "content-type": "text/html; charset=utf-8",
+            "date": "Tue, 25 Nov 2025 21:29:38 GMT",
+            "etag": "\"25b7dc214459c892b5166734ed3c57e1\"",
+            "last-modified": "Tue, 25 Nov 2025 21:18:00 GMT",
+            "server": "Vercel",
+            "strict-transport-security": "max-age=63072000",
+            "x-matched-path": "/500",
+            "x-vercel-cache": "MISS",
+            "x-vercel-id": "iad1::6rtsx-1764106178063-21b4d2ee7a75"
+          },
+          "data": null,
+          "error": {
+            "message": "No JSON response",
+            "status": 500,
+            "statusText": "Internal Server Error"
+          }
+        },
+        {
+          "name": "Handwriting Styles",
+          "url": "https://www.steadyletters.com/api/handwriting-styles",
+          "method": "GET",
+          "success": false,
+          "status": 500,
+          "statusText": "Internal Server Error",
+          "duration": 264,
+          "headers": {
+            "accept-ranges": "bytes",
+            "access-control-allow-origin": "*",
+            "age": "698",
+            "cache-control": "public, max-age=0, must-revalidate",
+            "content-disposition": "inline; filename=\"500\"",
+            "content-encoding": "br",
+            "content-length": "1978",
+            "content-type": "text/html; charset=utf-8",
+            "date": "Tue, 25 Nov 2025 21:29:38 GMT",
+            "etag": "\"25b7dc214459c892b5166734ed3c57e1\"",
+            "last-modified": "Tue, 25 Nov 2025 21:18:00 GMT",
+            "server": "Vercel",
+            "strict-transport-security": "max-age=63072000",
+            "x-matched-path": "/500",
+            "x-vercel-cache": "MISS",
+            "x-vercel-id": "iad1::84lb4-1764106178302-df91c2c3d316"
+          },
+          "data": null,
+          "error": {
+            "message": "No JSON response",
+            "status": 500,
+            "statusText": "Internal Server Error"
+          }
+        },
+        {
+          "name": "Billing Usage",
+          "url": "https://www.steadyletters.com/api/billing/usage",
+          "method": "GET",
+          "success": false,
+          "status": 500,
+          "statusText": "Internal Server Error",
+          "duration": 371,
+          "headers": {
+            "accept-ranges": "bytes",
+            "access-control-allow-origin": "*",
+            "age": "698",
+            "cache-control": "public, max-age=0, must-revalidate",
+            "content-disposition": "inline; filename=\"500\"",
+            "content-encoding": "br",
+            "content-length": "1978",
+            "content-type": "text/html; charset=utf-8",
+            "date": "Tue, 25 Nov 2025 21:29:38 GMT",
+            "etag": "\"25b7dc214459c892b5166734ed3c57e1\"",
+            "last-modified": "Tue, 25 Nov 2025 21:18:00 GMT",
+            "server": "Vercel",
+            "strict-transport-security": "max-age=63072000",
+            "x-matched-path": "/500",
+            "x-vercel-cache": "MISS",
+            "x-vercel-id": "iad1::slfvk-1764106178941-1e37976327ea"
+          },
+          "data": null,
+          "error": {
+            "message": "No JSON response",
+            "status": 500,
+            "statusText": "Internal Server Error"
+          }
+        },
+        {
+          "name": "Orders GET",
+          "url": "https://www.steadyletters.com/api/orders",
+          "method": "GET",
+          "success": false,
+          "status": 500,
+          "statusText": "Internal Server Error",
+          "duration": 213,
+          "headers": {
+            "accept-ranges": "bytes",
+            "access-control-allow-origin": "*",
+            "age": "699",
+            "cache-control": "public, max-age=0, must-revalidate",
+            "content-disposition": "inline; filename=\"500\"",
+            "content-encoding": "br",
+            "content-length": "1978",
+            "content-type": "text/html; charset=utf-8",
+            "date": "Tue, 25 Nov 2025 21:29:39 GMT",
+            "etag": "\"25b7dc214459c892b5166734ed3c57e1\"",
+            "last-modified": "Tue, 25 Nov 2025 21:18:00 GMT",
+            "server": "Vercel",
+            "strict-transport-security": "max-age=63072000",
+            "x-matched-path": "/500",
+            "x-vercel-cache": "MISS",
+            "x-vercel-id": "iad1::fc4l2-1764106179173-29858302e50a"
+          },
+          "data": null,
+          "error": {
+            "message": "No JSON response",
+            "status": 500,
+            "statusText": "Internal Server Error"
+          }
+        },
+        {
+          "name": "Thanks.io Products",
+          "url": "https://www.steadyletters.com/api/thanks-io/products",
+          "method": "GET",
+          "success": false,
+          "status": 500,
+          "statusText": "Internal Server Error",
+          "duration": 228,
+          "headers": {
+            "accept-ranges": "bytes",
+            "access-control-allow-origin": "*",
+            "age": "699",
+            "cache-control": "public, max-age=0, must-revalidate",
+            "content-disposition": "inline; filename=\"500\"",
+            "content-encoding": "br",
+            "content-length": "1978",
+            "content-type": "text/html; charset=utf-8",
+            "date": "Tue, 25 Nov 2025 21:29:39 GMT",
+            "etag": "\"25b7dc214459c892b5166734ed3c57e1\"",
+            "last-modified": "Tue, 25 Nov 2025 21:18:00 GMT",
+            "server": "Vercel",
+            "strict-transport-security": "max-age=63072000",
+            "x-matched-path": "/500",
+            "x-vercel-cache": "MISS",
+            "x-vercel-id": "iad1::jnmkx-1764106179637-37fe2f2a74ca"
+          },
+          "data": null,
+          "error": {
+            "message": "No JSON response",
+            "status": 500,
+            "statusText": "Internal Server Error"
+          }
+        },
+        {
+          "name": "Thanks.io Styles",
+          "url": "https://www.steadyletters.com/api/thanks-io/styles",
+          "method": "GET",
+          "success": false,
+          "status": 500,
+          "statusText": "Internal Server Error",
+          "duration": 222,
+          "headers": {
+            "accept-ranges": "bytes",
+            "access-control-allow-origin": "*",
+            "age": "699",
+            "cache-control": "public, max-age=0, must-revalidate",
+            "content-disposition": "inline; filename=\"500\"",
+            "content-encoding": "br",
+            "content-length": "1978",
+            "content-type": "text/html; charset=utf-8",
+            "date": "Tue, 25 Nov 2025 21:29:39 GMT",
+            "etag": "\"25b7dc214459c892b5166734ed3c57e1\"",
+            "last-modified": "Tue, 25 Nov 2025 21:18:00 GMT",
+            "server": "Vercel",
+            "strict-transport-security": "max-age=63072000",
+            "x-matched-path": "/500",
+            "x-vercel-cache": "MISS",
+            "x-vercel-id": "iad1::5ngql-1764106179903-6388716ff13e"
+          },
+          "data": null,
+          "error": {
+            "message": "No JSON response",
+            "status": 500,
+            "statusText": "Internal Server Error"
+          }
+        },
+        {
+          "name": "Stripe Portal",
+          "url": "https://www.steadyletters.com/api/stripe/portal",
+          "method": "GET",
+          "success": false,
+          "status": 500,
+          "statusText": "Internal Server Error",
+          "duration": 401,
+          "headers": {
+            "accept-ranges": "bytes",
+            "access-control-allow-origin": "*",
+            "age": "704",
+            "cache-control": "public, max-age=0, must-revalidate",
+            "content-disposition": "inline; filename=\"500\"",
+            "content-encoding": "br",
+            "content-length": "1978",
+            "content-type": "text/html; charset=utf-8",
+            "date": "Tue, 25 Nov 2025 21:29:44 GMT",
+            "etag": "\"25b7dc214459c892b5166734ed3c57e1\"",
+            "last-modified": "Tue, 25 Nov 2025 21:18:00 GMT",
+            "server": "Vercel",
+            "strict-transport-security": "max-age=63072000",
+            "x-matched-path": "/500",
+            "x-vercel-cache": "MISS",
+            "x-vercel-id": "iad1::699km-1764106184240-f24aaaca272a"
+          },
+          "data": null,
+          "error": {
+            "message": "No JSON response",
+            "status": 500,
+            "statusText": "Internal Server Error"
+          }
+        }
+      ]
+    }
+  }
+}

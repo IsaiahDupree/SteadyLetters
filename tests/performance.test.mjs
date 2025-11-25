@@ -10,7 +10,7 @@ describe('Performance Tests', () => {
             const loadTime = Date.now() - startTime;
 
             expect(loadTime).toBeLessThan(2000);
-        });
+        }, 30000);
 
         it('should load pricing page within 2 seconds', async () => {
             const startTime = Date.now();
@@ -18,7 +18,7 @@ describe('Performance Tests', () => {
             const loadTime = Date.now() - startTime;
 
             expect(loadTime).toBeLessThan(2000);
-        });
+        }, 30000);
 
         it('should have fast Time to First Byte (TTFB)', async () => {
             const startTime = Date.now();
@@ -27,7 +27,7 @@ describe('Performance Tests', () => {
 
             // TTFB should be under 600ms
             expect(ttfb).toBeLessThan(600);
-        });
+        }, 30000);
     });
 
     describe('API Response Times', () => {
@@ -38,7 +38,7 @@ describe('Performance Tests', () => {
 
             // API should respond within 3 seconds (allowing for network latency)
             expect(responseTime).toBeLessThan(3000);
-        });
+        }, 30000);
 
         it('should handle API errors gracefully', async () => {
             const response = await fetch(`${baseUrl}/api/generate/letter`, {
@@ -49,7 +49,7 @@ describe('Performance Tests', () => {
 
             // Should return error quickly, not timeout
             expect([400, 401, 500]).toContain(response.status);
-        });
+        }, 30000);
     });
 
     describe('Asset Optimization', () => {
@@ -151,7 +151,7 @@ describe('Performance Tests', () => {
             const allSuccessful = results.every(r => r.ok);
 
             expect(allSuccessful).toBe(true);
-        });
+        }, 30000);
     });
 
     describe('Memory Usage', () => {

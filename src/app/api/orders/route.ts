@@ -29,10 +29,42 @@ export async function GET(request: NextRequest) {
         });
 
         return NextResponse.json({ orders }, { status: 200 });
-    } catch (error) {
+    } catch (error: any) {
         console.error('Get orders error:', error);
+        console.error('Error details:', {
+            message: error.message,
+            code: error.code,
+            name: error.name,
+        });
+        
+        // Ensure user exists in Prisma if auth succeeded but DB query failed
+        try {
+            const authUser = await getAuthenticatedUser(request);
+            if (authUser) {
+                await prisma.user.upsert({
+                    where: { id: authUser.id },
+                    update: {},
+                    create: {
+                        id: authUser.id,
+                        email: authUser.email || '',
+                    },
+                });
+            }
+        } catch (upsertError) {
+            console.error('Failed to upsert user:', upsertError);
+        }
+        
+        const errorMessage = process.env.NODE_ENV === 'development'
+            ? error.message || 'Failed to fetch orders'
+            : 'Failed to fetch orders';
+        
         return NextResponse.json(
-            { error: 'Failed to fetch orders' },
+            { 
+                error: errorMessage,
+                ...(process.env.NODE_ENV === 'development' && { 
+                    details: error.message,
+                })
+            },
             { status: 500 }
         );
     }
