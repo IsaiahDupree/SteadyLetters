@@ -18,8 +18,12 @@
     "test:e2e:both": "playwright test --project=local && TEST_ENV=production playwright test --project=production",
     "test:all": "npm test && npm run test:e2e:local",
     "test:production-diagnostics": "PRODUCTION_URL=https://www.steadyletters.com playwright test tests/e2e/production-diagnostics.spec.ts",
+    "test:api-health": "npm test -- tests/api-health-check.test.mjs",
     "check:env": "node scripts/check-production-env.mjs",
-    "diagnose": "npm run check:env && npm run test:production-diagnostics"
+    "validate:keys": "node scripts/validate-api-keys.mjs",
+    "fix:local-env": "./scripts/fix-local-env.sh",
+    "diagnose": "npm run check:env && npm run validate:keys && npm run test:production-diagnostics",
+    "diagnose:local": "npm run check:env && npm run validate:keys && npm run test:api-health"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.2.2",

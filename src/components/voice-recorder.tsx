@@ -20,53 +20,71 @@ export function VoiceRecorder({ onTranscriptionComplete }: VoiceRecorderProps) {
 
     const startRecording = async () => {
         try {
+            // Request optimized audio stream for low latency
             const stream = await navigator.mediaDevices.getUserMedia({ 
                 audio: {
                     echoCancellation: true,
                     noiseSuppression: true,
                     autoGainControl: true,
+                    // Low latency optimizations
+                    sampleRate: 48000, // Higher sample rate for better quality
+                    channelCount: 1, // Mono for smaller file size and faster processing
                 }
             });
             
-            // Use the best available mime type
+            // Use the best available mime type with low latency preference
             let mimeType = 'audio/webm';
             if (MediaRecorder.isTypeSupported('audio/webm;codecs=opus')) {
                 mimeType = 'audio/webm;codecs=opus';
-            } else if (MediaRecorder.isTypeSupported('audio/mp4')) {
-                mimeType = 'audio/mp4';
             } else if (MediaRecorder.isTypeSupported('audio/ogg;codecs=opus')) {
                 mimeType = 'audio/ogg;codecs=opus';
+            } else if (MediaRecorder.isTypeSupported('audio/mp4')) {
+                mimeType = 'audio/mp4';
             }
             
+            // Optimize for low latency - lower bitrate, faster encoding
             const mediaRecorder = new MediaRecorder(stream, {
                 mimeType,
-                audioBitsPerSecond: 128000, // Optimize for quality/size balance
+                audioBitsPerSecond: 64000, // Lower bitrate for faster encoding (still good quality for speech)
             });
 
             mediaRecorderRef.current = mediaRecorder;
             chunksRef.current = [];
 
-            // Collect data more frequently for better responsiveness
+            // Collect data more frequently for lower latency (250ms chunks)
+            // This allows faster processing and better responsiveness
             mediaRecorder.ondataavailable = (event) => {
-                if (event.data.size > 0) {
+                if (event.data && event.data.size > 0) {
                     chunksRef.current.push(event.data);
                 }
             };
             
-            // Request data every second for better UX
-            mediaRecorder.start(1000);
+            // Start with smaller timeslice for lower latency (250ms instead of 1000ms)
+            // This makes the recording feel more responsive
+            mediaRecorder.start(250);
 
             mediaRecorder.onstop = async () => {
-                const audioBlob = new Blob(chunksRef.current, { type: 'audio/webm' });
+                // Stop stream immediately to free resources
                 stream.getTracks().forEach((track) => track.stop());
-                await transcribeAudio(audioBlob);
+                
+                // Create blob efficiently
+                const audioBlob = new Blob(chunksRef.current, { type: mimeType });
+                
+                // Clear chunks to free memory
+                chunksRef.current = [];
+                
+                // Transcribe in background (non-blocking)
+                transcribeAudio(audioBlob).catch((error) => {
+                    console.error('Transcription error:', error);
+                    alert('Failed to transcribe audio. Please try again.');
+                });
             };
 
             setIsRecording(true);
             setTranscribed(false);
             setDuration(0);
 
-            // Start duration counter
+            // Start duration counter with more frequent updates for smoother UI
             timerRef.current = setInterval(() => {
                 setDuration((prev) => prev + 1);
             }, 1000);
@@ -78,11 +96,19 @@ export function VoiceRecorder({ onTranscriptionComplete }: VoiceRecorderProps) {
 
     const stopRecording = () => {
         if (mediaRecorderRef.current && isRecording) {
+            // Stop immediately for lower latency
             mediaRecorderRef.current.stop();
             setIsRecording(false);
 
+            // Clear timer immediately
             if (timerRef.current) {
                 clearInterval(timerRef.current);
+                timerRef.current = null;
+            }
+            
+            // Request final data chunk immediately
+            if (mediaRecorderRef.current.state !== 'inactive') {
+                mediaRecorderRef.current.requestData();
             }
         }
     };
@@ -91,25 +117,40 @@ export function VoiceRecorder({ onTranscriptionComplete }: VoiceRecorderProps) {
         setIsTranscribing(true);
 
         try {
+            // Use AbortController for timeout handling
+            const controller = new AbortController();
+            const timeoutId = setTimeout(() => controller.abort(), 60000); // 60s timeout
+
             const formData = new FormData();
-            formData.append('audio', audioBlob, 'recording.webm');
+            // Use appropriate file extension based on mime type
+            const extension = audioBlob.type.includes('webm') ? 'webm' : 
+                             audioBlob.type.includes('ogg') ? 'ogg' : 'mp4';
+            formData.append('audio', audioBlob, `recording.${extension}`);
 
             const response = await fetch('/api/transcribe', {
                 method: 'POST',
                 body: formData,
+                signal: controller.signal,
             });
+
+            clearTimeout(timeoutId);
+
+            if (!response.ok) {
+                const data = await response.json().catch(() => ({}));
+                throw new Error(data.error || `Transcription failed: ${response.status}`);
+            }
 
             const data = await response.json();
 
-            if (!response.ok) {
-                throw new Error(data.error || 'Transcription failed');
-            }
-
             onTranscriptionComplete(data.text);
             setTranscribed(true);
-        } catch (error) {
+        } catch (error: any) {
             console.error('Transcription error:', error);
-            alert('Failed to transcribe audio. Please try again.');
+            
+            // Don't show alert if it was aborted (timeout)
+            if (error.name !== 'AbortError') {
+                alert('Failed to transcribe audio. Please try again.');
+            }
         } finally {
             setIsTranscribing(false);
         }
