@@ -31,9 +31,9 @@ export function canGenerate(usage: {
 
     switch (type) {
         case 'letter':
-            return tier.letterGenerations === -1 || usage.letterGenerations < tier.letterGenerations;
+            return usage.letterGenerations < tier.letterGenerations;
         case 'image':
-            return tier.imageGenerations === -1 || usage.imageGenerations < tier.imageGenerations;
+            return usage.imageGenerations < tier.imageGenerations;
         case 'send':
             return usage.lettersSent < tier.lettersSent;
         default:
@@ -50,8 +50,8 @@ export function getRemainingUsage(usage: {
     const tier = TIERS[usage.tier as TierName] || TIERS.FREE;
 
     return {
-        letters: tier.letterGenerations === -1 ? 'Unlimited' : `${usage.letterGenerations} / ${tier.letterGenerations}`,
-        images: tier.imageGenerations === -1 ? 'Unlimited' : `${usage.imageGenerations} / ${tier.imageGenerations}`,
+        letters: `${usage.letterGenerations} / ${tier.letterGenerations}`,
+        images: `${usage.imageGenerations} / ${tier.imageGenerations}`,
         sends: `${usage.lettersSent} / ${tier.lettersSent}`,
     };
 }
