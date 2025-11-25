@@ -52,6 +52,6 @@ export function getRemainingUsage(usage: {
     return {
         letters: tier.letterGenerations === -1 ? 'Unlimited' : `${usage.letterGenerations} / ${tier.letterGenerations}`,
         images: tier.imageGenerations === -1 ? 'Unlimited' : `${usage.imageGenerations} / ${tier.imageGenerations}`,
-        sends: tier.lettersSent === -1 ? 'Unlimited' : `${usage.lettersSent} / ${tier.lettersSent}`,
+        sends: `${usage.lettersSent} / ${tier.lettersSent}`,
     };
 }
