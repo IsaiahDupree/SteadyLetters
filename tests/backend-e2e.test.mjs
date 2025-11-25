@@ -1,8 +1,22 @@
 import { describe, it, expect, beforeAll } from '@jest/globals';
 
-// Backend E2E Tests - Testing API endpoints and backend functionality
-describe('Backend E2E Tests', () => {
-    const baseUrl = 'http://localhost:3000';
+/**
+ * Backend E2E Tests - Testing API endpoints and backend functionality
+ * 
+ * ⚠️ IMPORTANT: These tests verify UNAUTHENTICATED behavior.
+ * 
+ * Node.js fetch() doesn't handle Supabase cookie-based authentication properly.
+ * All 401 errors in these tests are EXPECTED and verify that:
+ * 1. API routes properly require authentication
+ * 2. Unauthenticated requests are correctly rejected
+ * 
+ * For AUTHENTICATED API testing, use Playwright E2E tests:
+ *   npx playwright test tests/e2e/authenticated.spec.ts
+ * 
+ * Playwright tests use real browsers with proper cookie handling.
+ */
+describe('Backend E2E Tests (Unauthenticated)', () => {
+    const baseUrl = process.env.PRODUCTION_URL || 'http://localhost:3000';
 
     describe('API Health Checks', () => {
         it('should have server running', async () => {
@@ -27,13 +41,13 @@ describe('Backend E2E Tests', () => {
             expect(endpoint).toContain('/api/auth/sync-user');
         });
 
-        it('should require authentication for sync-user', async () => {
+        it('should require authentication for sync-user (EXPECTED: 401)', async () => {
             const response = await fetch(`${baseUrl}/api/auth/sync-user`, {
                 method: 'POST',
             });
 
-            // Should return 401 or 500 when not authenticated
-            expect([401, 500]).toContain(response.status);
+            // ✅ EXPECTED: 401 when not authenticated (verifies auth is required)
+            expect(response.status).toBe(401);
         });
     });
 
@@ -49,15 +63,15 @@ describe('Backend E2E Tests', () => {
             expect(response.status).toBe(405); // Method not allowed
         });
 
-        it('should validate request body', async () => {
+        it('should require authentication (EXPECTED: 401)', async () => {
             const response = await fetch(endpoint, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({}),
             });
 
-            // Should return error for missing required fields
-            expect([400, 401, 500]).toContain(response.status);
+            // ✅ EXPECTED: 401 when not authenticated (verifies auth is required)
+            expect(response.status).toBe(401);
         });
     });
 
@@ -73,14 +87,15 @@ describe('Backend E2E Tests', () => {
             expect(response.status).toBe(405);
         });
 
-        it('should validate request body', async () => {
+        it('should require authentication (EXPECTED: 401)', async () => {
             const response = await fetch(endpoint, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({}),
             });
 
-            expect([400, 401, 500]).toContain(response.status);
+            // ✅ EXPECTED: 401 when not authenticated
+            expect(response.status).toBe(401);
         });
     });
 
@@ -96,15 +111,15 @@ describe('Backend E2E Tests', () => {
             expect(response.status).toBe(405);
         });
 
-        it('should handle file upload', async () => {
+        it('should require authentication (EXPECTED: 401)', async () => {
             const formData = new FormData();
             const response = await fetch(endpoint, {
                 method: 'POST',
                 body: formData,
             });
 
-            // Should return error for missing/invalid file
-            expect([400, 401, 500]).toContain(response.status);
+            // ✅ EXPECTED: 401 when not authenticated
+            expect(response.status).toBe(401);
         });
     });
 
@@ -120,14 +135,15 @@ describe('Backend E2E Tests', () => {
             expect(response.status).toBe(405);
         });
 
-        it('should validate file upload', async () => {
+        it('should require authentication (EXPECTED: 401)', async () => {
             const formData = new FormData();
             const response = await fetch(endpoint, {
                 method: 'POST',
                 body: formData,
             });
 
-            expect([400, 401, 500]).toContain(response.status);
+            // ✅ EXPECTED: 401 when not authenticated
+            expect(response.status).toBe(401);
         });
     });
 
@@ -144,14 +160,15 @@ describe('Backend E2E Tests', () => {
                 expect(response.status).toBe(405);
             });
 
-            it('should validate required fields', async () => {
+            it('should require authentication (EXPECTED: 401)', async () => {
                 const response = await fetch(endpoint, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({}),
                 });
 
-                expect([400, 500]).toContain(response.status);
+                // ✅ EXPECTED: 401 when not authenticated (we fixed this to require auth)
+                expect(response.status).toBe(401);
             });
         });
 
@@ -199,9 +216,9 @@ describe('Backend E2E Tests', () => {
             expect(endpoint).toContain('/api/handwriting-styles');
         });
 
-        it('should support GET method', async () => {
+        it('should support GET method (may require auth)', async () => {
             const response = await fetch(endpoint);
-            // Should work or return auth error
+            // May be public or require auth - both are valid
             expect([200, 401, 500]).toContain(response.status);
         });
     });
@@ -255,23 +272,26 @@ describe('Backend E2E Tests', () => {
     });
 
     describe('Error Handling', () => {
-        it('should handle missing required parameters', async () => {
+        it('should require authentication for letter generation (EXPECTED: 401)', async () => {
             const response = await fetch(`${baseUrl}/api/generate/letter`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ invalid: 'data' }),
             });
 
-            expect([400, 401, 500]).toContain(response.status);
+            // ✅ EXPECTED: 401 when not authenticated
+            expect(response.status).toBe(401);
         });
 
-        it('should handle invalid JSON', async () => {
+        it('should handle invalid JSON gracefully', async () => {
             const response = await fetch(`${baseUrl}/api/generate/letter`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: 'invalid json',
             });
 
+            // Invalid JSON should return 400 (bad request) or 500 (server error)
+            // Not 401 because the request never gets to auth check
             expect([400, 500]).toContain(response.status);
         });
     });
@@ -290,6 +310,9 @@ describe('Backend E2E Tests', () => {
             const text = JSON.stringify(data);
             expect(text).not.toContain('sk_live');
             expect(text).not.toContain('sk_test');
+            
+            // ✅ EXPECTED: 401 when not authenticated
+            expect(response.status).toBe(401);
         });
     });
 
@@ -298,12 +321,12 @@ describe('Backend E2E Tests', () => {
             const limits = {
                 FREE: { letters: 5, images: 10 },
                 PRO: { letters: 50, images: 100 },
-                BUSINESS: { letters: -1, images: -1 }, // unlimited
+                BUSINESS: { letters: 200, images: 400 }, // Updated per tierresearch.txt
             };
 
             expect(limits.FREE.letters).toBe(5);
             expect(limits.PRO.letters).toBe(50);
-            expect(limits.BUSINESS.letters).toBe(-1);
+            expect(limits.BUSINESS.letters).toBe(200); // Updated
         });
     });
 

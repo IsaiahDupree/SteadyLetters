@@ -18,21 +18,27 @@ export default function OrdersPage() {
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        // TODO: Fetch real orders from Thanks.io API
-        // Mock data for now
-        const mockOrders: Order[] = [
-            {
-                id: '1',
-                status: 'delivered',
-                createdAt: new Date().toISOString(),
-                recipientName: 'John Doe',
-                trackingNumber: 'USPS1234567890',
-            },
-        ];
-
-        setOrders(mockOrders);
-        setLoading(false);
+        fetchOrders();
     }, []);
+
+    const fetchOrders = async () => {
+        try {
+            const response = await fetch('/api/orders');
+
+            if (!response.ok) {
+                console.error('Failed to fetch orders');
+                setLoading(false);
+                return;
+            }
+
+            const data = await response.json();
+            setOrders(data.orders || []);
+        } catch (error) {
+            console.error('Error fetching orders:', error);
+        } finally {
+            setLoading(false);
+        }
+    };
 
     const getStatusIcon = (status: string) => {
         switch (status) {
