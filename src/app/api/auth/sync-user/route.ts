@@ -4,6 +4,15 @@ import { prisma } from '@/lib/prisma';
 
 export async function POST(request: NextRequest) {
     try {
+        // Validate environment variables
+        if (!process.env.NEXT_PUBLIC_SUPABASE_URL || !process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY) {
+            console.error('Missing Supabase environment variables');
+            return NextResponse.json(
+                { error: 'Server configuration error' },
+                { status: 500 }
+            );
+        }
+
         let response = NextResponse.next({
             request: {
                 headers: request.headers,
@@ -11,8 +20,8 @@ export async function POST(request: NextRequest) {
         });
 
         const supabase = createServerClient(
-            process.env.NEXT_PUBLIC_SUPABASE_URL!,
-            process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+            process.env.NEXT_PUBLIC_SUPABASE_URL,
+            process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY,
             {
                 cookies: {
                     get(name: string) {
@@ -67,19 +76,23 @@ export async function POST(request: NextRequest) {
         });
 
         if (!existingUser) {
-            // Create user in Prisma
-            await prisma.user.create({
-                data: {
+            // Create user in Prisma (use upsert to handle race conditions)
+            await prisma.user.upsert({
+                where: { id: user.id },
+                update: {},
+                create: {
                     id: user.id,
                     email: user.email!,
                 },
             });
 
-            // Create initial UserUsage record
+            // Create initial UserUsage record (use upsert to handle race conditions)
             const now = new Date();
             const resetAt = new Date(now.getFullYear(), now.getMonth() + 1, 1);
-            await prisma.userUsage.create({
-                data: {
+            await prisma.userUsage.upsert({
+                where: { userId: user.id },
+                update: {},
+                create: {
                     userId: user.id,
                     tier: 'FREE',
                     resetAt,
@@ -88,10 +101,23 @@ export async function POST(request: NextRequest) {
         }
 
         return NextResponse.json({ success: true });
-    } catch (error) {
+    } catch (error: any) {
         console.error('Sync user error:', error);
+        
+        // Provide more detailed error in development
+        const errorMessage = process.env.NODE_ENV === 'development'
+            ? error.message || 'Failed to sync user'
+            : 'Failed to sync user. Please try again.';
+        
         return NextResponse.json(
-            { error: 'Failed to sync user' },
+            { 
+                error: errorMessage,
+                ...(process.env.NODE_ENV === 'development' && { 
+                    details: error.stack,
+                    type: error.constructor?.name,
+                    code: error.code,
+                })
+            },
             { status: 500 }
         );
     }

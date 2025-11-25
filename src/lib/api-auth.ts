@@ -7,6 +7,12 @@ import { NextRequest, NextResponse } from 'next/server';
  * Returns null if not authenticated
  */
 export async function getAuthenticatedUser(request: NextRequest) {
+    // Validate environment variables
+    if (!process.env.NEXT_PUBLIC_SUPABASE_URL || !process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY) {
+        console.error('Missing Supabase environment variables in getAuthenticatedUser');
+        return null;
+    }
+
     let response = NextResponse.next({
         request: {
             headers: request.headers,
@@ -14,8 +20,8 @@ export async function getAuthenticatedUser(request: NextRequest) {
     });
 
     const supabase = createServerClient(
-        process.env.NEXT_PUBLIC_SUPABASE_URL!,
-        process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+        process.env.NEXT_PUBLIC_SUPABASE_URL,
+        process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY,
         {
             cookies: {
                 get(name: string) {
@@ -63,10 +69,16 @@ export async function getAuthenticatedUser(request: NextRequest) {
     
     if (error) {
         console.error('Auth error in getAuthenticatedUser:', error);
+        console.error('Error details:', {
+            message: error.message,
+            status: error.status,
+            name: error.name,
+        });
         return null;
     }
     
     if (!user) {
+        console.warn('No user found in getAuthenticatedUser');
         return null;
     }
 
