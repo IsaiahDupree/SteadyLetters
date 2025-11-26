@@ -1,4 +1,5 @@
 import { createBrowserClient } from '@supabase/ssr';
+import { getApiUrl } from './api-config';
 
 export function createClient() {
     return createBrowserClient(
@@ -21,7 +22,10 @@ export async function signUp(email: string, password: string) {
     // Sync user to Prisma after successful sign up
     if (result.data?.user && !result.error) {
         try {
-            await fetch('/api/auth/sync-user', { method: 'POST' });
+            await fetch(getApiUrl('auth/sync-user'), { 
+                method: 'POST',
+                credentials: 'include', // Include cookies for authentication
+            });
         } catch (err) {
             console.error('Failed to sync user:', err);
         }
@@ -41,7 +45,10 @@ export async function signIn(email: string, password: string) {
     // Sync user to Prisma after successful sign in
     if (result.data?.session && !result.error) {
         try {
-            await fetch('/api/auth/sync-user', { method: 'POST' });
+            await fetch(getApiUrl('auth/sync-user'), { 
+                method: 'POST',
+                credentials: 'include', // Include cookies for authentication
+            });
         } catch (err) {
             console.error('Failed to sync user:', err);
         }

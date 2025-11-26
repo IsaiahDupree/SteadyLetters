@@ -19,7 +19,9 @@ interface TestSuite {
     status: 'pass' | 'fail' | 'running' | 'pending';
 }
 
-const BASE_URL = process.env.NEXT_PUBLIC_URL || 'https://www.steadyletters.com';
+// Use backend URL for API tests, fallback to frontend URL for page tests
+const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL || process.env.NEXT_PUBLIC_API_URL || 'https://steadylettersbackend.vercel.app';
+const FRONTEND_URL = process.env.NEXT_PUBLIC_URL || 'https://www.steadyletters.com';
 
 async function runTest(
     name: string,
@@ -69,7 +71,7 @@ export async function POST(request: NextRequest) {
 
         // Test: Health Check
         apiTests.push(await runTest('Health Check Endpoint', async () => {
-            const response = await fetch(`${BASE_URL}/api/health`);
+            const response = await fetch(`${BACKEND_URL}/api/health`);
             const data = await response.json();
             return {
                 success: response.ok,
@@ -80,7 +82,7 @@ export async function POST(request: NextRequest) {
 
         // Test: Auth Sync User
         apiTests.push(await runTest('Auth Sync User', async () => {
-            const response = await fetch(`${BASE_URL}/api/auth/sync-user`, {
+            const response = await fetch(`${BACKEND_URL}/api/auth/sync-user`, {
                 method: 'POST',
                 headers: {
                     'Cookie': request.headers.get('cookie') || '',
@@ -97,7 +99,7 @@ export async function POST(request: NextRequest) {
 
         // Test: Billing Usage
         apiTests.push(await runTest('Billing Usage Endpoint', async () => {
-            const response = await fetch(`${BASE_URL}/api/billing/usage`, {
+            const response = await fetch(`${BACKEND_URL}/api/billing/usage`, {
                 headers: {
                     'Cookie': request.headers.get('cookie') || '',
                 },
@@ -113,7 +115,7 @@ export async function POST(request: NextRequest) {
 
         // Test: Transcribe (with auth)
         apiTests.push(await runTest('Transcribe Endpoint (Auth Required)', async () => {
-            const response = await fetch(`${BASE_URL}/api/transcribe`, {
+            const response = await fetch(`${BACKEND_URL}/api/transcribe`, {
                 method: 'POST',
                 headers: {
                     'Cookie': request.headers.get('cookie') || '',
@@ -132,7 +134,7 @@ export async function POST(request: NextRequest) {
 
         // Test: Analyze Image (with auth)
         apiTests.push(await runTest('Analyze Image Endpoint (Auth Required)', async () => {
-            const response = await fetch(`${BASE_URL}/api/analyze-image`, {
+            const response = await fetch(`${BACKEND_URL}/api/analyze-image`, {
                 method: 'POST',
                 headers: {
                     'Cookie': request.headers.get('cookie') || '',
@@ -150,7 +152,7 @@ export async function POST(request: NextRequest) {
 
         // Test: Generate Letter (with auth)
         apiTests.push(await runTest('Generate Letter Endpoint (Auth Required)', async () => {
-            const response = await fetch(`${BASE_URL}/api/generate/letter`, {
+            const response = await fetch(`${BACKEND_URL}/api/generate/letter`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -174,7 +176,7 @@ export async function POST(request: NextRequest) {
 
         // Test: Generate Card Image (with auth)
         apiTests.push(await runTest('Generate Card Image Endpoint (Auth Required)', async () => {
-            const response = await fetch(`${BASE_URL}/api/generate/card-image`, {
+            const response = await fetch(`${BACKEND_URL}/api/generate/card-image`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -197,7 +199,7 @@ export async function POST(request: NextRequest) {
 
         // Test: Generate Images (with auth)
         apiTests.push(await runTest('Generate Images Endpoint (Auth Required)', async () => {
-            const response = await fetch(`${BASE_URL}/api/generate/images`, {
+            const response = await fetch(`${BACKEND_URL}/api/generate/images`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -220,7 +222,7 @@ export async function POST(request: NextRequest) {
 
         // Test: Extract Address (with auth)
         apiTests.push(await runTest('Extract Address Endpoint (Auth Required)', async () => {
-            const response = await fetch(`${BASE_URL}/api/extract-address`, {
+            const response = await fetch(`${BACKEND_URL}/api/extract-address`, {
                 method: 'POST',
                 headers: {
                     'Cookie': request.headers.get('cookie') || '',
@@ -238,7 +240,7 @@ export async function POST(request: NextRequest) {
 
         // Test: Orders GET (with auth)
         apiTests.push(await runTest('Orders GET Endpoint (Auth Required)', async () => {
-            const response = await fetch(`${BASE_URL}/api/orders`, {
+            const response = await fetch(`${BACKEND_URL}/api/orders`, {
                 headers: {
                     'Cookie': request.headers.get('cookie') || '',
                 },
@@ -255,7 +257,7 @@ export async function POST(request: NextRequest) {
 
         // Test: Orders POST (with auth)
         apiTests.push(await runTest('Orders POST Endpoint (Auth Required)', async () => {
-            const response = await fetch(`${BASE_URL}/api/orders`, {
+            const response = await fetch(`${BACKEND_URL}/api/orders`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -275,7 +277,7 @@ export async function POST(request: NextRequest) {
 
         // Test: Thanks.io Products (with auth)
         apiTests.push(await runTest('Thanks.io Products Endpoint (Auth Required)', async () => {
-            const response = await fetch(`${BASE_URL}/api/thanks-io/products`, {
+            const response = await fetch(`${BACKEND_URL}/api/thanks-io/products`, {
                 headers: {
                     'Cookie': request.headers.get('cookie') || '',
                 },
@@ -292,7 +294,7 @@ export async function POST(request: NextRequest) {
 
         // Test: Thanks.io Styles (with auth)
         apiTests.push(await runTest('Thanks.io Styles Endpoint (Auth Required)', async () => {
-            const response = await fetch(`${BASE_URL}/api/thanks-io/styles`, {
+            const response = await fetch(`${BACKEND_URL}/api/thanks-io/styles`, {
                 headers: {
                     'Cookie': request.headers.get('cookie') || '',
                 },
@@ -309,7 +311,7 @@ export async function POST(request: NextRequest) {
 
         // Test: Thanks.io Send (with auth)
         apiTests.push(await runTest('Thanks.io Send Endpoint (Auth Required)', async () => {
-            const response = await fetch(`${BASE_URL}/api/thanks-io/send`, {
+            const response = await fetch(`${BACKEND_URL}/api/thanks-io/send`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -333,7 +335,7 @@ export async function POST(request: NextRequest) {
 
         // Test: Stripe Checkout (with auth)
         apiTests.push(await runTest('Stripe Checkout Endpoint (Auth Required)', async () => {
-            const response = await fetch(`${BASE_URL}/api/stripe/checkout`, {
+            const response = await fetch(`${BACKEND_URL}/api/stripe/checkout`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -355,7 +357,7 @@ export async function POST(request: NextRequest) {
 
         // Test: Stripe Portal (with auth)
         apiTests.push(await runTest('Stripe Portal Endpoint (Auth Required)', async () => {
-            const response = await fetch(`${BASE_URL}/api/stripe/portal`, {
+            const response = await fetch(`${BACKEND_URL}/api/stripe/portal`, {
                 headers: {
                     'Cookie': request.headers.get('cookie') || '',
                 },
@@ -372,7 +374,7 @@ export async function POST(request: NextRequest) {
 
         // Test: Handwriting Styles (public)
         apiTests.push(await runTest('Handwriting Styles Endpoint (Public)', async () => {
-            const response = await fetch(`${BASE_URL}/api/handwriting-styles`);
+            const response = await fetch(`${BACKEND_URL}/api/handwriting-styles`);
             const data = await response.json();
             return {
                 success: response.ok,
@@ -402,11 +404,11 @@ export async function POST(request: NextRequest) {
 
         for (const page of publicPages) {
             pageTests.push(await runTest(page.name, async () => {
-                const response = await fetch(`${BASE_URL}${page.path}`);
+                const response = await fetch(`${FRONTEND_URL}${page.path}`);
                 return {
                     success: response.ok,
                     error: response.ok ? undefined : `Status ${response.status}`,
-                    details: { status: response.status, url: `${BASE_URL}${page.path}` },
+                    details: { status: response.status, url: `${FRONTEND_URL}${page.path}` },
                     logs: [`Status: ${response.status}`],
                 };
             }));
