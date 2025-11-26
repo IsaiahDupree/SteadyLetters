@@ -18,6 +18,10 @@ import { Badge } from '@/components/ui/badge';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 
+// Force dynamic rendering to prevent static generation errors during build
+// This page requires database access which isn't available at build time
+export const dynamic = 'force-dynamic';
+
 export default async function DashboardPage() {
     const stats = await getDashboardStats();
 

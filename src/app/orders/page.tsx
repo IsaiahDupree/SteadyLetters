@@ -7,6 +7,10 @@ import { Badge } from '@/components/ui/badge';
 import { formatDistanceToNow } from 'date-fns';
 import { Mail, Package, DollarSign, User } from 'lucide-react';
 
+// Force dynamic rendering to prevent static generation errors during build
+// This page requires database access which isn't available at build time
+export const dynamic = 'force-dynamic';
+
 export default async function OrdersPage() {
     const cookieStore = await cookies();
     const supabase = createServerClient(
