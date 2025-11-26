@@ -38,7 +38,7 @@ let prismaInstance: PrismaClient | null = null;
 
 function getPrisma(): PrismaClient {
     // Check global first (for hot reload in development)
-    if (globalForPrisma.prisma) {
+    if (globalForPrisma.prisma && !(globalForPrisma.prisma instanceof Proxy)) {
         return globalForPrisma.prisma;
     }
     
@@ -52,15 +52,22 @@ function getPrisma(): PrismaClient {
 
 // Export a Proxy that initializes Prisma on first property access
 // This prevents initialization at module load time
-export const prisma = new Proxy({} as PrismaClient, {
+const prismaProxy = new Proxy({} as PrismaClient, {
     get(_target, prop) {
+        // Avoid infinite recursion by checking if we're accessing the proxy itself
+        if (prop === Symbol.toPrimitive || prop === 'then' || prop === 'constructor') {
+            return undefined;
+        }
+        
         const client = getPrisma();
         const value = (client as any)[prop];
         return typeof value === 'function' ? value.bind(client) : value;
     },
 });
 
+export const prisma = prismaProxy;
+
 // Store in global for hot reload in development
 if (process.env.NODE_ENV !== 'production') {
-    globalForPrisma.prisma = prisma as any;
+    globalForPrisma.prisma = prismaInstance || prismaProxy as any;
 }
