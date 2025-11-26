@@ -54,28 +54,37 @@ function getPrismaClient(): PrismaClient {
     return prismaInstance;
 }
 
-// Use Object.defineProperty to create a lazy getter
-// This ensures Prisma is only initialized when actually accessed, not at module load
-const prismaDescriptor: PropertyDescriptor = {
-    get() {
-        return getPrismaClient();
+// Use a function-based export for truly lazy initialization
+// This works correctly in both ES modules and CommonJS
+// The function is only called when prisma is actually used, not at module load
+let _prisma: PrismaClient | null = null;
+
+function getPrisma(): PrismaClient {
+    if (!_prisma) {
+        _prisma = getPrismaClient();
+    }
+    return _prisma;
+}
+
+// Export as a getter property that works in both ESM and CommonJS
+// This ensures Prisma is only initialized when actually accessed
+export const prisma = new Proxy({} as PrismaClient, {
+    get(_target, prop) {
+        const client = getPrisma();
+        const value = (client as any)[prop];
+        // If it's a function, bind it to the client
+        if (typeof value === 'function') {
+            return value.bind(client);
+        }
+        return value;
     },
-    enumerable: true,
-    configurable: true,
-};
-
-// Create a dummy object and define prisma as a getter property
-const prismaModule = {};
-Object.defineProperty(prismaModule, 'prisma', prismaDescriptor);
-
-// Export the getter - this will only initialize Prisma when first accessed
-export const prisma = (prismaModule as any).prisma as PrismaClient;
+});
 
 // Store in global for hot reload in development
 if (process.env.NODE_ENV !== 'production') {
     Object.defineProperty(globalForPrisma, 'prisma', {
         get() {
-            return getPrismaClient();
+            return getPrisma();
         },
         configurable: true,
     });

@@ -1,9 +1,36 @@
 import Stripe from 'stripe';
 import { STRIPE_PLANS, type StripePlan } from './pricing-tiers';
 
-export const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
-    apiVersion: '2025-11-17.clover',
-    typescript: true,
+// Lazy initialization - only create Stripe client when actually used
+// This prevents crashes if STRIPE_SECRET_KEY is not set at module load time
+let stripeInstance: Stripe | null = null;
+
+function getStripe(): Stripe {
+    if (!stripeInstance) {
+        const apiKey = process.env.STRIPE_SECRET_KEY;
+        if (!apiKey) {
+            throw new Error('STRIPE_SECRET_KEY environment variable is not set');
+        }
+        stripeInstance = new Stripe(apiKey, {
+            apiVersion: '2025-11-17.clover',
+            typescript: true,
+        });
+    }
+    return stripeInstance;
+}
+
+// Export as a getter that works in both ESM and CommonJS
+// This ensures Stripe is only initialized when actually accessed
+export const stripe = new Proxy({} as Stripe, {
+    get(_target, prop) {
+        const client = getStripe();
+        const value = (client as any)[prop];
+        // If it's a function, bind it to the client
+        if (typeof value === 'function') {
+            return value.bind(client);
+        }
+        return value;
+    },
 });
 
 export { STRIPE_PLANS, type StripePlan };
