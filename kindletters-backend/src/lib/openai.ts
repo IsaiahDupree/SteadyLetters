@@ -126,15 +126,15 @@ export const openai = {
     // Proxy common methods for backward compatibility
     chat: {
         completions: {
-            create: (...args: any[]) => getOpenAI().chat.completions.create(...args),
+            create: (params: any) => getOpenAI().chat.completions.create(params),
         },
     },
     audio: {
         transcriptions: {
-            create: (...args: any[]) => getOpenAI().audio.transcriptions.create(...args),
+            create: (params: any) => getOpenAI().audio.transcriptions.create(params),
         },
     },
     images: {
-        generate: (...args: any[]) => getOpenAI().images.generate(...args),
+        generate: (params: any) => getOpenAI().images.generate(params),
     },
 } as any;

@@ -98,7 +98,7 @@ export async function getHandwritingStyles(): Promise<HandwritingStyle[]> {
       throw new Error(`Failed to fetch styles: ${response.statusText}`);
     }
 
-    const data = await response.json();
+    const data = await response.json() as any;
     // Map API response to our interface
     return data.data?.map((style: any) => ({
       id: style.id?.toString() || style.handwriting_id?.toString(),
@@ -139,11 +139,11 @@ export async function sendPostcard(params: PostcardOrderParams): Promise<ThanksI
     });
 
     if (!response.ok) {
-      const errorData = await response.json();
+      const errorData = await response.json() as any;
       throw new Error(errorData.error || 'Failed to send postcard');
     }
 
-    return await response.json();
+    return await response.json() as ThanksIoResponse;
   } catch (error) {
     console.error('Error sending postcard:', error);
     throw error;
@@ -178,11 +178,11 @@ export async function sendLetter(params: LetterOrderParams): Promise<ThanksIoRes
     });
 
     if (!response.ok) {
-      const errorData = await response.json();
+      const errorData = await response.json() as any;
       throw new Error(errorData.error || 'Failed to send letter');
     }
 
-    return await response.json();
+    return await response.json() as ThanksIoResponse;
   } catch (error) {
     console.error('Error sending letter:', error);
     throw error;
@@ -217,11 +217,11 @@ export async function sendGreetingCard(params: GreetingOrderParams): Promise<Tha
     });
 
     if (!response.ok) {
-      const errorData = await response.json();
+      const errorData = await response.json() as any;
       throw new Error(errorData.error || 'Failed to send greeting card');
     }
 
-    return await response.json();
+    return await response.json() as ThanksIoResponse;
   } catch (error) {
     console.error('Error sending greeting card:', error);
     throw error;
@@ -258,11 +258,11 @@ export async function sendWindowlessLetter(params: WindowlessLetterOrderParams):
     });
 
     if (!response.ok) {
-      const errorData = await response.json();
+      const errorData = await response.json() as any;
       throw new Error(errorData.error || 'Failed to send windowless letter');
     }
 
-    return await response.json();
+    return await response.json() as ThanksIoResponse;
   } catch (error) {
     console.error('Error sending windowless letter:', error);
     throw error;
