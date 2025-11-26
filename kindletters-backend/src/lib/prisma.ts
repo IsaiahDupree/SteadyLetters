@@ -44,11 +44,30 @@ function createPrismaClient() {
 // Lazy initialization - only create when first accessed
 let prismaInstance: PrismaClient | null = null;
 
-export const prisma = globalForPrisma.prisma || (() => {
+function getPrisma(): PrismaClient {
+    // Check global first (for hot reload in development)
+    if (globalForPrisma.prisma) {
+        return globalForPrisma.prisma;
+    }
+    
+    // Create instance if it doesn't exist
     if (!prismaInstance) {
         prismaInstance = createPrismaClient();
     }
+    
     return prismaInstance;
-})();
+}
 
-if (process.env.NODE_ENV !== 'production') globalForPrisma.prisma = prisma;
+// Export a getter that initializes on first access
+export const prisma = new Proxy({} as PrismaClient, {
+    get(_target, prop) {
+        const client = getPrisma();
+        const value = (client as any)[prop];
+        return typeof value === 'function' ? value.bind(client) : value;
+    },
+});
+
+// Store in global for hot reload in development
+if (process.env.NODE_ENV !== 'production') {
+    globalForPrisma.prisma = prisma as any;
+}
