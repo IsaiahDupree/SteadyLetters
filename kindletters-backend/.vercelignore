@@ -1,0 +1,9 @@
+node_modules
+dist
+.env
+.env.local
+*.log
+tests
+vitest.config.ts
+tsconfig.json
+
