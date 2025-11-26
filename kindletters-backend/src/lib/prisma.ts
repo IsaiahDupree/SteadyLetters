@@ -33,15 +33,15 @@ function createPrismaClient() {
     });
 }
 
-// Simple lazy initialization - create on first access
-// Since dotenv.config() runs in index.ts before routes are imported,
-// DATABASE_URL will be available when Prisma is first used
+// Truly lazy initialization - only create when first property is accessed
+// This is critical for serverless where env vars may not be available at module load
 let prismaInstance: PrismaClient | null = null;
 
 function getPrismaClient(): PrismaClient {
     // Use global instance if available (for hot reload in development)
-    if (globalForPrisma.prisma) {
-        return globalForPrisma.prisma;
+    if (globalForPrisma.prisma && !prismaInstance) {
+        prismaInstance = globalForPrisma.prisma;
+        return prismaInstance;
     }
     
     // Create new instance if needed
@@ -52,14 +52,29 @@ function getPrismaClient(): PrismaClient {
     return prismaInstance;
 }
 
-// Export getter function - routes will access prisma properties which triggers initialization
-// This is simpler than Proxy and avoids recursion issues
-export const prisma = (() => {
-    const client = getPrismaClient();
-    return client;
-})();
+// Use Object.defineProperty to create a lazy getter
+// This ensures Prisma is only initialized when actually accessed, not at module load
+const prismaDescriptor: PropertyDescriptor = {
+    get() {
+        return getPrismaClient();
+    },
+    enumerable: true,
+    configurable: true,
+};
+
+// Create a dummy object and define prisma as a getter property
+const prismaModule = {};
+Object.defineProperty(prismaModule, 'prisma', prismaDescriptor);
+
+// Export the getter - this will only initialize Prisma when first accessed
+export const prisma = (prismaModule as any).prisma as PrismaClient;
 
 // Store in global for hot reload in development
 if (process.env.NODE_ENV !== 'production') {
-    globalForPrisma.prisma = prisma;
+    Object.defineProperty(globalForPrisma, 'prisma', {
+        get() {
+            return getPrismaClient();
+        },
+        configurable: true,
+    });
 }
