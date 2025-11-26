@@ -1,12 +1,31 @@
 import { PrismaClient } from '@prisma/client';
+import { Pool } from 'pg';
+import { PrismaPg } from '@prisma/adapter-pg';
 
 const globalForPrisma = global as unknown as { prisma: PrismaClient };
 
-// Prisma 7: DATABASE_URL is read from environment automatically
-// The prisma.config.ts file handles the connection URL for migrations
-// In serverless environments, we need to ensure Prisma Client is properly initialized
-export const prisma = globalForPrisma.prisma || new PrismaClient({
-    log: process.env.NODE_ENV === 'development' ? ['query', 'error', 'warn'] : ['error'],
-});
+// Prisma 7: Must provide adapter or accelerateUrl
+// For standard PostgreSQL, we use the pg adapter
+function createPrismaClient() {
+    const connectionString = process.env.DATABASE_URL;
+    
+    if (!connectionString) {
+        throw new Error('DATABASE_URL environment variable is not set');
+    }
+
+    // Create PostgreSQL connection pool
+    const pool = new Pool({ connectionString });
+    
+    // Create Prisma adapter
+    const adapter = new PrismaPg(pool);
+    
+    // Create Prisma Client with adapter
+    return new PrismaClient({
+        adapter,
+        log: process.env.NODE_ENV === 'development' ? ['query', 'error', 'warn'] : ['error'],
+    });
+}
+
+export const prisma = globalForPrisma.prisma || createPrismaClient();
 
 if (process.env.NODE_ENV !== 'production') globalForPrisma.prisma = prisma;
