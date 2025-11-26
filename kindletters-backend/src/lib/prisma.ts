@@ -33,16 +33,18 @@ function createPrismaClient() {
     });
 }
 
-// Lazy initialization - only create when first accessed
+// Simple lazy initialization - create on first access
+// Since dotenv.config() runs in index.ts before routes are imported,
+// DATABASE_URL will be available when Prisma is first used
 let prismaInstance: PrismaClient | null = null;
 
-function getPrisma(): PrismaClient {
-    // Check global first (for hot reload in development)
-    if (globalForPrisma.prisma && !(globalForPrisma.prisma instanceof Proxy)) {
+function getPrismaClient(): PrismaClient {
+    // Use global instance if available (for hot reload in development)
+    if (globalForPrisma.prisma) {
         return globalForPrisma.prisma;
     }
     
-    // Create instance if it doesn't exist
+    // Create new instance if needed
     if (!prismaInstance) {
         prismaInstance = createPrismaClient();
     }
@@ -50,24 +52,14 @@ function getPrisma(): PrismaClient {
     return prismaInstance;
 }
 
-// Export a Proxy that initializes Prisma on first property access
-// This prevents initialization at module load time
-const prismaProxy = new Proxy({} as PrismaClient, {
-    get(_target, prop) {
-        // Avoid infinite recursion by checking if we're accessing the proxy itself
-        if (prop === Symbol.toPrimitive || prop === 'then' || prop === 'constructor') {
-            return undefined;
-        }
-        
-        const client = getPrisma();
-        const value = (client as any)[prop];
-        return typeof value === 'function' ? value.bind(client) : value;
-    },
-});
-
-export const prisma = prismaProxy;
+// Export getter function - routes will access prisma properties which triggers initialization
+// This is simpler than Proxy and avoids recursion issues
+export const prisma = (() => {
+    const client = getPrismaClient();
+    return client;
+})();
 
 // Store in global for hot reload in development
 if (process.env.NODE_ENV !== 'production') {
-    globalForPrisma.prisma = prismaInstance || prismaProxy as any;
+    globalForPrisma.prisma = prisma;
 }
