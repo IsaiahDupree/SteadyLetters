@@ -5,7 +5,9 @@ import { PrismaPg } from '@prisma/adapter-pg';
 const globalForPrisma = global as unknown as { prisma: PrismaClient };
 
 // Prisma 7: Requires adapter or accelerateUrl
-// Using @prisma/adapter-pg with Supabase's session pooler
+// Using @prisma/adapter-pg with Supabase's connection pooler
+// Recommended: Transaction pooler (port 6543) for serverless
+// Alternative: Session pooler (port 5432) for direct connections
 function createPrismaClient() {
     const connectionString = process.env.DATABASE_URL;
     
@@ -14,7 +16,7 @@ function createPrismaClient() {
     }
 
     // Create PostgreSQL connection pool for Supabase
-    // Supabase's session pooler (port 5432) handles connection pooling
+    // Works with both transaction pooler (6543) and session pooler (5432)
     const pool = new Pool({ 
         connectionString,
         // Serverless-friendly settings
