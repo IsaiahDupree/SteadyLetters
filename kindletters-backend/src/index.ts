@@ -21,11 +21,16 @@ import thanksIoStylesRouter from './routes/thanks-io/styles';
 import thanksIoSendRouter from './routes/thanks-io/send';
 
 // Load environment variables
-dotenv.config();
+try {
+    dotenv.config();
+} catch (error) {
+    console.warn('Could not load .env file, assuming production environment variables are set.');
+}
 
 // Ensure critical environment variables are set
 if (!process.env.DATABASE_URL && process.env.VERCEL) {
     console.error('ERROR: DATABASE_URL is not set in Vercel environment variables');
+    // Don't throw here - let Prisma handle it with better error message
 }
 
 const app = express();
