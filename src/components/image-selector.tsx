@@ -11,6 +11,7 @@ import {
 } from '@/components/ui/card';
 import { Loader2, Check } from 'lucide-react';
 import type { Tone, Occasion } from '@/lib/types';
+import { apiRequest } from '@/lib/api-config';
 
 interface ImageSelectorProps {
     tone: Tone;
@@ -30,18 +31,10 @@ export function ImageSelector({ tone, occasion, holiday, onSelect }: ImageSelect
         setSelectedImage(null);
 
         try {
-            const response = await fetch('/api/generate/images', {
+            const data = await apiRequest<{ images: string[] }>('generate/images', {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ occasion, tone, holiday }),
             });
-
-            const data = await response.json();
-
-            if (!response.ok) {
-                alert(data.error || 'Failed to generate images');
-                return;
-            }
 
             setImages(data.images);
         } catch (error) {

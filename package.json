@@ -24,7 +24,8 @@
     "fix:local-env": "./scripts/fix-local-env.sh",
     "diagnose": "npm run check:env && npm run validate:keys && npm run test:production-diagnostics",
     "diagnose:local": "npm run check:env && npm run validate:keys && npm run test:api-health",
-    "test:post-deploy": "node scripts/post-deploy-tests.mjs"
+    "test:post-deploy": "node scripts/post-deploy-tests.mjs",
+    "test:integration": "node scripts/test-integration.mjs"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.2.2",

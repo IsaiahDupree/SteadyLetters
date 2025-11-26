@@ -4,6 +4,7 @@ import { useState, useCallback } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Upload, X, Loader2, Image as ImageIcon } from 'lucide-react';
+import { apiRequestFormData } from '@/lib/api-config';
 
 interface ImageUploadProps {
     onAnalysisComplete: (analysis: string) => void;
@@ -60,16 +61,10 @@ export function ImageUpload({ onAnalysisComplete }: ImageUploadProps) {
             const formData = new FormData();
             formData.append('image', imageFile);
 
-            const response = await fetch('/api/analyze-image', {
-                method: 'POST',
-                body: formData,
-            });
-
-            const data = await response.json();
-
-            if (!response.ok) {
-                throw new Error(data.error || 'Analysis failed');
-            }
+            const data = await apiRequestFormData<{ analysis: string }>(
+                'analyze-image',
+                formData
+            );
 
             setAnalysis(data.analysis);
             onAnalysisComplete(data.analysis);

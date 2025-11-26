@@ -4,6 +4,7 @@ import { useState, useRef } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Mic, Square, Loader2, Check } from 'lucide-react';
+import { apiRequestFormData } from '@/lib/api-config';
 
 interface VoiceRecorderProps {
     onTranscriptionComplete: (text: string) => void;
@@ -127,21 +128,14 @@ export function VoiceRecorder({ onTranscriptionComplete }: VoiceRecorderProps) {
                              audioBlob.type.includes('ogg') ? 'ogg' : 'mp4';
             formData.append('audio', audioBlob, `recording.${extension}`);
 
-            const response = await fetch('/api/transcribe', {
-                method: 'POST',
-                body: formData,
-                signal: controller.signal,
-            });
+            // Use backend API
+            const data = await apiRequestFormData<{ text: string }>(
+                'transcribe',
+                formData,
+                { signal: controller.signal }
+            );
 
             clearTimeout(timeoutId);
-
-            if (!response.ok) {
-                const data = await response.json().catch(() => ({}));
-                throw new Error(data.error || `Transcription failed: ${response.status}`);
-            }
-
-            const data = await response.json();
-
             onTranscriptionComplete(data.text);
             setTranscribed(true);
         } catch (error: any) {

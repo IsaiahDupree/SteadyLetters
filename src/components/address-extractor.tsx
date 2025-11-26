@@ -16,6 +16,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { createRecipient } from '@/app/actions/recipients';
 import { useRouter } from 'next/navigation';
+import { apiRequestFormData } from '@/lib/api-config';
 
 interface ExtractedAddress {
     name?: string;
@@ -82,16 +83,10 @@ export function AddressExtractor() {
             const formData = new FormData();
             formData.append('image', imageFile);
 
-            const response = await fetch('/api/extract-address', {
-                method: 'POST',
-                body: formData,
-            });
-
-            const data = await response.json();
-
-            if (!response.ok) {
-                throw new Error(data.error || 'Extraction failed');
-            }
+            const data = await apiRequestFormData<{
+                address: ExtractedAddress | null;
+                message: string;
+            }>('extract-address', formData);
 
             if (data.address) {
                 setExtractedAddress(data.address);

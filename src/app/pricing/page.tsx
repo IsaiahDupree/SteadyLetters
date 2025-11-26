@@ -5,6 +5,7 @@ import { PricingCard } from '@/components/pricing-card';
 import { STRIPE_PLANS } from '@/lib/pricing-tiers';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/contexts/auth-context';
+import { apiRequest } from '@/lib/api-config';
 
 export default function PricingPage() {
     const [loading, setLoading] = useState<string | null>(null);
@@ -22,20 +23,11 @@ export default function PricingPage() {
 
         try {
             const priceId = STRIPE_PLANS[tier].priceId;
-            const userId = user.id;
-            const email = user.email!;
 
-            const response = await fetch('/api/stripe/checkout', {
+            const data = await apiRequest<{ url: string }>('stripe/checkout', {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ priceId, userId, email }),
+                body: JSON.stringify({ priceId }),
             });
-
-            const data = await response.json();
-
-            if (!response.ok) {
-                throw new Error(data.error || 'Failed to create checkout session');
-            }
 
             // Redirect to Stripe Checkout
             window.location.href = data.url;

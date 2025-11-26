@@ -26,6 +26,7 @@ import { ImageUpload } from '@/components/image-upload';
 import { EnhancedLetterResult } from './enhanced-letter-result';
 import type { Tone, Occasion } from '@/lib/types';
 import { EXAMPLE_TEMPLATES, type ExampleTemplate } from '@/lib/example-templates';
+import { apiRequest } from '@/lib/api-config';
 
 const tones: { value: Tone; label: string }[] = [
     { value: 'formal', label: 'Formal' },
@@ -95,24 +96,17 @@ export function LetterGeneratorForm() {
 
         setLoading(true);
         try {
-            const response = await fetch('/api/generate/letter', {
+            const data = await apiRequest<{ letter: string }>('generate/letter', {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
                     context,
                     tone,
                     occasion,
                     holiday: applyHoliday ? holiday : undefined,
+                    imageAnalysis,
                     length: letterLength,
                 }),
             });
-
-            const data = await response.json();
-
-            if (!response.ok) {
-                alert(data.error || 'Failed to generate letter');
-                return;
-            }
 
             setGeneratedLetter(data.letter);
         } catch (error) {

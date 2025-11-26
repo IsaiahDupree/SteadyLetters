@@ -27,6 +27,7 @@ import {
 import { Wand2, Image as ImageIcon, Send, DollarSign } from 'lucide-react';
 import { HandwritingStyle, ProductType, PostcardSize, PRODUCT_CATALOG, getPostcardPrice } from '@/lib/thanks-io';
 import { ColorPicker } from '@/components/ui/color-picker';
+import { apiRequest } from '@/lib/api-config';
 
 // Card styles for Thanks.io API
 const cardStyles = [
@@ -104,27 +105,28 @@ export function EnhancedLetterResult({
         setGeneratingImage(true);
         try {
             // Use DALL-E to generate a front image based on ALL available context
-            const response = await fetch('/api/generate/card-image', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    tone,
-                    occasion,
-                    letterContent: letter, // Pass the actual letter content for theme extraction
-                    // imageAnalysis would come from the original image upload if available
-                }),
-            });
+            const data = await apiRequest<{ imageUrl: string; tone: string; occasion: string }>(
+                'generate/card-image',
+                {
+                    method: 'POST',
+                    body: JSON.stringify({
+                        tone,
+                        occasion,
+                        letterContent: letter, // Pass the actual letter content for theme extraction
+                        // imageAnalysis would come from the original image upload if available
+                    }),
+                }
+            );
 
-            const data = await response.json();
-            if (response.ok && data.imageUrl) {
+            if (data.imageUrl) {
                 setFrontImage(data.imageUrl);
                 setActiveTab('design');
             } else {
-                alert(data.error || 'Failed to generate image');
+                alert('Failed to generate image');
             }
-        } catch (error) {
+        } catch (error: any) {
             console.error('Image generation error:', error);
-            alert('Failed to generate front image');
+            alert(error.message || 'Failed to generate front image');
         } finally {
             setGeneratingImage(false);
         }

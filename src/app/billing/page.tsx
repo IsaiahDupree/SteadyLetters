@@ -7,6 +7,7 @@ import { Badge } from '@/components/ui/badge';
 import { CreditCard, Calendar, TrendingUp, Loader2 } from 'lucide-react';
 import { useAuth } from '@/contexts/auth-context';
 import { UsageItem } from '@/components/usage-item';
+import { apiRequest } from '@/lib/api-config';
 
 interface UsageStats {
     letterGenerations: { used: number; limit: number; percentage: number };
@@ -39,23 +40,29 @@ export default function BillingPage() {
 
     const fetchUsageData = async () => {
         try {
-            const response = await fetch('/api/billing/usage');
-            if (response.ok) {
-                const data = await response.json();
+            const data = await apiRequest<{
+                subscription: {
+                    tier: string;
+                    status: string;
+                    currentPeriodEnd: string | null;
+                    stripePriceId: string | null;
+                };
+                usage: UsageStats;
+                resetAt: string;
+            }>('billing/usage');
 
-                // Map API response to state
-                setSubscription({
-                    tier: data.subscription.tier,
-                    status: data.subscription.status,
-                    currentPeriodEnd: data.subscription.currentPeriodEnd 
-                        ? new Date(data.subscription.currentPeriodEnd) 
-                        : null,
-                    stripePriceId: data.subscription.stripePriceId,
-                });
+            // Map API response to state
+            setSubscription({
+                tier: data.subscription.tier,
+                status: data.subscription.status,
+                currentPeriodEnd: data.subscription.currentPeriodEnd 
+                    ? new Date(data.subscription.currentPeriodEnd) 
+                    : null,
+                stripePriceId: data.subscription.stripePriceId,
+            });
 
-                setUsage(data.usage);
-                setResetAt(data.resetAt ? new Date(data.resetAt) : null);
-            }
+            setUsage(data.usage);
+            setResetAt(data.resetAt ? new Date(data.resetAt) : null);
         } catch (error) {
             console.error('Failed to fetch usage data:', error);
         } finally {
@@ -72,18 +79,9 @@ export default function BillingPage() {
         setLoading(true);
         try {
             // Create Stripe Customer Portal session
-            const response = await fetch('/api/stripe/portal', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-            });
+            const data = await apiRequest<{ url: string }>('stripe/portal');
 
-            const data = await response.json();
-
-            if (response.ok) {
-                window.location.href = data.url;
-            } else {
-                alert(data.error || 'Failed to open billing portal');
-            }
+            window.location.href = data.url;
         } catch (error) {
             console.error('Billing portal error:', error);
             alert('Failed to open billing portal');

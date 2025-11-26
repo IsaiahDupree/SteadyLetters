@@ -1,4 +1,5 @@
 import { describe, it, expect, beforeAll } from '@jest/globals';
+import { getApiBaseUrl, apiUrl } from './test-config.mjs';
 
 /**
  * Backend E2E Tests - Testing API endpoints and backend functionality
@@ -16,7 +17,8 @@ import { describe, it, expect, beforeAll } from '@jest/globals';
  * Playwright tests use real browsers with proper cookie handling.
  */
 describe('Backend E2E Tests (Unauthenticated)', () => {
-    const baseUrl = process.env.PRODUCTION_URL || 'http://localhost:3000';
+    // Use backend URL (port 3001) instead of frontend URL
+    const baseUrl = getApiBaseUrl();
 
     describe('API Health Checks', () => {
         it('should have server running', async () => {
