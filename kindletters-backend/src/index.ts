@@ -20,7 +20,13 @@ import thanksIoProductsRouter from './routes/thanks-io/products';
 import thanksIoStylesRouter from './routes/thanks-io/styles';
 import thanksIoSendRouter from './routes/thanks-io/send';
 
+// Load environment variables
 dotenv.config();
+
+// Ensure critical environment variables are set
+if (!process.env.DATABASE_URL && process.env.VERCEL) {
+    console.error('ERROR: DATABASE_URL is not set in Vercel environment variables');
+}
 
 const app = express();
 const PORT = process.env.PORT || 3001;
