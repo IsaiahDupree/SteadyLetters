@@ -87,14 +87,6 @@ export async function middleware(request: NextRequest) {
     return response;
 }
 
-// Use inverted matching - specify what NOT to match
-// Vercel/Next.js Edge Runtime requires this explicit approach
-export const config = {
-    matcher: [
-        /*
-         * Use negative patterns to exclude /api routes
-         * Format: Match everything EXCEPT these patterns
-         */
-        '/((?!_next/static|_next/image|_next/webpack-hmr|favicon\\.ico|api/).*)',
-    ],
-};
+// Remove matcher - rely ONLY on early return for API routes
+// This is the most compatible approach for Vercel Edge Runtime
+// Matcher patterns seem to behave differently on Edge vs local
