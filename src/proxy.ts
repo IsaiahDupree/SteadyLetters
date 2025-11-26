@@ -1,9 +1,22 @@
 import { createServerClient, type CookieOptions } from '@supabase/ssr';
 import { NextResponse, type NextRequest } from 'next/server';
 
-export async function middleware(request: NextRequest) {
-    // Skip middleware for API routes - they should not be processed by middleware
-    if (request.nextUrl.pathname.startsWith('/api')) {
+// Next.js 16+ uses proxy.ts instead of middleware.ts
+export async function proxy(request: NextRequest) {
+    const path = request.nextUrl.pathname;
+
+    // CRITICAL: Skip ALL API routes before any other logic
+    // This prevents proxy from interfering with API route handlers
+    if (path.startsWith('/api/')) {
+        return NextResponse.next();
+    }
+
+    // CRITICAL: Skip static files
+    if (
+        path.startsWith('/_next/') ||
+        path.startsWith('/static/') ||
+        path.match(/\.(ico|png|jpg|jpeg|svg|webp|gif)$/)
+    ) {
         return NextResponse.next();
     }
 
@@ -59,34 +72,35 @@ export async function middleware(request: NextRequest) {
         }
     );
 
-    const {
-        data: { session },
-    } = await supabase.auth.getSession();
+    const { data: { user } } = await supabase.auth.getUser();
 
-    // Protected routes - require authentication
-    const protectedRoutes = ['/dashboard', '/generate', '/billing', '/orders', '/recipients', '/templates', '/send', '/settings'];
-    const isProtectedRoute = protectedRoutes.some(route =>
-        request.nextUrl.pathname.startsWith(route)
-    );
+    // Public routes that don't require authentication
+    const publicRoutes = ['/', '/login', '/signup', '/pricing', '/privacy', '/terms'];
+    const isPublicRoute = publicRoutes.includes(path);
 
-    if (isProtectedRoute && !session) {
-        // Redirect to login with return URL
-        const redirectUrl = new URL('/login', request.url);
-        redirectUrl.searchParams.set('redirectTo', request.nextUrl.pathname);
-        return NextResponse.redirect(redirectUrl);
+    // Redirect logic for authentication (pages only, not API)
+    if (!user && !isPublicRoute) {
+        return NextResponse.redirect(new URL('/login', request.url));
     }
 
-    // Redirect logged-in users away from auth pages
-    const authPages = ['/login', '/signup'];
-    const isAuthPage = authPages.some(page => request.nextUrl.pathname === page);
-
-    if (isAuthPage && session) {
+    if (user && (path === '/login' || path === '/signup')) {
         return NextResponse.redirect(new URL('/dashboard', request.url));
     }
 
     return response;
 }
 
-// Remove matcher - rely ONLY on early return for API routes
-// This is the most compatible approach for Vercel Edge Runtime
-// Matcher patterns seem to behave differently on Edge vs local
+export const config = {
+    matcher: [
+        /*
+         * Match all request paths except for:
+         * - /api/* (API routes - excluded via early return)
+         * - _next/static (static files)
+         * - _next/image (image optimization files)
+         * - favicon.ico (favicon file)
+         * - site.webmanifest (manifest file)
+         * - logo.png and other image files
+         */
+        '/((?!_next/static|_next/image|favicon.ico|site.webmanifest|logo.png|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)',
+    ],
+};
