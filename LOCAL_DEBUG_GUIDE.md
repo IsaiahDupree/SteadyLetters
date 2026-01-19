@@ -110,3 +110,4 @@ npm test -- tests/api-authenticated.test.mjs
 
 **Status:** ✅ Error handling improved, debug tools added
 
+

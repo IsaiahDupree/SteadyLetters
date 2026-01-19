@@ -128,3 +128,4 @@ Once deployed, check:
 - ✅ Verify Stripe keys are LIVE mode keys
 - ✅ Check browser console for errors
 
+

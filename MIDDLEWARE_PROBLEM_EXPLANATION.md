@@ -61,3 +61,4 @@ This ensures that:
 - Authentication is handled by `getAuthenticatedUser()` inside each API route
 - Middleware only handles page routes (dashboard, login, etc.)
 
+

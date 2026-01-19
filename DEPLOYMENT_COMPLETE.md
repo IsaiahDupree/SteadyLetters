@@ -117,3 +117,4 @@ After deployment succeeds:
 - **Deployments:** https://vercel.com/isaiahduprees-projects/steadyletters/deployments
 - **Supabase Dashboard:** https://supabase.com/dashboard/project/jibnaxhixzbuizscucbs
 
+

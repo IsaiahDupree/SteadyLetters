@@ -47,3 +47,4 @@ Once DATABASE_URL is set, you can trigger a deployment:
 - Push a commit to GitHub (auto-deploys)
 - Or manually redeploy from Vercel dashboard
 
+

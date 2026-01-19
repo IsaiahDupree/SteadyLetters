@@ -78,3 +78,4 @@ The pricing update is based on:
 
 The new pricing better reflects the true cost of the service, especially physical mailing, while remaining competitive in the market.
 
+

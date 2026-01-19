@@ -109,3 +109,4 @@ export function getExampleTemplatesByOccasion(occasion: ExampleTemplate['occasio
     return EXAMPLE_TEMPLATES.filter(template => template.occasion === occasion);
 }
 
+
