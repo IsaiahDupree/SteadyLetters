@@ -1,0 +1,1255 @@
+{
+  "project": "SteadyLetters",
+  "description": "SaaS web application for creating and sending physical handwritten-style letters via Thanks.io API integration",
+  "version": "1.0",
+  "totalFeatures": 71,
+  "completedFeatures": 31,
+  "phases": {
+    "phase1_core": "Core letter generation, voice transcription, image generation",
+    "phase2_recipients": "Recipient management and address book",
+    "phase3_templates": "Template creation and management",
+    "phase4_orders": "Order creation and Thanks.io integration",
+    "phase5_billing": "Stripe integration and subscription management",
+    "phase6_mobile": "Mobile responsive design and navigation",
+    "phase7_security": "Rate limiting, webhook signatures, security headers",
+    "phase8_observability": "Error tracking, analytics, health checks",
+    "phase9_improvements": "Code quality, technical debt, DX improvements"
+  },
+  "features": [
+    {
+      "id": "CORE-001",
+      "name": "AI Letter Generation",
+      "description": "Generate handwritten-style letters using OpenAI GPT-4o",
+      "priority": "P0",
+      "phase": 1,
+      "effort": "4h",
+      "passes": true,
+      "category": "core",
+      "files": [
+        "src/app/api/generate/letter/route.ts",
+        "src/lib/openai.ts"
+      ],
+      "acceptance": [
+        "API endpoint works",
+        "Returns formatted letter",
+        "Usage tracked"
+      ]
+    },
+    {
+      "id": "CORE-002",
+      "name": "Voice Transcription",
+      "description": "Transcribe voice recordings using OpenAI Whisper",
+      "priority": "P0",
+      "phase": 1,
+      "effort": "3h",
+      "passes": true,
+      "category": "core",
+      "files": [
+        "src/app/api/transcribe/route.ts",
+        "src/components/voice-recorder.tsx"
+      ],
+      "acceptance": [
+        "Whisper API integration",
+        "Audio upload works",
+        "Text returned"
+      ]
+    },
+    {
+      "id": "CORE-003",
+      "name": "AI Image Generation",
+      "description": "Generate card images using DALL-E 3 (4 images per request)",
+      "priority": "P0",
+      "phase": 1,
+      "effort": "4h",
+      "passes": true,
+      "category": "core",
+      "files": [
+        "src/app/api/generate/images/route.ts"
+      ],
+      "acceptance": [
+        "4 images generated",
+        "Stored in Supabase",
+        "Usage tracked"
+      ]
+    },
+    {
+      "id": "CORE-004",
+      "name": "Usage Limit Enforcement",
+      "description": "Enforce tier-based usage limits for generation",
+      "priority": "P0",
+      "phase": 1,
+      "effort": "2h",
+      "passes": true,
+      "category": "core",
+      "files": [
+        "src/lib/usage.ts",
+        "src/lib/tiers.ts"
+      ],
+      "acceptance": [
+        "Limits checked before generation",
+        "Error returned when exceeded"
+      ]
+    },
+    {
+      "id": "CORE-005",
+      "name": "Handwriting Styles API",
+      "description": "Fetch available handwriting styles from Thanks.io",
+      "priority": "P1",
+      "phase": 1,
+      "effort": "2h",
+      "passes": true,
+      "category": "core",
+      "files": [
+        "src/app/api/handwriting-styles/route.ts",
+        "src/lib/thanks-io.ts"
+      ],
+      "acceptance": [
+        "Styles fetched",
+        "Cached appropriately",
+        "Displayed in UI"
+      ]
+    },
+    {
+      "id": "RECIP-001",
+      "name": "Create Recipient",
+      "description": "Server action to create a new recipient",
+      "priority": "P0",
+      "phase": 2,
+      "effort": "2h",
+      "passes": true,
+      "category": "recipients",
+      "files": [
+        "src/app/actions/recipients.ts"
+      ],
+      "acceptance": [
+        "Recipient saved to DB",
+        "Validation works",
+        "Returns success"
+      ]
+    },
+    {
+      "id": "RECIP-002",
+      "name": "List Recipients",
+      "description": "Fetch all recipients for authenticated user",
+      "priority": "P0",
+      "phase": 2,
+      "effort": "1h",
+      "passes": true,
+      "category": "recipients",
+      "files": [
+        "src/app/actions/recipients.ts"
+      ],
+      "acceptance": [
+        "Returns user's recipients",
+        "Sorted by name"
+      ]
+    },
+    {
+      "id": "RECIP-003",
+      "name": "Delete Recipient",
+      "description": "Server action to delete a recipient",
+      "priority": "P1",
+      "phase": 2,
+      "effort": "1h",
+      "passes": true,
+      "category": "recipients",
+      "files": [
+        "src/app/actions/recipients.ts"
+      ],
+      "acceptance": [
+        "Recipient deleted",
+        "Revalidates path"
+      ]
+    },
+    {
+      "id": "RECIP-004",
+      "name": "Recipients Page UI",
+      "description": "Page to manage recipients with list and forms",
+      "priority": "P0",
+      "phase": 2,
+      "effort": "3h",
+      "passes": true,
+      "category": "recipients",
+      "files": [
+        "src/app/recipients/page.tsx"
+      ],
+      "acceptance": [
+        "List displays",
+        "Add form works",
+        "Delete works"
+      ]
+    },
+    {
+      "id": "TMPL-001",
+      "name": "Create Template",
+      "description": "Server action to save a letter template",
+      "priority": "P1",
+      "phase": 3,
+      "effort": "2h",
+      "passes": true,
+      "category": "templates",
+      "files": [
+        "src/app/actions/templates.ts"
+      ],
+      "acceptance": [
+        "Template saved",
+        "Linked to user"
+      ]
+    },
+    {
+      "id": "TMPL-002",
+      "name": "List Templates",
+      "description": "Fetch all templates for authenticated user",
+      "priority": "P1",
+      "phase": 3,
+      "effort": "1h",
+      "passes": true,
+      "category": "templates",
+      "files": [
+        "src/app/actions/templates.ts"
+      ],
+      "acceptance": [
+        "Returns user's templates",
+        "Includes all fields"
+      ]
+    },
+    {
+      "id": "TMPL-003",
+      "name": "Update Template",
+      "description": "Server action to update an existing template",
+      "priority": "P1",
+      "phase": 3,
+      "effort": "1h",
+      "passes": true,
+      "category": "templates",
+      "files": [
+        "src/app/actions/templates.ts"
+      ],
+      "acceptance": [
+        "Template updated",
+        "Revalidates path"
+      ]
+    },
+    {
+      "id": "TMPL-004",
+      "name": "Delete Template",
+      "description": "Server action to delete a template",
+      "priority": "P1",
+      "phase": 3,
+      "effort": "1h",
+      "passes": true,
+      "category": "templates",
+      "files": [
+        "src/app/actions/templates.ts"
+      ],
+      "acceptance": [
+        "Template deleted",
+        "Revalidates path"
+      ]
+    },
+    {
+      "id": "TMPL-005",
+      "name": "Templates Page UI",
+      "description": "Page to manage letter templates",
+      "priority": "P1",
+      "phase": 3,
+      "effort": "3h",
+      "passes": true,
+      "category": "templates",
+      "files": [
+        "src/app/templates/page.tsx"
+      ],
+      "acceptance": [
+        "List displays",
+        "Edit works",
+        "Delete works"
+      ]
+    },
+    {
+      "id": "ORDER-001",
+      "name": "Create Order",
+      "description": "Server action to create an order with Thanks.io",
+      "priority": "P0",
+      "phase": 4,
+      "effort": "4h",
+      "passes": true,
+      "category": "orders",
+      "files": [
+        "src/app/actions/orders.ts",
+        "src/lib/thanks-io.ts"
+      ],
+      "acceptance": [
+        "Order created in DB",
+        "Thanks.io API called",
+        "Status tracked"
+      ]
+    },
+    {
+      "id": "ORDER-002",
+      "name": "List Orders",
+      "description": "Fetch order history for authenticated user",
+      "priority": "P0",
+      "phase": 4,
+      "effort": "2h",
+      "passes": true,
+      "category": "orders",
+      "files": [
+        "src/app/actions/orders.ts"
+      ],
+      "acceptance": [
+        "Returns user's orders",
+        "Includes status"
+      ]
+    },
+    {
+      "id": "ORDER-003",
+      "name": "Order Detail Page",
+      "description": "View individual order details and status",
+      "priority": "P1",
+      "phase": 4,
+      "effort": "2h",
+      "passes": true,
+      "category": "orders",
+      "files": [
+        "src/app/orders/[id]/page.tsx"
+      ],
+      "acceptance": [
+        "Shows order details",
+        "Shows status history"
+      ]
+    },
+    {
+      "id": "ORDER-004",
+      "name": "Thanks.io Webhook Handler",
+      "description": "Receive order status updates from Thanks.io",
+      "priority": "P0",
+      "phase": 4,
+      "effort": "3h",
+      "passes": true,
+      "category": "orders",
+      "files": [
+        "src/app/api/webhooks/thanks/route.ts"
+      ],
+      "acceptance": [
+        "Webhook receives updates",
+        "Order status updated"
+      ]
+    },
+    {
+      "id": "ORDER-005",
+      "name": "Orders Page UI",
+      "description": "Page displaying order history",
+      "priority": "P0",
+      "phase": 4,
+      "effort": "3h",
+      "passes": true,
+      "category": "orders",
+      "files": [
+        "src/app/orders/page.tsx"
+      ],
+      "acceptance": [
+        "List displays",
+        "Status shown",
+        "Links to detail"
+      ]
+    },
+    {
+      "id": "BILL-001",
+      "name": "Stripe Checkout Session",
+      "description": "Create checkout session for subscription",
+      "priority": "P0",
+      "phase": 5,
+      "effort": "3h",
+      "passes": true,
+      "category": "billing",
+      "files": [
+        "src/app/api/stripe/checkout/route.ts"
+      ],
+      "acceptance": [
+        "Session created",
+        "Redirects to Stripe"
+      ]
+    },
+    {
+      "id": "BILL-002",
+      "name": "Stripe Customer Portal",
+      "description": "Link to Stripe customer portal for subscription management",
+      "priority": "P0",
+      "phase": 5,
+      "effort": "2h",
+      "passes": true,
+      "category": "billing",
+      "files": [
+        "src/app/api/stripe/portal/route.ts"
+      ],
+      "acceptance": [
+        "Portal link generated",
+        "Redirects correctly"
+      ]
+    },
+    {
+      "id": "BILL-003",
+      "name": "Stripe Webhook Handler",
+      "description": "Handle Stripe subscription events with signature verification",
+      "priority": "P0",
+      "phase": 5,
+      "effort": "4h",
+      "passes": true,
+      "category": "billing",
+      "files": [
+        "src/app/api/stripe/webhook/route.ts"
+      ],
+      "acceptance": [
+        "Signature verified",
+        "Subscription status updated",
+        "Tier updated"
+      ]
+    },
+    {
+      "id": "BILL-004",
+      "name": "Pricing Page",
+      "description": "Display subscription tiers and pricing",
+      "priority": "P0",
+      "phase": 5,
+      "effort": "3h",
+      "passes": true,
+      "category": "billing",
+      "files": [
+        "src/app/pricing/page.tsx"
+      ],
+      "acceptance": [
+        "Tiers displayed",
+        "CTA buttons work"
+      ]
+    },
+    {
+      "id": "BILL-005",
+      "name": "Billing Page",
+      "description": "User billing dashboard with subscription status",
+      "priority": "P1",
+      "phase": 5,
+      "effort": "3h",
+      "passes": true,
+      "category": "billing",
+      "files": [
+        "src/app/billing/page.tsx"
+      ],
+      "acceptance": [
+        "Shows current plan",
+        "Manage subscription link"
+      ]
+    },
+    {
+      "id": "DASH-001",
+      "name": "Dashboard Stats",
+      "description": "Server action to get dashboard statistics",
+      "priority": "P0",
+      "phase": 1,
+      "effort": "3h",
+      "passes": true,
+      "category": "dashboard",
+      "files": [
+        "src/app/actions/dashboard.ts"
+      ],
+      "acceptance": [
+        "Returns usage stats",
+        "Returns recent orders"
+      ]
+    },
+    {
+      "id": "DASH-002",
+      "name": "Dashboard Page",
+      "description": "Main dashboard with stats and quick actions",
+      "priority": "P0",
+      "phase": 1,
+      "effort": "4h",
+      "passes": true,
+      "category": "dashboard",
+      "files": [
+        "src/app/dashboard/page.tsx"
+      ],
+      "acceptance": [
+        "Stats cards display",
+        "Recent activity shows"
+      ]
+    },
+    {
+      "id": "AUTH-001",
+      "name": "Supabase Auth Integration",
+      "description": "Authentication with Supabase Auth",
+      "priority": "P0",
+      "phase": 1,
+      "effort": "4h",
+      "passes": true,
+      "category": "auth",
+      "files": [
+        "src/lib/supabase.ts",
+        "src/app/auth/callback/route.ts"
+      ],
+      "acceptance": [
+        "Login works",
+        "Logout works",
+        "Session persists"
+      ]
+    },
+    {
+      "id": "AUTH-002",
+      "name": "Protected Routes",
+      "description": "Middleware to protect authenticated routes",
+      "priority": "P0",
+      "phase": 1,
+      "effort": "2h",
+      "passes": true,
+      "category": "auth",
+      "files": [
+        "src/middleware.ts"
+      ],
+      "acceptance": [
+        "Unauthenticated users redirected",
+        "Auth pages accessible"
+      ]
+    },
+    {
+      "id": "EVENT-001",
+      "name": "Event Tracking System",
+      "description": "Track user events in database",
+      "priority": "P1",
+      "phase": 1,
+      "effort": "2h",
+      "passes": true,
+      "category": "analytics",
+      "files": [
+        "src/lib/events.ts"
+      ],
+      "acceptance": [
+        "Events stored",
+        "Metadata captured"
+      ]
+    },
+    {
+      "id": "STORAGE-001",
+      "name": "Image Storage",
+      "description": "Upload and manage images in Supabase Storage",
+      "priority": "P0",
+      "phase": 1,
+      "effort": "3h",
+      "passes": true,
+      "category": "storage",
+      "files": [
+        "src/lib/storage.ts"
+      ],
+      "acceptance": [
+        "Upload works",
+        "Delete works",
+        "URLs returned"
+      ]
+    },
+    {
+      "id": "UI-001",
+      "name": "Navbar Component",
+      "description": "Navigation bar with links and user menu",
+      "priority": "P0",
+      "phase": 1,
+      "effort": "3h",
+      "passes": true,
+      "category": "ui",
+      "files": [
+        "src/components/navbar.tsx"
+      ],
+      "acceptance": [
+        "Links display",
+        "User menu works"
+      ]
+    },
+    {
+      "id": "MOB-001",
+      "name": "Mobile Hamburger Menu",
+      "description": "Add hamburger menu for mobile navigation",
+      "priority": "P0",
+      "phase": 6,
+      "effort": "3h",
+      "passes": false,
+      "category": "mobile",
+      "files": [
+        "src/components/navbar.tsx"
+      ],
+      "acceptance": [
+        "Hamburger icon on mobile",
+        "Slide-out menu",
+        "Menu closes on navigation"
+      ]
+    },
+    {
+      "id": "MOB-002",
+      "name": "Mobile Menu Overlay",
+      "description": "Add overlay behind mobile menu that closes on tap",
+      "priority": "P0",
+      "phase": 6,
+      "effort": "1h",
+      "passes": false,
+      "category": "mobile",
+      "files": [
+        "src/components/navbar.tsx"
+      ],
+      "acceptance": [
+        "Overlay appears",
+        "Tap closes menu"
+      ]
+    },
+    {
+      "id": "MOB-003",
+      "name": "Touch Target Utility",
+      "description": "CSS utility for 44x44px minimum touch targets",
+      "priority": "P0",
+      "phase": 6,
+      "effort": "1h",
+      "passes": false,
+      "category": "mobile",
+      "files": [
+        "src/app/globals.css"
+      ],
+      "acceptance": [
+        ".touch-target class works",
+        "Applied to interactive elements"
+      ]
+    },
+    {
+      "id": "MOB-004",
+      "name": "iOS Input Zoom Fix",
+      "description": "Prevent iOS zoom on input focus with 16px font size",
+      "priority": "P0",
+      "phase": 6,
+      "effort": "30m",
+      "passes": false,
+      "category": "mobile",
+      "files": [
+        "src/app/globals.css"
+      ],
+      "acceptance": [
+        "Inputs have 16px font on mobile",
+        "No zoom on focus"
+      ]
+    },
+    {
+      "id": "MOB-005",
+      "name": "Safe Area Insets",
+      "description": "Handle notched devices with safe area padding",
+      "priority": "P1",
+      "phase": 6,
+      "effort": "30m",
+      "passes": false,
+      "category": "mobile",
+      "files": [
+        "src/app/globals.css"
+      ],
+      "acceptance": [
+        ".safe-area-inset class works",
+        "Content not hidden by notch"
+      ]
+    },
+    {
+      "id": "MOB-006",
+      "name": "Dashboard Mobile Responsive",
+      "description": "Make dashboard stats cards responsive on mobile",
+      "priority": "P1",
+      "phase": 6,
+      "effort": "2h",
+      "passes": false,
+      "category": "mobile",
+      "files": [
+        "src/app/dashboard/page.tsx"
+      ],
+      "acceptance": [
+        "Stats stack on mobile",
+        "Table scrolls horizontally"
+      ]
+    },
+    {
+      "id": "MOB-007",
+      "name": "Generate Page Mobile Layout",
+      "description": "Optimize generate page for mobile devices",
+      "priority": "P1",
+      "phase": 6,
+      "effort": "2h",
+      "passes": false,
+      "category": "mobile",
+      "files": [
+        "src/app/generate/page.tsx"
+      ],
+      "acceptance": [
+        "Form fits mobile",
+        "Voice recorder accessible"
+      ]
+    },
+    {
+      "id": "MOB-008",
+      "name": "Send Page Mobile Form",
+      "description": "Stack form fields on mobile for send page",
+      "priority": "P1",
+      "phase": 6,
+      "effort": "1h",
+      "passes": false,
+      "category": "mobile",
+      "files": [
+        "src/app/send/page.tsx"
+      ],
+      "acceptance": [
+        "Fields stack",
+        "Submit button full width"
+      ]
+    },
+    {
+      "id": "MOB-009",
+      "name": "Voice Recorder Touch Targets",
+      "description": "Ensure voice recorder button is 60x60px for easy tapping",
+      "priority": "P1",
+      "phase": 6,
+      "effort": "1h",
+      "passes": false,
+      "category": "mobile",
+      "files": [
+        "src/components/voice-recorder.tsx"
+      ],
+      "acceptance": [
+        "Large touch target",
+        "Visual feedback on tap"
+      ]
+    },
+    {
+      "id": "MOB-010",
+      "name": "Mobile Lighthouse Score",
+      "description": "Achieve Lighthouse mobile score >= 90",
+      "priority": "P2",
+      "phase": 6,
+      "effort": "2h",
+      "passes": false,
+      "category": "mobile",
+      "files": [],
+      "acceptance": [
+        "Performance >= 90",
+        "Accessibility >= 90",
+        "Best Practices >= 90"
+      ]
+    },
+    {
+      "id": "SEC-001",
+      "name": "Thanks.io Webhook Signature",
+      "description": "Verify signature on Thanks.io webhook requests",
+      "priority": "P0",
+      "phase": 7,
+      "effort": "1h",
+      "passes": false,
+      "category": "security",
+      "files": [
+        "src/app/api/webhooks/thanks/route.ts"
+      ],
+      "acceptance": [
+        "Signature verified",
+        "Invalid requests rejected with 401"
+      ]
+    },
+    {
+      "id": "SEC-002",
+      "name": "Rate Limiter Setup",
+      "description": "Setup Upstash Redis rate limiting infrastructure",
+      "priority": "P1",
+      "phase": 7,
+      "effort": "2h",
+      "passes": false,
+      "category": "security",
+      "files": [
+        "src/lib/rate-limit.ts"
+      ],
+      "acceptance": [
+        "Upstash connected",
+        "Rate limiters configured"
+      ]
+    },
+    {
+      "id": "SEC-003",
+      "name": "Letter Generation Rate Limit",
+      "description": "Rate limit letter generation endpoint",
+      "priority": "P1",
+      "phase": 7,
+      "effort": "1h",
+      "passes": false,
+      "category": "security",
+      "files": [
+        "src/app/api/generate/letter/route.ts"
+      ],
+      "acceptance": [
+        "10 requests/minute limit",
+        "429 returned when exceeded"
+      ]
+    },
+    {
+      "id": "SEC-004",
+      "name": "Image Generation Rate Limit",
+      "description": "Rate limit image generation endpoint",
+      "priority": "P1",
+      "phase": 7,
+      "effort": "1h",
+      "passes": false,
+      "category": "security",
+      "files": [
+        "src/app/api/generate/images/route.ts"
+      ],
+      "acceptance": [
+        "5 requests/minute limit",
+        "429 returned when exceeded"
+      ]
+    },
+    {
+      "id": "SEC-005",
+      "name": "Transcription Rate Limit",
+      "description": "Rate limit voice transcription endpoint",
+      "priority": "P1",
+      "phase": 7,
+      "effort": "1h",
+      "passes": false,
+      "category": "security",
+      "files": [
+        "src/app/api/transcribe/route.ts"
+      ],
+      "acceptance": [
+        "10 requests/minute limit",
+        "429 returned when exceeded"
+      ]
+    },
+    {
+      "id": "SEC-006",
+      "name": "Security Headers",
+      "description": "Add security headers to all responses",
+      "priority": "P1",
+      "phase": 7,
+      "effort": "1h",
+      "passes": false,
+      "category": "security",
+      "files": [
+        "next.config.js"
+      ],
+      "acceptance": [
+        "HSTS enabled",
+        "X-Frame-Options set",
+        "CSP configured"
+      ]
+    },
+    {
+      "id": "SEC-007",
+      "name": "Input Validation Schemas",
+      "description": "Zod schemas for all API input validation",
+      "priority": "P1",
+      "phase": 7,
+      "effort": "2h",
+      "passes": false,
+      "category": "security",
+      "files": [
+        "src/lib/validations/letter.ts",
+        "src/lib/validations/recipient.ts"
+      ],
+      "acceptance": [
+        "Schemas defined",
+        "Used in all API routes"
+      ]
+    },
+    {
+      "id": "SEC-008",
+      "name": "Order Send Usage Check",
+      "description": "Check usage limits before sending order",
+      "priority": "P1",
+      "phase": 7,
+      "effort": "30m",
+      "passes": false,
+      "category": "security",
+      "files": [
+        "src/app/actions/orders.ts"
+      ],
+      "acceptance": [
+        "Usage checked",
+        "Error returned if exceeded"
+      ]
+    },
+    {
+      "id": "OBS-001",
+      "name": "Sentry Setup",
+      "description": "Initialize Sentry error tracking",
+      "priority": "P1",
+      "phase": 8,
+      "effort": "2h",
+      "passes": false,
+      "category": "observability",
+      "files": [
+        "sentry.client.config.ts",
+        "sentry.server.config.ts"
+      ],
+      "acceptance": [
+        "Sentry initialized",
+        "Errors captured"
+      ]
+    },
+    {
+      "id": "OBS-002",
+      "name": "Error Boundary Component",
+      "description": "React error boundary that reports to Sentry",
+      "priority": "P1",
+      "phase": 8,
+      "effort": "1h",
+      "passes": false,
+      "category": "observability",
+      "files": [
+        "src/components/error-boundary.tsx"
+      ],
+      "acceptance": [
+        "Errors caught",
+        "User-friendly fallback",
+        "Reported to Sentry"
+      ]
+    },
+    {
+      "id": "OBS-003",
+      "name": "Vercel Analytics",
+      "description": "Add Vercel Analytics for web vitals",
+      "priority": "P2",
+      "phase": 8,
+      "effort": "30m",
+      "passes": false,
+      "category": "observability",
+      "files": [
+        "src/app/layout.tsx"
+      ],
+      "acceptance": [
+        "Analytics component added",
+        "Page views tracked"
+      ]
+    },
+    {
+      "id": "OBS-004",
+      "name": "PostHog Integration",
+      "description": "Add PostHog for user behavior analytics",
+      "priority": "P2",
+      "phase": 8,
+      "effort": "2h",
+      "passes": false,
+      "category": "observability",
+      "files": [
+        "src/lib/posthog.ts",
+        "src/app/layout.tsx"
+      ],
+      "acceptance": [
+        "PostHog initialized",
+        "Key events tracked"
+      ]
+    },
+    {
+      "id": "OBS-005",
+      "name": "User Flow Events",
+      "description": "Track signup, generate, send conversion funnel",
+      "priority": "P2",
+      "phase": 8,
+      "effort": "2h",
+      "passes": false,
+      "category": "observability",
+      "files": [
+        "src/lib/posthog.ts"
+      ],
+      "acceptance": [
+        "Funnel events tracked",
+        "Visible in PostHog"
+      ]
+    },
+    {
+      "id": "OBS-006",
+      "name": "API Timing Middleware",
+      "description": "Track and log slow API requests",
+      "priority": "P2",
+      "phase": 8,
+      "effort": "1h",
+      "passes": false,
+      "category": "observability",
+      "files": [
+        "src/lib/api-timing.ts"
+      ],
+      "acceptance": [
+        "Duration logged",
+        "Slow requests flagged"
+      ]
+    },
+    {
+      "id": "OBS-007",
+      "name": "Enhanced Health Check",
+      "description": "Health check that verifies all dependencies",
+      "priority": "P1",
+      "phase": 8,
+      "effort": "2h",
+      "passes": false,
+      "category": "observability",
+      "files": [
+        "src/app/api/health/route.ts"
+      ],
+      "acceptance": [
+        "Checks DB, Supabase, Stripe",
+        "Returns degraded status on failures"
+      ]
+    },
+    {
+      "id": "OBS-008",
+      "name": "Structured Logger",
+      "description": "JSON structured logging utility",
+      "priority": "P2",
+      "phase": 8,
+      "effort": "1h",
+      "passes": false,
+      "category": "observability",
+      "files": [
+        "src/lib/logger.ts"
+      ],
+      "acceptance": [
+        "JSON output",
+        "Log levels",
+        "Context support"
+      ]
+    },
+    {
+      "id": "IMP-001",
+      "name": "Extract Shared Auth Utility",
+      "description": "DRY: Extract getCurrentUser to shared module",
+      "priority": "P2",
+      "phase": 9,
+      "effort": "30m",
+      "passes": false,
+      "category": "improvements",
+      "files": [
+        "src/lib/server-auth.ts"
+      ],
+      "acceptance": [
+        "Shared function",
+        "Used in all actions"
+      ]
+    },
+    {
+      "id": "IMP-002",
+      "name": "Type Safety Thanks.io",
+      "description": "Replace any types in Thanks.io client",
+      "priority": "P2",
+      "phase": 9,
+      "effort": "1h",
+      "passes": false,
+      "category": "improvements",
+      "files": [
+        "src/lib/thanks-io.ts"
+      ],
+      "acceptance": [
+        "Proper interfaces defined",
+        "No any types"
+      ]
+    },
+    {
+      "id": "IMP-003",
+      "name": "Type Safety Stripe Webhook",
+      "description": "Replace any casts in Stripe webhook handler",
+      "priority": "P2",
+      "phase": 9,
+      "effort": "1h",
+      "passes": false,
+      "category": "improvements",
+      "files": [
+        "src/app/api/stripe/webhook/route.ts"
+      ],
+      "acceptance": [
+        "Proper Stripe types",
+        "No as any casts"
+      ]
+    },
+    {
+      "id": "IMP-004",
+      "name": "API Error Standardization",
+      "description": "Unified error response format for all API routes",
+      "priority": "P2",
+      "phase": 9,
+      "effort": "2h",
+      "passes": false,
+      "category": "improvements",
+      "files": [
+        "src/lib/api-errors.ts"
+      ],
+      "acceptance": [
+        "apiError utility",
+        "Used in all routes",
+        "Consistent format"
+      ]
+    },
+    {
+      "id": "IMP-005",
+      "name": "Environment Validation",
+      "description": "Zod schema to validate env vars at startup",
+      "priority": "P1",
+      "phase": 9,
+      "effort": "1h",
+      "passes": false,
+      "category": "improvements",
+      "files": [
+        "src/lib/env.ts"
+      ],
+      "acceptance": [
+        "Schema validates all vars",
+        "Fails fast on missing"
+      ]
+    },
+    {
+      "id": "IMP-006",
+      "name": "Server Action Unit Tests",
+      "description": "Unit tests for all server actions",
+      "priority": "P2",
+      "phase": 9,
+      "effort": "4h",
+      "passes": false,
+      "category": "improvements",
+      "files": [
+        "tests/unit/actions/"
+      ],
+      "acceptance": [
+        "All actions tested",
+        "Coverage > 80%"
+      ]
+    },
+    {
+      "id": "IMP-007",
+      "name": "Component Tests",
+      "description": "Unit tests for key components",
+      "priority": "P2",
+      "phase": 9,
+      "effort": "4h",
+      "passes": false,
+      "category": "improvements",
+      "files": [
+        "tests/unit/components/"
+      ],
+      "acceptance": [
+        "Voice recorder tested",
+        "Form components tested"
+      ]
+    },
+    {
+      "id": "IMP-008",
+      "name": "Mobile E2E Tests",
+      "description": "Playwright tests for mobile viewports",
+      "priority": "P2",
+      "phase": 9,
+      "effort": "3h",
+      "passes": false,
+      "category": "improvements",
+      "files": [
+        "tests/e2e/mobile.spec.ts"
+      ],
+      "acceptance": [
+        "Mobile navigation tested",
+        "Touch targets verified"
+      ]
+    },
+    {
+      "id": "FUTURE-001",
+      "name": "Email Notifications",
+      "description": "Send email notifications for order status changes",
+      "priority": "P2",
+      "phase": 9,
+      "effort": "4h",
+      "passes": false,
+      "category": "future",
+      "files": [
+        "src/lib/email.ts",
+        "src/app/api/webhooks/thanks/route.ts"
+      ],
+      "acceptance": [
+        "Emails sent on status change",
+        "Templates created"
+      ]
+    },
+    {
+      "id": "FUTURE-002",
+      "name": "Bulk Send Feature",
+      "description": "Send same letter to multiple recipients",
+      "priority": "P3",
+      "phase": 9,
+      "effort": "6h",
+      "passes": false,
+      "category": "future",
+      "files": [
+        "src/app/send/bulk/page.tsx"
+      ],
+      "acceptance": [
+        "Select multiple recipients",
+        "Single order created"
+      ]
+    },
+    {
+      "id": "FUTURE-003",
+      "name": "CSV Recipient Import",
+      "description": "Import recipients from CSV file",
+      "priority": "P3",
+      "phase": 9,
+      "effort": "4h",
+      "passes": false,
+      "category": "future",
+      "files": [
+        "src/app/recipients/import/page.tsx"
+      ],
+      "acceptance": [
+        "CSV parsed",
+        "Validation shown",
+        "Bulk insert"
+      ]
+    },
+    {
+      "id": "FUTURE-004",
+      "name": "Address Validation API",
+      "description": "Validate addresses with USPS API",
+      "priority": "P3",
+      "phase": 9,
+      "effort": "6h",
+      "passes": false,
+      "category": "future",
+      "files": [
+        "src/lib/address-validation.ts"
+      ],
+      "acceptance": [
+        "USPS API integrated",
+        "Addresses validated before send"
+      ]
+    },
+    {
+      "id": "FUTURE-005",
+      "name": "Accessibility Audit",
+      "description": "WCAG 2.1 AA compliance audit and fixes",
+      "priority": "P3",
+      "phase": 9,
+      "effort": "8h",
+      "passes": false,
+      "category": "future",
+      "files": [
+        "docs/ACCESSIBILITY.md"
+      ],
+      "acceptance": [
+        "Audit completed",
+        "Issues documented",
+        "Key fixes implemented"
+      ]
+    },
+    {
+      "id": "FUTURE-006",
+      "name": "Scheduled Usage Reset",
+      "description": "Cron job to reset usage on 1st of month",
+      "priority": "P3",
+      "phase": 9,
+      "effort": "2h",
+      "passes": false,
+      "category": "future",
+      "files": [
+        "src/app/api/cron/reset-usage/route.ts"
+      ],
+      "acceptance": [
+        "Vercel Cron configured",
+        "Usage reset monthly"
+      ]
+    }
+  ]
+}
