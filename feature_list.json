@@ -1205,10 +1205,16 @@
       "priority": "P3",
       "phase": 9,
       "effort": "4h",
-      "passes": false,
+      "passes": true,
       "category": "future",
       "files": [
-        "src/app/recipients/import/page.tsx"
+        "src/app/recipients/import/page.tsx",
+        "src/features/recipients/csv-import-form.tsx",
+        "src/lib/csv-parser.ts",
+        "src/lib/csv-parser-impl.js",
+        "src/app/actions/recipients.ts",
+        "tests/unit/csv-parser.test.mjs",
+        "tests/e2e/csv-import.spec.ts"
       ],
       "acceptance": [
         "CSV parsed",
