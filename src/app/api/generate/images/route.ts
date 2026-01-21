@@ -5,6 +5,7 @@ import { canGenerate } from '@/lib/tiers';
 import { trackEvent } from '@/lib/events';
 import { getAuthenticatedUser } from '@/lib/api-auth';
 import { checkRateLimit } from '@/lib/rate-limit';
+import { trackServerEvent } from '@/lib/posthog-server';
 
 export async function POST(request: NextRequest) {
     try {
@@ -79,6 +80,12 @@ export async function POST(request: NextRequest) {
                 metadata: { type: 'image_generation', tier: usage.tier },
             });
 
+            // Track in PostHog
+            await trackServerEvent(userId, 'limit_reached', {
+                type: 'image_generation',
+                tier: usage.tier,
+            });
+
             return NextResponse.json(
                 { error: 'You have reached your image generation limit. Please upgrade your plan.' },
                 { status: 403 }
@@ -126,21 +133,42 @@ export async function POST(request: NextRequest) {
             });
         }
 
+        // Track in PostHog (single event with count)
+        await trackServerEvent(userId, 'image_generated', {
+            occasion,
+            tone,
+            tier: usage.tier,
+            count: validImages.length,
+        });
+
         return NextResponse.json({ images: validImages });
     } catch (error: any) {
         console.error('Failed to generate images:', error);
-        
+
+        // Track failure in PostHog
+        try {
+            const user = await getAuthenticatedUser(request);
+            if (user) {
+                await trackServerEvent(user.id, 'image_generation_failed', {
+                    error: error.message,
+                });
+            }
+        } catch (trackError) {
+            // Silently fail tracking
+            console.error('Failed to track error event:', trackError);
+        }
+
         // Provide more detailed error in development
         const errorMessage = process.env.NODE_ENV === 'development'
             ? error.message || 'Failed to generate images'
             : 'Failed to generate images. Please try again.';
-        
+
         return NextResponse.json(
-            { 
+            {
                 error: errorMessage,
-                ...(process.env.NODE_ENV === 'development' && { 
+                ...(process.env.NODE_ENV === 'development' && {
                     details: error.stack,
-                    type: error.constructor?.name 
+                    type: error.constructor?.name
                 })
             },
             { status: 500 }

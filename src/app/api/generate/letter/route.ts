@@ -6,6 +6,7 @@ import { trackEvent } from '@/lib/events';
 import { getAuthenticatedUser } from '@/lib/api-auth';
 import { checkRateLimit } from '@/lib/rate-limit';
 import { letterGenerationSchema } from '@/lib/validations/letter';
+import { trackServerEvent } from '@/lib/posthog-server';
 
 export async function POST(request: NextRequest) {
     try {
@@ -86,6 +87,12 @@ export async function POST(request: NextRequest) {
                 metadata: { type: 'letter_generation', tier: usage.tier },
             });
 
+            // Track in PostHog
+            await trackServerEvent(userId, 'limit_reached', {
+                type: 'letter_generation',
+                tier: usage.tier,
+            });
+
             return NextResponse.json(
                 { error: 'You have reached your letter generation limit. Please upgrade your plan.' },
                 { status: 403 }
@@ -117,21 +124,43 @@ export async function POST(request: NextRequest) {
             metadata: { tone, occasion, holiday: holiday || null },
         });
 
+        // Track in PostHog
+        await trackServerEvent(userId, 'letter_generated', {
+            tone,
+            occasion,
+            holiday: holiday || null,
+            tier: usage.tier,
+            length: length || 'medium',
+        });
+
         return NextResponse.json({ letter });
     } catch (error: any) {
         console.error('Failed to generate letter:', error);
-        
+
+        // Track failure in PostHog
+        try {
+            const user = await getAuthenticatedUser(request);
+            if (user) {
+                await trackServerEvent(user.id, 'letter_generation_failed', {
+                    error: error.message,
+                });
+            }
+        } catch (trackError) {
+            // Silently fail tracking
+            console.error('Failed to track error event:', trackError);
+        }
+
         // Provide more detailed error in development
         const errorMessage = process.env.NODE_ENV === 'development'
             ? error.message || 'Failed to generate letter'
             : 'Failed to generate letter. Please try again.';
-        
+
         return NextResponse.json(
-            { 
+            {
                 error: errorMessage,
-                ...(process.env.NODE_ENV === 'development' && { 
+                ...(process.env.NODE_ENV === 'development' && {
                     details: error.stack,
-                    type: error.constructor?.name 
+                    type: error.constructor?.name
                 })
             },
             { status: 500 }

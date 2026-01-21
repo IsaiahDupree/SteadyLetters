@@ -6,6 +6,7 @@ import { createServerClient } from '@supabase/ssr';
 import { cookies } from 'next/headers';
 import { sendPostcard, sendLetter, sendGreetingCard, ProductType } from '@/lib/thanks-io';
 import { canGenerate } from '@/lib/tiers';
+import { trackServerEvent } from '@/lib/posthog-server';
 
 async function getCurrentUser() {
     const cookieStore = await cookies();
@@ -73,6 +74,12 @@ export async function createOrder(data: {
 
         // Check if user can send (using 'letter' as it maps to lettersSent)
         if (!canGenerate(usage, 'letter')) {
+            // Track limit reached event
+            await trackServerEvent(user.id, 'limit_reached', {
+                type: 'order_creation',
+                tier: usage.tier,
+            });
+
             return {
                 success: false,
                 error: 'You have reached your monthly sending limit. Please upgrade your plan.'
@@ -137,7 +144,7 @@ export async function createOrder(data: {
             // Increment usage counter
             await prisma.userUsage.upsert({
                 where: { userId: user.id },
-                update: { 
+                update: {
                     lettersSent: { increment: 1 },
                 },
                 create: {
@@ -147,13 +154,21 @@ export async function createOrder(data: {
                     resetAt: getNextResetDate(),
                 },
             });
-            
+
+            // Track order creation in PostHog
+            await trackServerEvent(user.id, 'order_created', {
+                productType: data.productType,
+                orderId: order.id,
+                thanksIoId: response.id,
+                tier: usage.tier,
+            });
+
             revalidatePath('/orders');
             revalidatePath('/dashboard');
-            
-            return { 
-                success: true, 
-                orderId: order.id, 
+
+            return {
+                success: true,
+                orderId: order.id,
                 thanksIoId: response.id,
                 status: response.status,
             };
@@ -164,6 +179,14 @@ export async function createOrder(data: {
                 where: { id: order.id },
                 data: { status: 'failed' },
             });
+
+            // Track order creation failure in PostHog
+            await trackServerEvent(user.id, 'order_creation_failed', {
+                productType: data.productType,
+                orderId: order.id,
+                error: sendError.message,
+            });
+
             console.error('Thanks.io send error:', sendError);
             return { success: false, error: sendError.message || 'Failed to send via Thanks.io' };
         }

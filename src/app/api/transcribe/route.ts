@@ -5,6 +5,7 @@ import { canGenerate } from '@/lib/tiers';
 import { trackEvent } from '@/lib/events';
 import { getAuthenticatedUser } from '@/lib/api-auth';
 import { checkRateLimit } from '@/lib/rate-limit';
+import { trackServerEvent } from '@/lib/posthog-server';
 
 export async function POST(request: NextRequest) {
     try {
@@ -89,6 +90,12 @@ export async function POST(request: NextRequest) {
                 metadata: { type: 'voice_transcription', tier: usage.tier },
             });
 
+            // Track in PostHog
+            await trackServerEvent(userId, 'limit_reached', {
+                type: 'voice_transcription',
+                tier: usage.tier,
+            });
+
             return NextResponse.json(
                 { error: 'You have reached your transcription limit. Please upgrade your plan.' },
                 { status: 403 }
@@ -121,23 +128,43 @@ export async function POST(request: NextRequest) {
             },
         });
 
+        // Track in PostHog
+        await trackServerEvent(userId, 'voice_transcribed', {
+            fileSize: audioFile.size,
+            wordCount: transcription.text.split(' ').length,
+            tier: usage.tier,
+        });
+
         return NextResponse.json({
             text: transcription.text,
         });
     } catch (error: any) {
         console.error('Transcription error:', error);
-        
+
+        // Track failure in PostHog
+        try {
+            const user = await getAuthenticatedUser(request);
+            if (user) {
+                await trackServerEvent(user.id, 'voice_transcription_failed', {
+                    error: error.message,
+                });
+            }
+        } catch (trackError) {
+            // Silently fail tracking
+            console.error('Failed to track error event:', trackError);
+        }
+
         // Provide more detailed error in development
         const errorMessage = process.env.NODE_ENV === 'development'
             ? error.message || 'Failed to transcribe audio'
             : 'Failed to transcribe audio. Please try again.';
-        
+
         return NextResponse.json(
-            { 
+            {
                 error: errorMessage,
-                ...(process.env.NODE_ENV === 'development' && { 
+                ...(process.env.NODE_ENV === 'development' && {
                     details: error.stack,
-                    type: error.constructor?.name 
+                    type: error.constructor?.name
                 })
             },
             { status: 500 }

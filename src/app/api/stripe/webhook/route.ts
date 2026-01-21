@@ -3,6 +3,7 @@ import { stripe } from '@/lib/stripe';
 import { prisma } from '@/lib/prisma';
 import { headers } from 'next/headers';
 import Stripe from 'stripe';
+import { trackServerEvent } from '@/lib/posthog-server';
 
 export async function POST(request: NextRequest) {
     const body = await request.text();
@@ -71,6 +72,13 @@ export async function POST(request: NextRequest) {
                     data: { tier },
                 });
 
+                // Track subscription started in PostHog
+                await trackServerEvent(userId, 'subscription_started', {
+                    tier,
+                    priceId,
+                    subscriptionId: subscription.id,
+                });
+
                 break;
             }
 
@@ -88,10 +96,16 @@ export async function POST(request: NextRequest) {
                     where: { id: user.id },
                     data: {
                         stripePriceId: subscription.items.data[0].price.id,
-                        stripeCurrentPeriodEnd: subscription.current_period_end 
+                        stripeCurrentPeriodEnd: subscription.current_period_end
                             ? new Date(subscription.current_period_end * 1000)
                             : null,
                     },
+                });
+
+                // Track subscription updated in PostHog
+                await trackServerEvent(user.id, 'subscription_updated', {
+                    priceId: subscription.items.data[0].price.id,
+                    subscriptionId: subscription.id,
                 });
 
                 break;
@@ -120,6 +134,11 @@ export async function POST(request: NextRequest) {
                 await prisma.userUsage.update({
                     where: { userId: user.id },
                     data: { tier: 'FREE' },
+                });
+
+                // Track subscription cancelled in PostHog
+                await trackServerEvent(user.id, 'subscription_cancelled', {
+                    subscriptionId: subscription.id,
                 });
 
                 break;

@@ -3,6 +3,7 @@
 import { createContext, useContext, useEffect, useState } from 'react';
 import { User } from '@supabase/supabase-js';
 import { createClient, getCurrentUser, signOut as authSignOut } from '@/lib/supabase-auth';
+import { identifyUser, resetUser, trackEvent } from '@/lib/posthog';
 
 interface AuthContextType {
     user: User | null;
@@ -31,9 +32,22 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         const supabase = createClient();
         const {
             data: { subscription },
-        } = supabase.auth.onAuthStateChange((_event, session) => {
+        } = supabase.auth.onAuthStateChange((event, session) => {
             setUser(session?.user ?? null);
             setLoading(false);
+
+            // Track auth events in PostHog
+            if (event === 'SIGNED_IN' && session?.user) {
+                identifyUser(session.user.id, {
+                    email: session.user.email,
+                });
+                trackEvent('user_logged_in', {
+                    method: session.user.app_metadata.provider || 'email',
+                });
+            } else if (event === 'SIGNED_OUT') {
+                trackEvent('user_logged_out');
+                resetUser();
+            }
         });
 
         return () => {
@@ -42,6 +56,10 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     }, []);
 
     const handleSignOut = async () => {
+        // Track logout event before signing out
+        trackEvent('user_logged_out');
+        resetUser();
+
         await authSignOut();
         setUser(null);
     };
