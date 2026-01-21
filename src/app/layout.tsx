@@ -15,6 +15,7 @@ import { Navbar } from "@/components/navbar";
 import { Footer } from "@/components/footer";
 import { AuthProvider } from "@/contexts/auth-context";
 import { ErrorBoundary } from "@/components/error-boundary";
+import { Analytics } from '@vercel/analytics/react';
 
 const lora = Lora({
   variable: "--font-serif",
@@ -129,6 +130,7 @@ export default function RootLayout({
             <Footer />
           </AuthProvider>
         </ErrorBoundary>
+        <Analytics />
       </body>
     </html>
   );
