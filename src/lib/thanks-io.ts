@@ -76,6 +76,14 @@ export interface ThanksIoResponse {
   error?: string;
 }
 
+export interface ThanksIoHandwritingStyleApiResponse {
+  id?: number | string;
+  handwriting_id?: number | string;
+  name?: string;
+  description?: string;
+  style?: string;
+}
+
 // ============================================================================
 // HANDWRITING STYLES API
 // ============================================================================
@@ -100,9 +108,9 @@ export async function getHandwritingStyles(): Promise<HandwritingStyle[]> {
 
     const data = await response.json();
     // Map API response to our interface
-    return data.data?.map((style: any) => ({
-      id: style.id?.toString() || style.handwriting_id?.toString(),
-      name: style.name || `Style ${style.id}`,
+    return data.data?.map((style: ThanksIoHandwritingStyleApiResponse) => ({
+      id: style.id?.toString() || style.handwriting_id?.toString() || '',
+      name: style.name || `Style ${style.id || style.handwriting_id || 'unknown'}`,
       style: style.description || style.style || 'Handwritten',
     })) || MOCK_STYLES;
   } catch (error) {
