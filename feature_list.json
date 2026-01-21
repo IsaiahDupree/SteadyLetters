@@ -3,7 +3,7 @@
   "description": "SaaS web application for creating and sending physical handwritten-style letters via Thanks.io API integration",
   "version": "1.0",
   "totalFeatures": 71,
-  "completedFeatures": 41,
+  "completedFeatures": 48,
   "phases": {
     "phase1_core": "Core letter generation, voice transcription, image generation",
     "phase2_recipients": "Recipient management and address book",
@@ -761,10 +761,10 @@
       "priority": "P1",
       "phase": 7,
       "effort": "2h",
-      "passes": false,
+      "passes": true,
       "category": "security",
       "files": [
-        "src/lib/rate-limit.ts"
+        "src/lib/rate-limit.js"
       ],
       "acceptance": [
         "Upstash connected",
@@ -778,7 +778,7 @@
       "priority": "P1",
       "phase": 7,
       "effort": "1h",
-      "passes": false,
+      "passes": true,
       "category": "security",
       "files": [
         "src/app/api/generate/letter/route.ts"
@@ -795,7 +795,7 @@
       "priority": "P1",
       "phase": 7,
       "effort": "1h",
-      "passes": false,
+      "passes": true,
       "category": "security",
       "files": [
         "src/app/api/generate/images/route.ts"
@@ -812,7 +812,7 @@
       "priority": "P1",
       "phase": 7,
       "effort": "1h",
-      "passes": false,
+      "passes": true,
       "category": "security",
       "files": [
         "src/app/api/transcribe/route.ts"
@@ -829,10 +829,10 @@
       "priority": "P1",
       "phase": 7,
       "effort": "1h",
-      "passes": false,
+      "passes": true,
       "category": "security",
       "files": [
-        "next.config.js"
+        "next.config.ts"
       ],
       "acceptance": [
         "HSTS enabled",
@@ -847,7 +847,7 @@
       "priority": "P1",
       "phase": 7,
       "effort": "2h",
-      "passes": false,
+      "passes": true,
       "category": "security",
       "files": [
         "src/lib/validations/letter.ts",
@@ -865,7 +865,7 @@
       "priority": "P1",
       "phase": 7,
       "effort": "30m",
-      "passes": false,
+      "passes": true,
       "category": "security",
       "files": [
         "src/app/actions/orders.ts"

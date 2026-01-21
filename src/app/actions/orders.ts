@@ -5,6 +5,7 @@ import { revalidatePath } from 'next/cache';
 import { createServerClient } from '@supabase/ssr';
 import { cookies } from 'next/headers';
 import { sendPostcard, sendLetter, sendGreetingCard, ProductType } from '@/lib/thanks-io';
+import { canGenerate } from '@/lib/tiers';
 
 async function getCurrentUser() {
     const cookieStore = await cookies();
@@ -55,7 +56,29 @@ export async function createOrder(data: {
         if (!recipient || recipient.userId !== user.id) {
             return { success: false, error: 'Recipient not found or unauthorized' };
         }
-        
+
+        // Check usage limits before creating order
+        let usage = await prisma.userUsage.findUnique({
+            where: { userId: user.id },
+        });
+
+        if (!usage) {
+            // Create initial usage record if it doesn't exist
+            const now = new Date();
+            const resetAt = new Date(now.getFullYear(), now.getMonth() + 1, 1);
+            usage = await prisma.userUsage.create({
+                data: { userId: user.id, tier: 'FREE', resetAt },
+            });
+        }
+
+        // Check if user can send (using 'letter' as it maps to lettersSent)
+        if (!canGenerate(usage, 'letter')) {
+            return {
+                success: false,
+                error: 'You have reached your monthly sending limit. Please upgrade your plan.'
+            };
+        }
+
         // Create order record first (pending status)
         const order = await prisma.order.create({
             data: {

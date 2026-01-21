@@ -4,9 +4,27 @@ import { prisma } from '@/lib/prisma';
 import { canGenerate } from '@/lib/tiers';
 import { trackEvent } from '@/lib/events';
 import { getAuthenticatedUser } from '@/lib/api-auth';
+import { checkRateLimit } from '@/lib/rate-limit';
 
 export async function POST(request: NextRequest) {
     try {
+        // Check rate limit first
+        const ip = request.headers.get('x-forwarded-for') || request.headers.get('x-real-ip') || 'anonymous';
+        const { success, remaining } = await checkRateLimit('transcription', ip);
+
+        if (!success) {
+            return NextResponse.json(
+                { error: 'Too many requests. Please try again later.' },
+                {
+                    status: 429,
+                    headers: {
+                        'X-RateLimit-Remaining': remaining.toString(),
+                        'Retry-After': '60'
+                    }
+                }
+            );
+        }
+
         // Get authenticated user
         const user = await getAuthenticatedUser(request);
 

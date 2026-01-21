@@ -4,9 +4,28 @@ import { prisma } from '@/lib/prisma';
 import { canGenerate } from '@/lib/tiers';
 import { trackEvent } from '@/lib/events';
 import { getAuthenticatedUser } from '@/lib/api-auth';
+import { checkRateLimit } from '@/lib/rate-limit';
+import { letterGenerationSchema } from '@/lib/validations/letter';
 
 export async function POST(request: NextRequest) {
     try {
+        // Check rate limit first
+        const ip = request.headers.get('x-forwarded-for') || request.headers.get('x-real-ip') || 'anonymous';
+        const { success, remaining } = await checkRateLimit('generation', ip);
+
+        if (!success) {
+            return NextResponse.json(
+                { error: 'Too many requests. Please try again later.' },
+                {
+                    status: 429,
+                    headers: {
+                        'X-RateLimit-Remaining': remaining.toString(),
+                        'Retry-After': '60'
+                    }
+                }
+            );
+        }
+
         // Get authenticated user
         const user = await getAuthenticatedUser(request);
 
@@ -18,14 +37,20 @@ export async function POST(request: NextRequest) {
         }
 
         const body = await request.json();
-        const { context, tone, occasion, holiday, imageAnalysis, length } = body;
 
-        if (!context || !tone || !occasion) {
+        // Validate input with Zod schema
+        const validationResult = letterGenerationSchema.safeParse(body);
+        if (!validationResult.success) {
             return NextResponse.json(
-                { error: 'Missing required fields' },
+                {
+                    error: 'Invalid input',
+                    details: validationResult.error.flatten().fieldErrors
+                },
                 { status: 400 }
             );
         }
+
+        const { context, tone, occasion, holiday, imageAnalysis, length } = validationResult.data;
 
         // Ensure user exists in Prisma
         const userId = user.id;
