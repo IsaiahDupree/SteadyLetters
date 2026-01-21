@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import { verifyThanksSignature } from '@/lib/webhook-verification.js';
+import { sendOrderStatusEmail } from '@/lib/email.js';
 
 export async function POST(request: NextRequest) {
     try {
@@ -31,25 +32,100 @@ export async function POST(request: NextRequest) {
         }
         
         const newStatus = status || event_type || 'unknown';
-        
+
         // Update Order records matching this Thanks.io order ID
         const updatedOrders = await prisma.order.updateMany({
             where: { thanksIoOrderId: order_id },
             data: { status: newStatus },
         });
-        
+
         // Also update MailOrder if it exists
         const updatedMailOrders = await prisma.mailOrder.updateMany({
             where: { thanksIoOrderId: order_id },
             data: { status: newStatus },
         });
-        
+
         console.log(`[Thanks.io Webhook] Updated ${updatedOrders.count} orders, ${updatedMailOrders.count} mail orders for ${order_id} to status: ${newStatus}`);
-        
-        return NextResponse.json({ 
+
+        // Send email notifications to users for each updated order
+        let emailsSent = 0;
+
+        // Handle Order model notifications
+        if (updatedOrders.count > 0) {
+            const orders = await prisma.order.findMany({
+                where: { thanksIoOrderId: order_id },
+                include: {
+                    user: true,
+                    recipient: true,
+                },
+            });
+
+            for (const order of orders) {
+                try {
+                    const sent = await sendOrderStatusEmail(
+                        order.user.email,
+                        order.user.email.split('@')[0], // Extract name from email (fallback)
+                        newStatus,
+                        {
+                            orderId: order.id,
+                            thanksIoOrderId: order_id,
+                            productType: 'Letter', // Default for Order model
+                            recipientName: order.recipient.name,
+                            recipientAddress: `${order.recipient.address1}, ${order.recipient.city}, ${order.recipient.state} ${order.recipient.zip}`,
+                        }
+                    );
+
+                    if (sent) {
+                        emailsSent++;
+                    }
+                } catch (error) {
+                    console.error('[Thanks.io Webhook] Email send error:', error);
+                    // Continue processing other orders even if one email fails
+                }
+            }
+        }
+
+        // Handle MailOrder model notifications
+        if (updatedMailOrders.count > 0) {
+            const mailOrders = await prisma.mailOrder.findMany({
+                where: { thanksIoOrderId: order_id },
+                include: {
+                    user: true,
+                },
+            });
+
+            for (const mailOrder of mailOrders) {
+                try {
+                    const sent = await sendOrderStatusEmail(
+                        mailOrder.user.email,
+                        mailOrder.user.email.split('@')[0], // Extract name from email (fallback)
+                        newStatus,
+                        {
+                            orderId: mailOrder.id,
+                            thanksIoOrderId: order_id,
+                            productType: mailOrder.productType,
+                            recipientName: `${mailOrder.recipientCount} recipient(s)`,
+                            recipientAddress: 'Multiple addresses',
+                        }
+                    );
+
+                    if (sent) {
+                        emailsSent++;
+                    }
+                } catch (error) {
+                    console.error('[Thanks.io Webhook] Email send error:', error);
+                    // Continue processing other orders even if one email fails
+                }
+            }
+        }
+
+        console.log(`[Thanks.io Webhook] Sent ${emailsSent} email notification(s)`);
+
+        return NextResponse.json({
             received: true,
             ordersUpdated: updatedOrders.count,
             mailOrdersUpdated: updatedMailOrders.count,
+            emailsSent,
         });
         
     } catch (error) {
