@@ -44,7 +44,13 @@ export async function POST(request: NextRequest) {
                 const subscription = await stripe.subscriptions.retrieve(
                     session.subscription as string,
                     { expand: ['items.data.price'] }
-                ) as any;
+                ) as Stripe.Subscription & {
+                    items: {
+                        data: Array<{
+                            price: Stripe.Price;
+                        }>;
+                    };
+                };
 
                 await prisma.user.update({
                     where: { id: userId },
@@ -83,7 +89,13 @@ export async function POST(request: NextRequest) {
             }
 
             case 'customer.subscription.updated': {
-                const subscription = event.data.object as any;
+                const subscription = event.data.object as Stripe.Subscription & {
+                    items: {
+                        data: Array<{
+                            price: Stripe.Price;
+                        }>;
+                    };
+                };
                 const customerId = subscription.customer as string;
 
                 const user = await prisma.user.findUnique({
