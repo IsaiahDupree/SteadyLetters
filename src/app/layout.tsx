@@ -14,6 +14,7 @@ import "./globals.css";
 import { Navbar } from "@/components/navbar";
 import { Footer } from "@/components/footer";
 import { AuthProvider } from "@/contexts/auth-context";
+import { ErrorBoundary } from "@/components/error-boundary";
 
 const lora = Lora({
   variable: "--font-serif",
@@ -119,13 +120,15 @@ export default function RootLayout({
       <body
         className={`${inter.variable} ${lora.variable} ${caveat.variable} ${playfair.variable} ${greatVibes.variable} ${dancingScript.variable} ${patrickHand.variable} ${sacramento.variable} antialiased font-sans`}
       >
-        <AuthProvider>
-          <Navbar />
-          <main className="container mx-auto py-6 px-4 min-h-[calc(100vh-140px)]">
-            {children}
-          </main>
-          <Footer />
-        </AuthProvider>
+        <ErrorBoundary>
+          <AuthProvider>
+            <Navbar />
+            <main className="container mx-auto py-6 px-4 min-h-[calc(100vh-140px)]">
+              {children}
+            </main>
+            <Footer />
+          </AuthProvider>
+        </ErrorBoundary>
       </body>
     </html>
   );
