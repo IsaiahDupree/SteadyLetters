@@ -1,4 +1,4 @@
-import { recipientSchema } from './validations/recipient';
+import { recipientSchema } from './validations/recipient.js';
 
 /**
  * Expected CSV columns (case-insensitive):
@@ -77,10 +77,17 @@ export function parseCSV(csvText) {
     const rowData = {};
 
     // Map values to columns
+    const optionalFields = ['address2', 'country'];
     values.forEach((value, index) => {
       const columnName = columnMap.get(index);
       if (columnName) {
-        rowData[columnName] = value.trim();
+        const trimmed = value.trim();
+        // Convert empty strings to undefined only for optional fields
+        if (trimmed === '' && optionalFields.includes(columnName)) {
+          rowData[columnName] = undefined;
+        } else {
+          rowData[columnName] = trimmed;
+        }
       }
     });
 
@@ -95,7 +102,7 @@ export function parseCSV(csvText) {
         errors: [],
       });
     } else {
-      const errors = result.error.errors.map(err => `${err.path.join('.')}: ${err.message}`);
+      const errors = (result.error?.issues || result.error?.errors || []).map(err => `${err.path.join('.')}: ${err.message}`);
       invalid.push({
         data: rowData,
         rowNumber: i + 1,
