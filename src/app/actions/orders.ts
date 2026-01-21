@@ -6,6 +6,7 @@ import { getCurrentUser } from '@/lib/server-auth';
 import { sendPostcard, sendLetter, sendGreetingCard, ProductType } from '@/lib/thanks-io';
 import { canGenerate } from '@/lib/tiers';
 import { trackServerEvent } from '@/lib/posthog-server';
+import { validateAddress } from '@/lib/address-validation.js';
 
 export async function createOrder(data: {
     recipientId: string;
@@ -18,14 +19,40 @@ export async function createOrder(data: {
 }) {
     try {
         const user = await getCurrentUser();
-        
+
         // Get recipient details
         const recipient = await prisma.recipient.findUnique({
             where: { id: data.recipientId },
         });
-        
+
         if (!recipient || recipient.userId !== user.id) {
             return { success: false, error: 'Recipient not found or unauthorized' };
+        }
+
+        // Validate recipient address before sending
+        const validationResult = await validateAddress({
+            address1: recipient.address1,
+            address2: recipient.address2 || undefined,
+            city: recipient.city,
+            state: recipient.state,
+            zip: recipient.zip,
+            country: recipient.country,
+        });
+
+        if (!validationResult.isValid) {
+            const errorMessage = validationResult.messages?.[0] || 'Invalid address';
+            return {
+                success: false,
+                error: `Cannot send to invalid address: ${errorMessage}. Please update the recipient's address.`
+            };
+        }
+
+        // Warn if address is not deliverable (USPS validation failed)
+        if (validationResult.deliverable === false) {
+            return {
+                success: false,
+                error: 'Address validation failed. The address may not be deliverable. Please verify the recipient address.'
+            };
         }
 
         // Check usage limits before creating order
@@ -292,6 +319,28 @@ export async function createBulkOrder(data: {
         let failCount = 0;
 
         for (const recipient of recipients) {
+            // Validate recipient address before sending
+            const validationResult = await validateAddress({
+                address1: recipient.address1,
+                address2: recipient.address2 || undefined,
+                city: recipient.city,
+                state: recipient.state,
+                zip: recipient.zip,
+                country: recipient.country,
+            });
+
+            if (!validationResult.isValid || validationResult.deliverable === false) {
+                const errorMessage = validationResult.messages?.[0] || 'Invalid address';
+                results.push({
+                    recipientId: recipient.id,
+                    recipientName: recipient.name,
+                    success: false,
+                    error: `Address validation failed: ${errorMessage}`,
+                });
+                failCount++;
+                continue;
+            }
+
             // Re-fetch usage for each iteration to get updated counts
             const currentUsage = await prisma.userUsage.findUnique({
                 where: { userId: user.id },
