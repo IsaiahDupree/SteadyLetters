@@ -1,4 +1,7 @@
 export async function register() {
+  // Validate environment variables first - fail fast if configuration is invalid
+  await import('./src/lib/env');
+
   if (process.env.NEXT_RUNTIME === 'nodejs') {
     await import('./sentry.server.config');
   }
