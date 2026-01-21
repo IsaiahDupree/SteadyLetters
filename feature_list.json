@@ -1264,14 +1264,20 @@
       "priority": "P3",
       "phase": 9,
       "effort": "2h",
-      "passes": false,
+      "passes": true,
       "category": "future",
       "files": [
-        "src/app/api/cron/reset-usage/route.ts"
+        "src/app/api/cron/reset-usage/route.ts",
+        "vercel.json",
+        "tests/integration/cron-reset-usage.test.mjs",
+        "docs/CRON_JOBS.md"
       ],
       "acceptance": [
         "Vercel Cron configured",
-        "Usage reset monthly"
+        "Usage reset monthly",
+        "Authentication via CRON_SECRET",
+        "Integration tests created",
+        "Documentation complete"
       ]
     }
   ]

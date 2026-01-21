@@ -9,6 +9,12 @@
     "env": {
         "NEXT_PUBLIC_URL": "https://steadyletters.com"
     },
+    "crons": [
+        {
+            "path": "/api/cron/reset-usage",
+            "schedule": "0 0 1 * *"
+        }
+    ],
     "github": {
         "deployHooks": [
             {
