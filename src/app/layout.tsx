@@ -27,16 +27,19 @@ const inter = Inter({
   display: "swap",
 });
 
+// Handwriting fonts - only loaded when needed (not preloaded for performance)
 const caveat = Caveat({
   variable: "--font-handwriting-casual",
   subsets: ["latin"],
   display: "swap",
+  preload: false,
 });
 
 const playfair = Playfair_Display({
   variable: "--font-handwriting-professional",
   subsets: ["latin"],
   display: "swap",
+  preload: false,
 });
 
 const greatVibes = Great_Vibes({
@@ -44,12 +47,14 @@ const greatVibes = Great_Vibes({
   variable: "--font-handwriting-elegant",
   subsets: ["latin"],
   display: "swap",
+  preload: false,
 });
 
 const dancingScript = Dancing_Script({
   variable: "--font-handwriting-warm",
   subsets: ["latin"],
   display: "swap",
+  preload: false,
 });
 
 const patrickHand = Patrick_Hand({
@@ -57,6 +62,7 @@ const patrickHand = Patrick_Hand({
   variable: "--font-handwriting-bold",
   subsets: ["latin"],
   display: "swap",
+  preload: false,
 });
 
 const sacramento = Sacramento({
@@ -64,6 +70,7 @@ const sacramento = Sacramento({
   variable: "--font-handwriting-signature",
   subsets: ["latin"],
   display: "swap",
+  preload: false,
 });
 
 export const metadata: Metadata = {
