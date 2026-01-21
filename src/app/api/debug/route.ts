@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getAuthenticatedUser } from '@/lib/api-auth';
 import { prisma } from '@/lib/prisma';
+import { ApiErrors } from '@/lib/api-errors';
 
 /**
  * Debug endpoint to check authentication and database status
@@ -8,7 +9,7 @@ import { prisma } from '@/lib/prisma';
  */
 export async function GET(request: NextRequest) {
     if (process.env.NODE_ENV !== 'development') {
-        return NextResponse.json({ error: 'Not available in production' }, { status: 403 });
+        return ApiErrors.forbidden('Not available in production');
     }
 
     const debug: any = {

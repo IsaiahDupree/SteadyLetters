@@ -7,6 +7,7 @@ import { getAuthenticatedUser } from '@/lib/api-auth';
 import { checkRateLimit } from '@/lib/rate-limit';
 import { letterGenerationSchema } from '@/lib/validations/letter';
 import { trackServerEvent } from '@/lib/posthog-server';
+import { ApiErrors, apiErrorFromException } from '@/lib/api-errors';
 
 export async function POST(request: NextRequest) {
     try {
@@ -15,26 +16,14 @@ export async function POST(request: NextRequest) {
         const { success, remaining } = await checkRateLimit('generation', ip);
 
         if (!success) {
-            return NextResponse.json(
-                { error: 'Too many requests. Please try again later.' },
-                {
-                    status: 429,
-                    headers: {
-                        'X-RateLimit-Remaining': remaining.toString(),
-                        'Retry-After': '60'
-                    }
-                }
-            );
+            return ApiErrors.tooManyRequests();
         }
 
         // Get authenticated user
         const user = await getAuthenticatedUser(request);
 
         if (!user) {
-            return NextResponse.json(
-                { error: 'Unauthorized. Please sign in to generate letters.' },
-                { status: 401 }
-            );
+            return ApiErrors.unauthorized('Unauthorized. Please sign in to generate letters.');
         }
 
         const body = await request.json();
@@ -42,13 +31,7 @@ export async function POST(request: NextRequest) {
         // Validate input with Zod schema
         const validationResult = letterGenerationSchema.safeParse(body);
         if (!validationResult.success) {
-            return NextResponse.json(
-                {
-                    error: 'Invalid input',
-                    details: validationResult.error.flatten().fieldErrors
-                },
-                { status: 400 }
-            );
+            return ApiErrors.badRequest('Invalid input', validationResult.error.flatten().fieldErrors);
         }
 
         const { context, tone, occasion, holiday, imageAnalysis, length } = validationResult.data;
@@ -93,10 +76,7 @@ export async function POST(request: NextRequest) {
                 tier: usage.tier,
             });
 
-            return NextResponse.json(
-                { error: 'You have reached your letter generation limit. Please upgrade your plan.' },
-                { status: 403 }
-            );
+            return ApiErrors.forbidden('You have reached your letter generation limit. Please upgrade your plan.');
         }
 
         // Generate letter using OpenAI
@@ -135,8 +115,6 @@ export async function POST(request: NextRequest) {
 
         return NextResponse.json({ letter });
     } catch (error: any) {
-        console.error('Failed to generate letter:', error);
-
         // Track failure in PostHog
         try {
             const user = await getAuthenticatedUser(request);
@@ -150,20 +128,6 @@ export async function POST(request: NextRequest) {
             console.error('Failed to track error event:', trackError);
         }
 
-        // Provide more detailed error in development
-        const errorMessage = process.env.NODE_ENV === 'development'
-            ? error.message || 'Failed to generate letter'
-            : 'Failed to generate letter. Please try again.';
-
-        return NextResponse.json(
-            {
-                error: errorMessage,
-                ...(process.env.NODE_ENV === 'development' && {
-                    details: error.stack,
-                    type: error.constructor?.name
-                })
-            },
-            { status: 500 }
-        );
+        return apiErrorFromException('Failed to generate letter. Please try again.', error);
     }
 }

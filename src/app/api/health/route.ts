@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import Stripe from 'stripe';
 import { logger } from '@/lib/logger';
+import { apiError } from '@/lib/api-errors';
 
 export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
@@ -149,13 +150,9 @@ export async function GET() {
     return NextResponse.json(response, { status: httpStatus });
   } catch (error: any) {
     logger.error('Health check error', {}, error);
-    return NextResponse.json(
-      {
-        status: 'unhealthy',
-        error: error.message || 'Health check failed',
-        timestamp: new Date().toISOString(),
-      },
-      { status: 500 }
-    );
+    return apiError('Health check failed', 500, {
+      status: 'unhealthy',
+      timestamp: new Date().toISOString(),
+    });
   }
 }

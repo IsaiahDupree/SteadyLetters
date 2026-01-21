@@ -6,6 +6,7 @@ import { trackEvent } from '@/lib/events';
 import { getAuthenticatedUser } from '@/lib/api-auth';
 import { checkRateLimit } from '@/lib/rate-limit';
 import { trackServerEvent } from '@/lib/posthog-server';
+import { ApiErrors, apiErrorFromException } from '@/lib/api-errors';
 
 export async function POST(request: NextRequest) {
     try {
@@ -14,36 +15,21 @@ export async function POST(request: NextRequest) {
         const { success, remaining } = await checkRateLimit('imageGeneration', ip);
 
         if (!success) {
-            return NextResponse.json(
-                { error: 'Too many requests. Please try again later.' },
-                {
-                    status: 429,
-                    headers: {
-                        'X-RateLimit-Remaining': remaining.toString(),
-                        'Retry-After': '60'
-                    }
-                }
-            );
+            return ApiErrors.tooManyRequests();
         }
 
         // Get authenticated user
         const user = await getAuthenticatedUser(request);
 
         if (!user) {
-            return NextResponse.json(
-                { error: 'Unauthorized. Please sign in to generate images.' },
-                { status: 401 }
-            );
+            return ApiErrors.unauthorized('Unauthorized. Please sign in to generate images.');
         }
 
         const body = await request.json();
         const { occasion, tone, holiday, imageAnalysis } = body;
 
         if (!occasion || !tone) {
-            return NextResponse.json(
-                { error: 'Missing required fields' },
-                { status: 400 }
-            );
+            return ApiErrors.badRequest('Missing required fields: occasion and tone are required');
         }
 
         // Ensure user exists in Prisma
@@ -86,10 +72,7 @@ export async function POST(request: NextRequest) {
                 tier: usage.tier,
             });
 
-            return NextResponse.json(
-                { error: 'You have reached your image generation limit. Please upgrade your plan.' },
-                { status: 403 }
-            );
+            return ApiErrors.forbidden('You have reached your image generation limit. Please upgrade your plan.');
         }
 
         // Generate 4 images using DALL-E 3
@@ -106,10 +89,7 @@ export async function POST(request: NextRequest) {
         const validImages = images.filter((url): url is string => url !== null);
 
         if (validImages.length === 0) {
-            return NextResponse.json(
-                { error: 'Failed to generate images. Please try again.' },
-                { status: 500 }
-            );
+            return ApiErrors.internalError('Failed to generate images. Please try again.');
         }
 
         // Increment usage counter by the number of images generated
@@ -143,8 +123,6 @@ export async function POST(request: NextRequest) {
 
         return NextResponse.json({ images: validImages });
     } catch (error: any) {
-        console.error('Failed to generate images:', error);
-
         // Track failure in PostHog
         try {
             const user = await getAuthenticatedUser(request);
@@ -158,20 +136,6 @@ export async function POST(request: NextRequest) {
             console.error('Failed to track error event:', trackError);
         }
 
-        // Provide more detailed error in development
-        const errorMessage = process.env.NODE_ENV === 'development'
-            ? error.message || 'Failed to generate images'
-            : 'Failed to generate images. Please try again.';
-
-        return NextResponse.json(
-            {
-                error: errorMessage,
-                ...(process.env.NODE_ENV === 'development' && {
-                    details: error.stack,
-                    type: error.constructor?.name
-                })
-            },
-            { status: 500 }
-        );
+        return apiErrorFromException('Failed to generate images. Please try again.', error);
     }
 }

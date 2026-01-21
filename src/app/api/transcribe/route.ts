@@ -6,6 +6,7 @@ import { trackEvent } from '@/lib/events';
 import { getAuthenticatedUser } from '@/lib/api-auth';
 import { checkRateLimit } from '@/lib/rate-limit';
 import { trackServerEvent } from '@/lib/posthog-server';
+import { ApiErrors, apiErrorFromException } from '@/lib/api-errors';
 
 export async function POST(request: NextRequest) {
     try {
@@ -14,26 +15,14 @@ export async function POST(request: NextRequest) {
         const { success, remaining } = await checkRateLimit('transcription', ip);
 
         if (!success) {
-            return NextResponse.json(
-                { error: 'Too many requests. Please try again later.' },
-                {
-                    status: 429,
-                    headers: {
-                        'X-RateLimit-Remaining': remaining.toString(),
-                        'Retry-After': '60'
-                    }
-                }
-            );
+            return ApiErrors.tooManyRequests();
         }
 
         // Get authenticated user
         const user = await getAuthenticatedUser(request);
 
         if (!user) {
-            return NextResponse.json(
-                { error: 'Unauthorized. Please sign in to use this feature.' },
-                { status: 401 }
-            );
+            return ApiErrors.unauthorized('Unauthorized. Please sign in to use this feature.');
         }
 
         const userId = user.id;
@@ -42,18 +31,12 @@ export async function POST(request: NextRequest) {
         const audioFile = formData.get('audio') as File;
 
         if (!audioFile) {
-            return NextResponse.json(
-                { error: 'No audio file provided' },
-                { status: 400 }
-            );
+            return ApiErrors.badRequest('No audio file provided');
         }
 
         // Check file size (25MB max for Whisper)
         if (audioFile.size > 25 * 1024 * 1024) {
-            return NextResponse.json(
-                { error: 'Audio file too large. Maximum size is 25MB.' },
-                { status: 400 }
-            );
+            return ApiErrors.badRequest('Audio file too large. Maximum size is 25MB.');
         }
 
         // Ensure user exists in Prisma
@@ -96,10 +79,7 @@ export async function POST(request: NextRequest) {
                 tier: usage.tier,
             });
 
-            return NextResponse.json(
-                { error: 'You have reached your transcription limit. Please upgrade your plan.' },
-                { status: 403 }
-            );
+            return ApiErrors.forbidden('You have reached your transcription limit. Please upgrade your plan.');
         }
 
         // Transcribe audio using Whisper
@@ -139,8 +119,6 @@ export async function POST(request: NextRequest) {
             text: transcription.text,
         });
     } catch (error: any) {
-        console.error('Transcription error:', error);
-
         // Track failure in PostHog
         try {
             const user = await getAuthenticatedUser(request);
@@ -154,20 +132,6 @@ export async function POST(request: NextRequest) {
             console.error('Failed to track error event:', trackError);
         }
 
-        // Provide more detailed error in development
-        const errorMessage = process.env.NODE_ENV === 'development'
-            ? error.message || 'Failed to transcribe audio'
-            : 'Failed to transcribe audio. Please try again.';
-
-        return NextResponse.json(
-            {
-                error: errorMessage,
-                ...(process.env.NODE_ENV === 'development' && {
-                    details: error.stack,
-                    type: error.constructor?.name
-                })
-            },
-            { status: 500 }
-        );
+        return apiErrorFromException('Failed to transcribe audio. Please try again.', error);
     }
 }
