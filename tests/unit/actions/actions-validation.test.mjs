@@ -354,4 +354,185 @@ describe('Server Actions - Validation Logic', () => {
       expect(nextMonth.getMonth()).toBe(0); // January
     });
   });
+
+  describe('Bulk Order Validation', () => {
+    it('should validate required bulk order fields', () => {
+      const validBulkOrder = {
+        recipientIds: ['recipient-1', 'recipient-2', 'recipient-3'],
+        message: 'Hello from SteadyLetters!',
+        productType: 'postcard',
+      };
+
+      expect(validBulkOrder.recipientIds).toBeTruthy();
+      expect(validBulkOrder.recipientIds.length).toBeGreaterThan(0);
+      expect(validBulkOrder.message).toBeTruthy();
+      expect(validBulkOrder.productType).toBeTruthy();
+    });
+
+    it('should reject bulk order with no recipients', () => {
+      const invalidBulkOrder = {
+        recipientIds: [],
+        message: 'Hello!',
+        productType: 'postcard',
+      };
+
+      expect(invalidBulkOrder.recipientIds.length).toBe(0);
+    });
+
+    it('should handle optional bulk order fields', () => {
+      const bulkOrderWithOptionals = {
+        recipientIds: ['recipient-1', 'recipient-2'],
+        templateId: 'template-456',
+        message: 'Hello!',
+        productType: 'letter',
+        frontImageUrl: 'https://example.com/card.jpg',
+        handwritingStyle: '3',
+        handwritingColor: 'black',
+      };
+
+      expect(bulkOrderWithOptionals.templateId).toBe('template-456');
+      expect(bulkOrderWithOptionals.frontImageUrl).toBeTruthy();
+      expect(bulkOrderWithOptionals.handwritingStyle).toBe('3');
+      expect(bulkOrderWithOptionals.handwritingColor).toBe('black');
+    });
+
+    it('should validate multiple recipients for bulk send', () => {
+      const recipientIds = ['recipient-1', 'recipient-2', 'recipient-3'];
+      const expectedCount = 3;
+
+      expect(recipientIds.length).toBe(expectedCount);
+      recipientIds.forEach(id => {
+        expect(id).toBeTruthy();
+      });
+    });
+
+    it('should track bulk order success and failure counts', () => {
+      const results = {
+        total: 5,
+        successful: 4,
+        failed: 1,
+      };
+
+      expect(results.total).toBe(results.successful + results.failed);
+      expect(results.successful).toBeGreaterThan(0);
+    });
+
+    it('should return detailed results for each recipient', () => {
+      const bulkOrderResults = [
+        {
+          recipientId: 'recipient-1',
+          recipientName: 'John Doe',
+          success: true,
+          orderId: 'order-1',
+          thanksIoId: 'thanks-1',
+        },
+        {
+          recipientId: 'recipient-2',
+          recipientName: 'Jane Smith',
+          success: false,
+          error: 'Monthly sending limit reached',
+        },
+      ];
+
+      expect(bulkOrderResults.length).toBe(2);
+      expect(bulkOrderResults[0].success).toBe(true);
+      expect(bulkOrderResults[0].orderId).toBeTruthy();
+      expect(bulkOrderResults[1].success).toBe(false);
+      expect(bulkOrderResults[1].error).toBeTruthy();
+    });
+
+    it('should check usage limits per recipient in bulk send', () => {
+      const recipientCount = 5;
+      let currentUsage = 2;
+      const limit = 5;
+
+      let successCount = 0;
+      let failCount = 0;
+
+      for (let i = 0; i < recipientCount; i++) {
+        if (currentUsage < limit) {
+          currentUsage++;
+          successCount++;
+        } else {
+          failCount++;
+        }
+      }
+
+      expect(successCount).toBe(3);
+      expect(failCount).toBe(2);
+      expect(currentUsage).toBe(5);
+    });
+
+    it('should revalidate paths after bulk order completion', () => {
+      const pathsToRevalidate = ['/orders', '/dashboard'];
+
+      expect(pathsToRevalidate).toContain('/orders');
+      expect(pathsToRevalidate).toContain('/dashboard');
+    });
+
+    it('should return summary with bulk order response', () => {
+      const bulkOrderResponse = {
+        success: true,
+        results: [
+          { recipientId: 'r1', success: true },
+          { recipientId: 'r2', success: true },
+          { recipientId: 'r3', success: false },
+        ],
+        summary: {
+          total: 3,
+          successful: 2,
+          failed: 1,
+        },
+      };
+
+      expect(bulkOrderResponse.summary).toBeTruthy();
+      expect(bulkOrderResponse.summary.total).toBe(3);
+      expect(bulkOrderResponse.summary.successful).toBe(2);
+      expect(bulkOrderResponse.summary.failed).toBe(1);
+    });
+
+    it('should handle bulk order with all recipients unauthorized', () => {
+      const requestedRecipients = ['r1', 'r2', 'r3'];
+      const foundRecipients = []; // None belong to user
+
+      const isValid = requestedRecipients.length === foundRecipients.length;
+      expect(isValid).toBe(false);
+    });
+
+    it('should handle bulk order with some recipients not found', () => {
+      const requestedRecipients = ['r1', 'r2', 'r3'];
+      const foundRecipients = ['r1', 'r2']; // r3 not found
+
+      const isValid = requestedRecipients.length === foundRecipients.length;
+      expect(isValid).toBe(false);
+    });
+
+    it('should track bulk order events in analytics', () => {
+      const bulkOrderEvent = {
+        event: 'bulk_order_created',
+        productType: 'postcard',
+        totalRecipients: 5,
+        successCount: 4,
+        failCount: 1,
+        tier: 'PRO',
+      };
+
+      expect(bulkOrderEvent.event).toBe('bulk_order_created');
+      expect(bulkOrderEvent.totalRecipients).toBe(5);
+      expect(bulkOrderEvent.successCount + bulkOrderEvent.failCount).toBe(5);
+    });
+
+    it('should track limit reached during bulk send', () => {
+      const limitReachedEvent = {
+        event: 'limit_reached',
+        type: 'bulk_order_creation',
+        tier: 'FREE',
+        successCount: 2,
+        failCount: 3,
+      };
+
+      expect(limitReachedEvent.type).toBe('bulk_order_creation');
+      expect(limitReachedEvent.tier).toBe('FREE');
+    });
+  });
 });

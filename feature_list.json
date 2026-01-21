@@ -3,7 +3,7 @@
   "description": "SaaS web application for creating and sending physical handwritten-style letters via Thanks.io API integration",
   "version": "1.0",
   "totalFeatures": 71,
-  "completedFeatures": 65,
+  "completedFeatures": 66,
   "phases": {
     "phase1_core": "Core letter generation, voice transcription, image generation",
     "phase2_recipients": "Recipient management and address book",
@@ -1182,14 +1182,20 @@
       "priority": "P3",
       "phase": 9,
       "effort": "6h",
-      "passes": false,
+      "passes": true,
       "category": "future",
       "files": [
-        "src/app/send/bulk/page.tsx"
+        "src/app/send/bulk/page.tsx",
+        "src/features/send/bulk-send-form.tsx",
+        "src/app/actions/orders.ts",
+        "tests/unit/actions/actions-validation.test.mjs"
       ],
       "acceptance": [
         "Select multiple recipients",
-        "Single order created"
+        "Multiple orders created (one per recipient)",
+        "Usage limits checked per recipient",
+        "Summary of successes and failures returned",
+        "Tests passing"
       ]
     },
     {

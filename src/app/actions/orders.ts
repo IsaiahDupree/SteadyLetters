@@ -239,3 +239,204 @@ function getNextResetDate(): Date {
     const nextMonth = new Date(now.getFullYear(), now.getMonth() + 1, 1);
     return nextMonth;
 }
+
+export async function createBulkOrder(data: {
+    recipientIds: string[];
+    templateId?: string;
+    message: string;
+    productType: ProductType;
+    frontImageUrl?: string;
+    handwritingStyle?: string;
+    handwritingColor?: string;
+}) {
+    try {
+        const user = await getCurrentUser();
+
+        // Validate recipient IDs
+        if (!data.recipientIds || data.recipientIds.length === 0) {
+            return { success: false, error: 'No recipients selected' };
+        }
+
+        // Get all recipients
+        const recipients = await prisma.recipient.findMany({
+            where: {
+                id: { in: data.recipientIds },
+                userId: user.id,
+            },
+        });
+
+        if (recipients.length !== data.recipientIds.length) {
+            return { success: false, error: 'Some recipients not found or unauthorized' };
+        }
+
+        // Check usage limits before creating orders
+        let usage = await prisma.userUsage.findUnique({
+            where: { userId: user.id },
+        });
+
+        if (!usage) {
+            // Create initial usage record if it doesn't exist
+            const now = new Date();
+            const resetAt = new Date(now.getFullYear(), now.getMonth() + 1, 1);
+            usage = await prisma.userUsage.create({
+                data: { userId: user.id, tier: 'FREE', resetAt },
+            });
+        }
+
+        // Check if user can send all letters (need to check available count)
+        const requiredCount = data.recipientIds.length;
+        // We'll check each send individually to properly handle usage limits
+
+        const results = [];
+        let successCount = 0;
+        let failCount = 0;
+
+        for (const recipient of recipients) {
+            // Re-fetch usage for each iteration to get updated counts
+            const currentUsage = await prisma.userUsage.findUnique({
+                where: { userId: user.id },
+            });
+
+            if (!currentUsage || !canGenerate(currentUsage, 'letter')) {
+                // Track limit reached event
+                await trackServerEvent(user.id, 'limit_reached', {
+                    type: 'bulk_order_creation',
+                    tier: currentUsage?.tier || 'FREE',
+                    successCount,
+                    failCount: failCount + 1,
+                });
+
+                results.push({
+                    recipientId: recipient.id,
+                    recipientName: recipient.name,
+                    success: false,
+                    error: 'Monthly sending limit reached',
+                });
+                failCount++;
+                continue;
+            }
+
+            // Create order record first (pending status)
+            const order = await prisma.order.create({
+                data: {
+                    userId: user.id,
+                    recipientId: recipient.id,
+                    templateId: data.templateId || null,
+                    status: 'pending',
+                },
+            });
+
+            // Format recipient for Thanks.io
+            const thanksRecipient = {
+                name: recipient.name,
+                address: recipient.address1,
+                address2: recipient.address2 || undefined,
+                city: recipient.city,
+                province: recipient.state,
+                postal_code: recipient.zip,
+                country: recipient.country,
+            };
+
+            try {
+                // Send via Thanks.io based on product type
+                let response;
+                const params = {
+                    recipients: [thanksRecipient],
+                    message: data.message,
+                    front_image_url: data.frontImageUrl,
+                    handwriting_style: data.handwritingStyle || '1',
+                    handwriting_color: data.handwritingColor || 'blue',
+                };
+
+                switch (data.productType) {
+                    case 'postcard':
+                        response = await sendPostcard(params);
+                        break;
+                    case 'letter':
+                        response = await sendLetter(params);
+                        break;
+                    case 'greeting':
+                        response = await sendGreetingCard(params);
+                        break;
+                    default:
+                        response = await sendPostcard(params);
+                }
+
+                // Update order with Thanks.io ID
+                await prisma.order.update({
+                    where: { id: order.id },
+                    data: {
+                        thanksIoOrderId: response.id,
+                        status: response.status || 'queued',
+                    },
+                });
+
+                // Increment usage counter
+                await prisma.userUsage.upsert({
+                    where: { userId: user.id },
+                    update: {
+                        lettersSent: { increment: 1 },
+                    },
+                    create: {
+                        userId: user.id,
+                        lettersSent: 1,
+                        tier: 'FREE',
+                        resetAt: getNextResetDate(),
+                    },
+                });
+
+                results.push({
+                    recipientId: recipient.id,
+                    recipientName: recipient.name,
+                    success: true,
+                    orderId: order.id,
+                    thanksIoId: response.id,
+                    status: response.status,
+                });
+                successCount++;
+
+            } catch (sendError: any) {
+                // Mark order as failed
+                await prisma.order.update({
+                    where: { id: order.id },
+                    data: { status: 'failed' },
+                });
+
+                console.error('Thanks.io send error:', sendError);
+                results.push({
+                    recipientId: recipient.id,
+                    recipientName: recipient.name,
+                    success: false,
+                    error: sendError.message || 'Failed to send via Thanks.io',
+                });
+                failCount++;
+            }
+        }
+
+        // Track bulk order completion in PostHog
+        await trackServerEvent(user.id, 'bulk_order_created', {
+            productType: data.productType,
+            totalRecipients: data.recipientIds.length,
+            successCount,
+            failCount,
+            tier: usage.tier,
+        });
+
+        revalidatePath('/orders');
+        revalidatePath('/dashboard');
+
+        return {
+            success: successCount > 0,
+            results,
+            summary: {
+                total: data.recipientIds.length,
+                successful: successCount,
+                failed: failCount,
+            },
+        };
+
+    } catch (error: any) {
+        console.error('Failed to create bulk orders:', error);
+        return { success: false, error: error.message || 'Failed to create bulk orders' };
+    }
+}

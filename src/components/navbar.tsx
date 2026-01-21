@@ -77,6 +77,12 @@ export function Navbar() {
                                 Send
                             </Link>
                             <Link
+                                href="/send/bulk"
+                                className="text-sm font-medium transition-colors hover:text-primary"
+                            >
+                                Bulk Send
+                            </Link>
+                            <Link
                                 href="/orders"
                                 className="text-sm font-medium transition-colors hover:text-primary"
                             >
@@ -209,6 +215,13 @@ export function Navbar() {
                                 className="block px-4 py-3 text-sm font-medium transition-colors hover:bg-accent rounded-md"
                             >
                                 Send
+                            </Link>
+                            <Link
+                                href="/send/bulk"
+                                onClick={closeMobileMenu}
+                                className="block px-4 py-3 text-sm font-medium transition-colors hover:bg-accent rounded-md"
+                            >
+                                Bulk Send
                             </Link>
                             <Link
                                 href="/orders"
