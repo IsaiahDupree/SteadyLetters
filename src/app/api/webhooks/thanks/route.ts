@@ -1,12 +1,27 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
+import { verifyThanksSignature } from '@/lib/webhook-verification.js';
 
 export async function POST(request: NextRequest) {
     try {
-        const body = await request.json();
-        
+        // Get raw body for signature verification
+        const body = await request.text();
+        const signature = request.headers.get('x-thanks-signature');
+
+        // Verify webhook signature
+        if (!verifyThanksSignature(body, signature, process.env.THANKS_IO_WEBHOOK_SECRET)) {
+            console.warn('[Thanks.io Webhook] Invalid signature rejected');
+            return NextResponse.json(
+                { error: 'Invalid signature' },
+                { status: 401 }
+            );
+        }
+
+        // Parse the verified body
+        const data = JSON.parse(body);
+
         // Extract order info from Thanks.io webhook
-        const { order_id, status, event_type } = body;
+        const { order_id, status, event_type } = data;
         
         if (!order_id) {
             return NextResponse.json(

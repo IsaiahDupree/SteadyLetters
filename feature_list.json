@@ -742,10 +742,12 @@
       "priority": "P0",
       "phase": 7,
       "effort": "1h",
-      "passes": false,
+      "passes": true,
       "category": "security",
       "files": [
-        "src/app/api/webhooks/thanks/route.ts"
+        "src/app/api/webhooks/thanks/route.ts",
+        "src/lib/webhook-verification.js",
+        "tests/unit/webhook-verification.test.mjs"
       ],
       "acceptance": [
         "Signature verified",
