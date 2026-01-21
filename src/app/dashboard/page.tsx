@@ -30,7 +30,7 @@ export default async function DashboardPage() {
             <div className="flex items-center justify-between">
                 <h1 className="text-3xl font-bold tracking-tight">Dashboard</h1>
                 <Link href="/send">
-                    <Button>Send Letter</Button>
+                    <Button className="touch-target">Send Letter</Button>
                 </Link>
             </div>
 
@@ -89,30 +89,32 @@ export default async function DashboardPage() {
                             No orders yet. Send your first letter!
                         </p>
                     ) : (
-                        <Table>
-                            <TableHeader>
-                                <TableRow>
-                                    <TableHead>Date</TableHead>
-                                    <TableHead>Recipient</TableHead>
-                                    <TableHead>Template</TableHead>
-                                    <TableHead>Status</TableHead>
-                                </TableRow>
-                            </TableHeader>
-                            <TableBody>
-                                {stats.recentOrders.map((order) => (
-                                    <TableRow key={order.id}>
-                                        <TableCell>
-                                            {new Date(order.createdAt).toLocaleDateString()}
-                                        </TableCell>
-                                        <TableCell>{order.recipient.name}</TableCell>
-                                        <TableCell>{order.template?.name || 'N/A'}</TableCell>
-                                        <TableCell>
-                                            <Badge variant="outline">{order.status}</Badge>
-                                        </TableCell>
+                        <div className="overflow-x-auto mobile-scroll-smooth">
+                            <Table>
+                                <TableHeader>
+                                    <TableRow>
+                                        <TableHead>Date</TableHead>
+                                        <TableHead>Recipient</TableHead>
+                                        <TableHead>Template</TableHead>
+                                        <TableHead>Status</TableHead>
                                     </TableRow>
-                                ))}
-                            </TableBody>
-                        </Table>
+                                </TableHeader>
+                                <TableBody>
+                                    {stats.recentOrders.map((order) => (
+                                        <TableRow key={order.id}>
+                                            <TableCell>
+                                                {new Date(order.createdAt).toLocaleDateString()}
+                                            </TableCell>
+                                            <TableCell>{order.recipient.name}</TableCell>
+                                            <TableCell>{order.template?.name || 'N/A'}</TableCell>
+                                            <TableCell>
+                                                <Badge variant="outline">{order.status}</Badge>
+                                            </TableCell>
+                                        </TableRow>
+                                    ))}
+                                </TableBody>
+                            </Table>
+                        </div>
                     )}
                 </CardContent>
             </Card>
