@@ -1,5 +1,9 @@
 import '@testing-library/jest-dom';
-import { vi } from 'vitest';
+import { vi, expect } from 'vitest';
+import { toHaveNoViolations } from 'vitest-axe/matchers';
+
+// Extend Vitest's expect with axe-core matchers
+expect.extend({ toHaveNoViolations });
 
 // Mock Next.js router
 vi.mock('next/navigation', () => ({
