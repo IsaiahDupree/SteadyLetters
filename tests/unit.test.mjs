@@ -5,11 +5,16 @@
 
 import { describe, it } from '@jest/globals';
 import assert from 'node:assert';
+import { getCurrentUser, getCurrentUserOrNull } from '../src/lib/server-auth.ts';
 
 describe('API Auth Utils', () => {
     // These tests moved to E2E suite since they require Next.js runtime
-    it('should have getAuthenticatedUser function available', () => {
-        expect(typeof getAuthenticatedUser).toBe('function');
+    it('should have getCurrentUser function available', () => {
+        expect(typeof getCurrentUser).toBe('function');
+    });
+
+    it('should have getCurrentUserOrNull function available', () => {
+        expect(typeof getCurrentUserOrNull).toBe('function');
     });
 });
 

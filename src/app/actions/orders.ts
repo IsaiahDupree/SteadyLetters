@@ -2,40 +2,10 @@
 
 import { prisma } from '@/lib/prisma';
 import { revalidatePath } from 'next/cache';
-import { createServerClient } from '@supabase/ssr';
-import { cookies } from 'next/headers';
+import { getCurrentUser } from '@/lib/server-auth';
 import { sendPostcard, sendLetter, sendGreetingCard, ProductType } from '@/lib/thanks-io';
 import { canGenerate } from '@/lib/tiers';
 import { trackServerEvent } from '@/lib/posthog-server';
-
-async function getCurrentUser() {
-    const cookieStore = await cookies();
-    const supabase = createServerClient(
-        process.env.NEXT_PUBLIC_SUPABASE_URL!,
-        process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-        {
-            cookies: {
-                get(name: string) {
-                    return cookieStore.get(name)?.value;
-                },
-                set(name: string, value: string, options: any) {
-                    cookieStore.set(name, value, options);
-                },
-                remove(name: string, options: any) {
-                    cookieStore.delete(name);
-                },
-            },
-        }
-    );
-    
-    const { data: { user } } = await supabase.auth.getUser();
-    
-    if (!user) {
-        throw new Error('Unauthorized. Please sign in.');
-    }
-    
-    return user;
-}
 
 export async function createOrder(data: {
     recipientId: string;
