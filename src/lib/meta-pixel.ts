@@ -148,13 +148,16 @@ export function generateEventId(): string {
 
 /**
  * Map SteadyLetters tracking events to Meta standard events
+ * @param trackingEvent - The event name to track
+ * @param properties - Event properties including eventId for deduplication
+ * @returns Mapped Meta event or null if not mapped
  */
 export function mapToMetaEvent(
   trackingEvent: string,
   properties?: Record<string, any>
 ): { event: MetaStandardEvent | string; params: Record<string, any> } | null {
-  // Generate event ID for deduplication with CAPI
-  const eventId = generateEventId();
+  // Use provided eventId for deduplication with CAPI, or generate new one
+  const eventId = properties?.eventId || generateEventId();
 
   switch (trackingEvent) {
     // Activation

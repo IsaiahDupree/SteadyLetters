@@ -1622,7 +1622,22 @@
       "description": "Fire Pixel eventID matching CAPI event_id for deduplication",
       "category": "growth-data-plane",
       "priority": "P1",
-      "passes": false
+      "passes": true,
+      "files": [
+        "src/lib/meta-pixel.ts",
+        "src/lib/meta-capi.ts",
+        "src/lib/tracking.ts",
+        "src/app/api/tracking/meta-capi/route.ts",
+        "tests/unit/meta-deduplication.test.mjs"
+      ],
+      "acceptance": [
+        "Single eventId generated in tracking.ts",
+        "Same eventId used for both Pixel (client) and CAPI (server)",
+        "mapToMetaEvent() uses provided eventId from properties",
+        "CAPI endpoint sends event_id to Meta",
+        "Meta deduplicates browser and server events",
+        "10 unit tests passing"
+      ]
     },
     {
       "id": "GDP-011",
