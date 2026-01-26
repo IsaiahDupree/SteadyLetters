@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createServerClient, type CookieOptions } from '@supabase/ssr';
 import { prisma } from '@/lib/prisma';
+import { getOrCreatePersonFromUser } from '@/lib/identity.js';
 
 export async function GET(request: NextRequest) {
     try {
@@ -44,8 +45,17 @@ export async function GET(request: NextRequest) {
             return NextResponse.json({ error: 'User not found' }, { status: 404 });
         }
 
+        // Get or create Person record and link to user
+        const person = await getOrCreatePersonFromUser(
+            user.id,
+            user.email || '',
+            user.user_metadata?.first_name,
+            user.user_metadata?.last_name
+        );
+
         // Build user traits for tracking
         const traits: Record<string, any> = {
+            person_id: person.id,
             tier: dbUser.usage?.tier || 'FREE',
             created_at: dbUser.createdAt.toISOString(),
         };

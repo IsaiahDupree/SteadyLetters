@@ -41,23 +41,27 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
             if (event === 'SIGNED_IN' && session?.user) {
                 const method = session.user.app_metadata.provider || 'email';
 
-                // Fetch user tier from API
+                // Fetch user traits from API (includes person_id)
                 fetch('/api/user/traits', { credentials: 'include' })
                     .then(res => res.json())
                     .then(traits => {
-                        // Identify user in both systems with full traits
-                        identifyUser(session.user.id, {
+                        // Identify user in PostHog with person_id (canonical identity)
+                        // This stitches PostHog anonymous ID to our Person record
+                        const personId = traits.person_id || session.user.id;
+                        identifyUser(personId, {
                             email: session.user.email,
+                            user_id: session.user.id, // Keep Supabase user ID as a trait
                             ...traits,
                         });
-                        tracking.identify(session.user.id, {
+                        tracking.identify(personId, {
                             email: session.user.email,
+                            user_id: session.user.id,
                             ...traits,
                         });
                     })
                     .catch(err => {
                         console.error('Failed to fetch user traits:', err);
-                        // Fall back to basic identification
+                        // Fall back to basic identification with user ID
                         identifyUser(session.user.id, {
                             email: session.user.email,
                         });

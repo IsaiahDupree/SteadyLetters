@@ -1,5 +1,6 @@
 import { createServerClient, type CookieOptions } from '@supabase/ssr';
 import { NextResponse, type NextRequest } from 'next/server';
+import { getOrCreatePersonFromUser, linkIdentity } from '@/lib/identity.js';
 
 export async function GET(request: NextRequest) {
     const requestUrl = new URL(request.url);
@@ -26,7 +27,22 @@ export async function GET(request: NextRequest) {
             }
         );
 
-        await supabase.auth.exchangeCodeForSession(code);
+        const { data } = await supabase.auth.exchangeCodeForSession(code);
+
+        // Create or link Person record for identity stitching
+        if (data.user) {
+            try {
+                await getOrCreatePersonFromUser(
+                    data.user.id,
+                    data.user.email || '',
+                    data.user.user_metadata?.first_name,
+                    data.user.user_metadata?.last_name
+                );
+            } catch (error) {
+                console.error('Failed to create Person record on auth:', error);
+                // Continue anyway - this is not critical for auth flow
+            }
+        }
     }
 
     // Redirect to dashboard after auth

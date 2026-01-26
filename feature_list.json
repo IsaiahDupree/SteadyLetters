@@ -1602,7 +1602,19 @@
       "description": "Call posthog.identify(personId) on login/signup",
       "category": "growth-data-plane",
       "priority": "P1",
-      "passes": false
+      "passes": true,
+      "files": [
+        "src/app/auth/callback/route.ts",
+        "src/app/api/user/traits/route.ts",
+        "src/contexts/auth-context.tsx",
+        "tests/integration/posthog-identity-stitching.test.mjs"
+      ],
+      "acceptance": [
+        "Auth callback creates Person record on login",
+        "User traits API returns person_id",
+        "PostHog identify called with person_id instead of user_id",
+        "IdentityLink created between Supabase user and Person"
+      ]
     },
     {
       "id": "GDP-010",
