@@ -27,6 +27,7 @@ import {
 import { Wand2, Image as ImageIcon, Send, DollarSign } from 'lucide-react';
 import { HandwritingStyle, ProductType, PostcardSize, PRODUCT_CATALOG, getPostcardPrice } from '@/lib/thanks-io';
 import { ColorPicker } from '@/components/ui/color-picker';
+import { tracking } from '@/lib/tracking';
 
 // Card styles for Thanks.io API
 const cardStyles = [
@@ -80,12 +81,19 @@ export function EnhancedLetterResult({
     const [handwritingColor, setHandwritingColor] = useState<string>('blue');
 
     useEffect(() => {
+        // Track letter rendered event when component first mounts
+        const startTime = performance.now();
+        tracking.trackLetterRendered({
+            letter_id: `temp-${Date.now()}`,
+            render_time_ms: Math.round(performance.now() - startTime),
+        });
+
         // Fetch handwriting styles from our API wrapper (or mock)
-        // Since we can't easily call the server-side lib from client, 
+        // Since we can't easily call the server-side lib from client,
         // we'll use the hardcoded list for now, but in a real app we'd fetch from an API route
         // that wraps the Thanks.io call.
-        // For this implementation, we'll stick to the mock list in the component 
-        // to avoid creating another API route just for styles right now, 
+        // For this implementation, we'll stick to the mock list in the component
+        // to avoid creating another API route just for styles right now,
         // as the user's request focused on the integration logic.
         // But let's use the same list as the lib to be consistent.
 
@@ -315,7 +323,18 @@ export function EnhancedLetterResult({
                                     </CardDescription>
                                 </CardHeader>
                                 <CardContent className="space-y-4">
-                                    <Select value={handwriting} onValueChange={setHandwriting}>
+                                    <Select
+                                        value={handwriting}
+                                        onValueChange={(value) => {
+                                            setHandwriting(value);
+                                            // Track font selected
+                                            const font = handwritingFonts.find(f => f.id === value);
+                                            tracking.trackFontSelected({
+                                                font_id: value,
+                                                font_name: font?.name,
+                                            });
+                                        }}
+                                    >
                                         <SelectTrigger>
                                             <SelectValue />
                                         </SelectTrigger>

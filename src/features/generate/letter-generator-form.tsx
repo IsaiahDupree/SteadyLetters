@@ -26,6 +26,7 @@ import { ImageUpload } from '@/components/image-upload';
 import { EnhancedLetterResult } from './enhanced-letter-result';
 import type { Tone, Occasion } from '@/lib/types';
 import { EXAMPLE_TEMPLATES, type ExampleTemplate } from '@/lib/example-templates';
+import { tracking } from '@/lib/tracking';
 
 const tones: { value: Tone; label: string }[] = [
     { value: 'formal', label: 'Formal' },
@@ -115,6 +116,14 @@ export function LetterGeneratorForm() {
             }
 
             setGeneratedLetter(data.letter);
+
+            // Track letter created event
+            tracking.trackLetterCreated({
+                letter_id: `temp-${Date.now()}`, // Temporary ID until saved
+                font_id: 'default',
+                word_count: data.letter.split(/\s+/).length,
+                template_used: occasion,
+            });
         } catch (error) {
             alert('Failed to generate letter');
         } finally {

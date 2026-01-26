@@ -15,6 +15,7 @@ import {
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { createRecipient } from '@/app/actions/recipients';
+import { tracking } from '@/lib/tracking';
 
 export function RecipientForm() {
     const [open, setOpen] = useState(false);
@@ -38,6 +39,11 @@ export function RecipientForm() {
         const result = await createRecipient(data);
 
         if (result.success) {
+            // Track recipient added event
+            tracking.trackRecipientAdded({
+                recipient_id: result.recipient?.id || 'unknown',
+                source: 'manual',
+            });
             setOpen(false);
             router.refresh();
         } else {
