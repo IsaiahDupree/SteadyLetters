@@ -271,10 +271,14 @@ Tests cover:
 
 ## Next Steps
 
-### META-007: Custom Audiences (Optional)
-- Create audiences based on user behavior
-- Retarget users who viewed pricing but didn't subscribe
-- Lookalike audiences for user acquisition
+### META-007: Custom Audiences ✅ COMPLETE
+See `docs/META_CUSTOM_AUDIENCES.md` for the complete guide on:
+- 12 pre-configured audience segments for SteadyLetters
+- Step-by-step setup instructions in Meta Ads Manager
+- Lookalike audience strategies for acquisition
+- Campaign structure examples and best practices
+
+Configuration file: `src/config/meta-audiences.ts`
 
 ### META-008: Conversion Optimization (Optional)
 - Set up conversion campaigns optimized for "Letter Sent"
