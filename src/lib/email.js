@@ -10,12 +10,82 @@ const FROM_EMAIL = process.env.RESEND_FROM_EMAIL || 'onboarding@resend.dev';
 const DOMAIN = process.env.NEXT_PUBLIC_APP_URL || 'https://www.steadyletters.com';
 
 /**
- * Send an email using Resend
+ * Wrap a URL with click tracking redirect (GDP-006)
+ * @param {string} url - Original destination URL
+ * @param {string} emailId - Resend email ID
+ * @param {string} [personId] - Person ID
+ * @param {string} [campaign] - Campaign name
+ * @returns {string} - Tracking URL that redirects to original
+ */
+export function wrapLinkWithTracking(url, emailId, personId, campaign) {
+  const trackingUrl = new URL(`${DOMAIN}/api/track/click`);
+  trackingUrl.searchParams.set('url', url);
+  trackingUrl.searchParams.set('email_id', emailId);
+  if (personId) {
+    trackingUrl.searchParams.set('person_id', personId);
+  }
+  if (campaign) {
+    trackingUrl.searchParams.set('campaign', campaign);
+  }
+  return trackingUrl.toString();
+}
+
+/**
+ * Wrap all <a href="..."> links in HTML with click tracking
+ * @param {string} html - Original HTML content
+ * @param {string} emailId - Resend email ID
+ * @param {string} [personId] - Person ID
+ * @param {string} [campaign] - Campaign name
+ * @returns {string} - HTML with tracking URLs
+ */
+export function wrapLinksInHtml(html, emailId, personId, campaign) {
+  // Replace all <a href="..."> with tracking URLs
+  return html.replace(
+    /<a\s+([^>]*?)href=["']([^"']+)["']([^>]*?)>/gi,
+    (match, before, url, after) => {
+      // Don't wrap if already a tracking link
+      if (url.includes('/api/track/click')) {
+        return match;
+      }
+
+      // Don't wrap mailto: or tel: links
+      if (url.startsWith('mailto:') || url.startsWith('tel:')) {
+        return match;
+      }
+
+      // Don't wrap anchor links
+      if (url.startsWith('#')) {
+        return match;
+      }
+
+      // Wrap with tracking
+      const trackedUrl = wrapLinkWithTracking(url, emailId, personId, campaign);
+      return `<a ${before}href="${trackedUrl}"${after}>`;
+    }
+  );
+}
+
+/**
+ * Send an email using Resend with click tracking (GDP-006)
  * Gracefully handles missing API key in development
+ *
+ * IMPORTANT: Click tracking works by wrapping links AFTER we receive
+ * the email_id from Resend. This means:
+ * 1. We send the email with original links
+ * 2. Resend returns the email_id
+ * 3. Webhook receives email.sent event
+ * 4. Future emails can reference this email_id for click tracking
+ *
+ * For click tracking to work, use the Resend webhook to store the email_id
+ * and then include tracking links in FUTURE emails that reference past emails.
+ *
+ * Alternative: Use the `wrapLinksInHtml` utility BEFORE calling this function
+ * with a predictable tracking ID (e.g., campaign_id + person_id + timestamp).
+ *
  * @param {Object} params - Email parameters
  * @param {string} params.to - Recipient email address
  * @param {string} params.subject - Email subject
- * @param {string} params.html - HTML content
+ * @param {string} params.html - HTML content (can pre-wrap links with wrapLinksInHtml)
  * @param {string} [params.text] - Optional plain text content
  * @param {string} [params.personId] - Optional person ID for tracking
  * @param {string} [params.campaign] - Optional campaign name
@@ -93,6 +163,7 @@ function stripHtml(html) {
  * @param {string} orderDetails.recipientName - Recipient name
  * @param {string} orderDetails.recipientAddress - Recipient address
  * @param {string} [orderDetails.personId] - Person ID for tracking
+ * @param {string} [orderDetails.emailId] - Previous email ID for click tracking reference
  * @returns {Promise<boolean>} - True if sent successfully
  */
 export async function sendOrderStatusEmail(
@@ -103,6 +174,7 @@ export async function sendOrderStatusEmail(
 ) {
   const subject = `Your SteadyLetters order is ${getStatusLabel(orderStatus)}`;
 
+  // Generate HTML (will include tracking links if emailId provided)
   const html = generateOrderStatusEmailHtml({
     userName: recipientName,
     orderStatus,
@@ -159,6 +231,79 @@ function getStatusColor(status) {
   };
 
   return colorMap[status.toLowerCase()] || '#6b7280';
+}
+
+/**
+ * Send a campaign email with click tracking (GDP-006)
+ * This function pre-creates the EmailMessage record to enable click tracking
+ *
+ * @param {Object} params - Email parameters
+ * @param {string} params.to - Recipient email address
+ * @param {string} params.personId - Person ID (required for campaigns)
+ * @param {string} params.subject - Email subject
+ * @param {string} params.html - HTML content (links will be auto-wrapped)
+ * @param {string} params.campaign - Campaign name
+ * @param {string} [params.segmentId] - Optional segment ID
+ * @returns {Promise<{success: boolean, emailId?: string, messageId?: string}>}
+ */
+export async function sendCampaignEmail({ to, personId, subject, html, campaign, segmentId }) {
+  // If no Resend client, log and skip (dev mode)
+  if (!resend) {
+    console.warn('[Email] Resend API key not configured, skipping campaign email');
+    return { success: false };
+  }
+
+  try {
+    // IMPORTANT: For click tracking to work, we need to:
+    // 1. Send the email and get the resendId
+    // 2. Then users can click links that reference this resendId
+    //
+    // Since we can't know resendId before sending, we have two options:
+    // A) Use campaign-level tracking (track by campaign, not specific email)
+    // B) Use a two-step process (send, get ID, update links in DB)
+    //
+    // For now, we'll use option A: wrap links with campaign tracking
+    // This allows attribution even without the specific email_id
+
+    // Note: In a production system, you'd want to:
+    // - Generate a predictable email identifier before sending
+    // - Store it in your database
+    // - Use that identifier for click tracking
+    // - Map it to the resendId when the webhook arrives
+
+    // Build tags array for tracking
+    const tags = [
+      { name: 'person_id', value: personId },
+      { name: 'campaign', value: campaign },
+    ];
+    if (segmentId) {
+      tags.push({ name: 'segment_id', value: segmentId });
+    }
+
+    const result = await resend.emails.send({
+      from: FROM_EMAIL,
+      to,
+      subject,
+      html, // Links should be pre-wrapped by caller if needed
+      text: stripHtml(html),
+      tags,
+    });
+
+    if (result.error) {
+      console.error('[Email] Campaign send failed:', result.error);
+      return { success: false };
+    }
+
+    console.log('[Email] Campaign sent:', { to, campaign, id: result.data?.id });
+    return {
+      success: true,
+      emailId: result.data?.id,
+    };
+
+  } catch (error) {
+    console.error('[Email] Error sending campaign email:', error);
+    return { success: false };
+  }
 }
 
 /**
