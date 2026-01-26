@@ -41,13 +41,30 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
             if (event === 'SIGNED_IN' && session?.user) {
                 const method = session.user.app_metadata.provider || 'email';
 
-                // Identify user in both systems
-                identifyUser(session.user.id, {
-                    email: session.user.email,
-                });
-                tracking.identify(session.user.id, {
-                    email: session.user.email,
-                });
+                // Fetch user tier from API
+                fetch('/api/user/traits', { credentials: 'include' })
+                    .then(res => res.json())
+                    .then(traits => {
+                        // Identify user in both systems with full traits
+                        identifyUser(session.user.id, {
+                            email: session.user.email,
+                            ...traits,
+                        });
+                        tracking.identify(session.user.id, {
+                            email: session.user.email,
+                            ...traits,
+                        });
+                    })
+                    .catch(err => {
+                        console.error('Failed to fetch user traits:', err);
+                        // Fall back to basic identification
+                        identifyUser(session.user.id, {
+                            email: session.user.email,
+                        });
+                        tracking.identify(session.user.id, {
+                            email: session.user.email,
+                        });
+                    });
 
                 // Track login success
                 trackEvent('user_logged_in', { method });
