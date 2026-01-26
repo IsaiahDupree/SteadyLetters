@@ -8,6 +8,7 @@ import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { signIn } from '@/lib/supabase-auth';
 import Link from 'next/link';
+import { tracking } from '@/lib/tracking';
 
 export default function LoginPage() {
     const router = useRouter();
@@ -30,6 +31,8 @@ export default function LoginPage() {
             }
 
             if (data?.session) {
+                // Track successful login
+                tracking.trackLoginSuccess({ method: 'email' });
                 router.push('/dashboard');
                 router.refresh();
             }
