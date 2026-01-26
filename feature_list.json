@@ -3,7 +3,7 @@
   "description": "SaaS web application for creating and sending physical handwritten-style letters via Thanks.io API integration",
   "version": "1.0",
   "totalFeatures": 95,
-  "completedFeatures": 91,
+  "completedFeatures": 92,
   "phases": {
     "phase1_core": "Core letter generation, voice transcription, image generation",
     "phase2_recipients": "Recipient management and address book",
@@ -1456,7 +1456,21 @@
       "description": "Canonical person table with identity links for posthog, stripe, meta",
       "category": "growth-data-plane",
       "priority": "P0",
-      "passes": false
+      "passes": true,
+      "files": [
+        "src/lib/identity.ts",
+        "src/lib/identity.js",
+        "scripts/backfill-persons.ts",
+        "tests/unit/identity.test.mjs"
+      ],
+      "acceptance": [
+        "getOrCreatePerson function implemented",
+        "linkIdentity function for cross-system linking",
+        "findPersonByIdentity lookup function",
+        "Identity merging support",
+        "Backfill script created for User -> Person migration",
+        "Comprehensive unit tests written"
+      ]
     },
     {
       "id": "GDP-003",
