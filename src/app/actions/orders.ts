@@ -160,6 +160,21 @@ export async function createOrder(data: {
                 tier: usage.tier,
             });
 
+            // Track letter sent event
+            await trackServerEvent(user.id, 'letter_sent', {
+                letter_id: order.id,
+                recipient_count: 1,
+                mail_class: 'first_class',
+                cost: 0, // TODO: Calculate actual cost from product type
+            });
+
+            // Track returning user if they've sent letters before
+            // Before this send, lettersSent was not yet incremented, so if it's > 0, they're returning
+            const previouslySent = usage.lettersSent || 0;
+            if (previouslySent > 0) {
+                await trackServerEvent(user.id, 'letter_returning_user', {});
+            }
+
             revalidatePath('/orders');
             revalidatePath('/dashboard');
 
@@ -433,6 +448,24 @@ export async function createBulkOrder(data: {
                         resetAt: getNextResetDate(),
                     },
                 });
+
+                // Track letter sent event
+                await trackServerEvent(user.id, 'letter_sent', {
+                    letter_id: order.id,
+                    recipient_count: 1,
+                    mail_class: 'first_class',
+                    cost: 0, // TODO: Calculate actual cost from product type
+                });
+
+                // Track returning user if they've sent letters before
+                // Re-check current usage to see if this is their first or subsequent send
+                const updatedUsage = await prisma.userUsage.findUnique({
+                    where: { userId: user.id },
+                });
+                const totalSent = updatedUsage?.lettersSent || 0;
+                if (totalSent > 1) {
+                    await trackServerEvent(user.id, 'letter_returning_user', {});
+                }
 
                 results.push({
                     recipientId: recipient.id,
