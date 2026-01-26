@@ -17,6 +17,7 @@ import { AuthProvider } from "@/contexts/auth-context";
 import { ErrorBoundary } from "@/components/error-boundary";
 import { Analytics } from '@vercel/analytics/react';
 import { PostHogProvider } from '@/components/posthog-provider';
+import { WebVitalsTracker } from '@/components/web-vitals-tracker';
 
 const lora = Lora({
   variable: "--font-serif",
@@ -133,6 +134,7 @@ export default function RootLayout({
             </AuthProvider>
           </ErrorBoundary>
           <Analytics />
+          <WebVitalsTracker />
         </PostHogProvider>
       </body>
     </html>

@@ -4,6 +4,7 @@ import * as Sentry from '@sentry/nextjs';
 import { Component, ReactNode } from 'react';
 import { AlertTriangle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { tracking } from '@/lib/tracking';
 
 interface ErrorBoundaryProps {
   children: ReactNode;
@@ -35,7 +36,22 @@ export class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundarySt
       },
     });
 
+    // Track error with our tracking SDK
+    tracking.trackErrorShown({
+      error_type: 'react_error',
+      error_message: error.message,
+      component: this.getComponentName(errorInfo.componentStack),
+      severity: 'high',
+    });
+
     console.error('Error caught by ErrorBoundary:', error, errorInfo);
+  }
+
+  private getComponentName(componentStack?: string): string {
+    if (!componentStack) return 'unknown';
+    // Extract first component from stack
+    const match = componentStack.match(/at (\w+)/);
+    return match ? match[1] : 'unknown';
   }
 
   resetError = () => {
