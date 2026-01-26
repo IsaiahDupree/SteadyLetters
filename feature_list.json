@@ -3,7 +3,7 @@
   "description": "SaaS web application for creating and sending physical handwritten-style letters via Thanks.io API integration",
   "version": "1.0",
   "totalFeatures": 95,
-  "completedFeatures": 96,
+  "completedFeatures": 98,
   "phases": {
     "phase1_core": "Core letter generation, voice transcription, image generation",
     "phase2_recipients": "Recipient management and address book",
@@ -1564,7 +1564,18 @@
       "description": "Handle subscription events, map stripe_customer_id to person_id",
       "category": "growth-data-plane",
       "priority": "P1",
-      "passes": false
+      "passes": true,
+      "files": [
+        "src/lib/identity.js",
+        "src/app/api/stripe/webhook/route.ts",
+        "tests/integration/stripe-person-integration.test.mjs"
+      ],
+      "acceptance": [
+        "getOrCreatePersonFromStripe function created",
+        "Stripe customer ID linked to Person via IdentityLink",
+        "User, Stripe, and PostHog identities can be linked to same Person",
+        "Integration tests created"
+      ]
     },
     {
       "id": "GDP-008",
@@ -1572,7 +1583,18 @@
       "description": "Upsert subscription status, plan, MRR from Stripe events",
       "category": "growth-data-plane",
       "priority": "P1",
-      "passes": false
+      "passes": true,
+      "files": [
+        "src/app/api/stripe/webhook/route.ts",
+        "tests/integration/stripe-person-integration.test.mjs"
+      ],
+      "acceptance": [
+        "PersonSubscription upserted on checkout.session.completed",
+        "PersonSubscription updated on customer.subscription.updated",
+        "PersonSubscription marked canceled on customer.subscription.deleted",
+        "Handles trial and past_due subscription statuses",
+        "MRR calculated from Stripe price"
+      ]
     },
     {
       "id": "GDP-009",

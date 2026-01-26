@@ -263,3 +263,40 @@ export async function updatePersonTraits(personId, traits) {
     },
   });
 }
+
+/**
+ * Get or create Person from Stripe customer
+ * Links stripe_customer_id to person_id
+ */
+export async function getOrCreatePersonFromStripe(stripeCustomerId, email, firstName, lastName) {
+  // First check if this stripe customer is already linked
+  const existingPerson = await findPersonByIdentity('stripe', stripeCustomerId);
+  if (existingPerson) {
+    // Update last seen and return
+    await updatePersonActivity(existingPerson.id);
+    return existingPerson;
+  }
+
+  // Try to find person by email
+  let person = await prisma.person.findUnique({
+    where: { email },
+  });
+
+  // If no person exists, create one
+  if (!person) {
+    person = await prisma.person.create({
+      data: {
+        email,
+        firstName,
+        lastName,
+        firstSeenAt: new Date(),
+        lastSeenAt: new Date(),
+      },
+    });
+  }
+
+  // Link stripe customer ID to person
+  await linkIdentity(person.id, 'stripe', stripeCustomerId);
+
+  return person;
+}
