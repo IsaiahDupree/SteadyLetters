@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -8,6 +8,7 @@ import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { signUp } from '@/lib/supabase-auth';
 import Link from 'next/link';
+import { tracking } from '@/lib/tracking';
 
 export default function SignUpPage() {
     const router = useRouter();
@@ -16,6 +17,11 @@ export default function SignUpPage() {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
     const [message, setMessage] = useState('');
+
+    // Track signup page view
+    useEffect(() => {
+        tracking.trackSignupStart({ method: 'email' });
+    }, []);
 
     const handleSignUp = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -33,6 +39,8 @@ export default function SignUpPage() {
 
             if (data?.user) {
                 setMessage('Check your email to confirm your account!');
+                // Track activation complete (account created)
+                tracking.trackActivationComplete();
                 // Optionally redirect after a delay
                 setTimeout(() => router.push('/login'), 3000);
             }

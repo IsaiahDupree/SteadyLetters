@@ -4,6 +4,7 @@ import { createContext, useContext, useEffect, useState } from 'react';
 import { User } from '@supabase/supabase-js';
 import { createClient, getCurrentUser, signOut as authSignOut } from '@/lib/supabase-auth';
 import { identifyUser, resetUser, trackEvent } from '@/lib/posthog';
+import { tracking } from '@/lib/tracking';
 
 interface AuthContextType {
     user: User | null;
@@ -36,14 +37,21 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
             setUser(session?.user ?? null);
             setLoading(false);
 
-            // Track auth events in PostHog
+            // Track auth events in PostHog and unified tracking
             if (event === 'SIGNED_IN' && session?.user) {
+                const method = session.user.app_metadata.provider || 'email';
+
+                // Identify user in both systems
                 identifyUser(session.user.id, {
                     email: session.user.email,
                 });
-                trackEvent('user_logged_in', {
-                    method: session.user.app_metadata.provider || 'email',
+                tracking.identify(session.user.id, {
+                    email: session.user.email,
                 });
+
+                // Track login success
+                trackEvent('user_logged_in', { method });
+                tracking.trackLoginSuccess({ method });
             } else if (event === 'SIGNED_OUT') {
                 trackEvent('user_logged_out');
                 resetUser();

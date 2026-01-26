@@ -1,15 +1,21 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { PricingCard } from '@/components/pricing-card';
 import { STRIPE_PLANS } from '@/lib/pricing-tiers';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/contexts/auth-context';
+import { tracking } from '@/lib/tracking';
 
 export default function PricingPage() {
     const [loading, setLoading] = useState<string | null>(null);
     const router = useRouter();
     const { user } = useAuth();
+
+    // Track pricing page view
+    useEffect(() => {
+        tracking.trackPricingView();
+    }, []);
 
     const handleSelectPlan = async (tier: 'PRO' | 'BUSINESS') => {
         // Require authentication for paid plans
