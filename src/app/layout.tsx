@@ -17,6 +17,7 @@ import { AuthProvider } from "@/contexts/auth-context";
 import { ErrorBoundary } from "@/components/error-boundary";
 import { Analytics } from '@vercel/analytics/react';
 import { PostHogProvider } from '@/components/posthog-provider';
+import { MetaPixelProvider } from '@/components/meta-pixel-provider';
 import { WebVitalsTracker } from '@/components/web-vitals-tracker';
 
 const lora = Lora({
@@ -123,19 +124,21 @@ export default function RootLayout({
       <body
         className={`${inter.variable} ${lora.variable} ${caveat.variable} ${playfair.variable} ${greatVibes.variable} ${dancingScript.variable} ${patrickHand.variable} ${sacramento.variable} antialiased font-sans`}
       >
-        <PostHogProvider>
-          <ErrorBoundary>
-            <AuthProvider>
-              <Navbar />
-              <main className="container mx-auto py-6 px-4 min-h-[calc(100vh-140px)]">
-                {children}
-              </main>
-              <Footer />
-            </AuthProvider>
-          </ErrorBoundary>
-          <Analytics />
-          <WebVitalsTracker />
-        </PostHogProvider>
+        <MetaPixelProvider>
+          <PostHogProvider>
+            <ErrorBoundary>
+              <AuthProvider>
+                <Navbar />
+                <main className="container mx-auto py-6 px-4 min-h-[calc(100vh-140px)]">
+                  {children}
+                </main>
+                <Footer />
+              </AuthProvider>
+            </ErrorBoundary>
+            <Analytics />
+            <WebVitalsTracker />
+          </PostHogProvider>
+        </MetaPixelProvider>
       </body>
     </html>
   );

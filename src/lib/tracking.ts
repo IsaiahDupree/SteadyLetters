@@ -7,6 +7,7 @@
  */
 
 import { trackEvent as posthogTrack, identifyUser as posthogIdentify } from './posthog';
+import { autoTrackToMeta, generateEventId } from './meta-pixel';
 
 // ============================
 // Event Type Definitions
@@ -149,10 +150,47 @@ class TrackingSDK {
       page_title: typeof window !== 'undefined' ? document.title : undefined,
     };
 
+    // Generate event ID for deduplication
+    const eventId = generateEventId();
+
+    // Track to PostHog
     posthogTrack(event, enrichedProperties);
+
+    // Auto-track to Meta Pixel (client-side) with event ID
+    autoTrackToMeta(event, { ...enrichedProperties, eventId });
+
+    // Send to Meta CAPI (server-side) for deduplication
+    this.sendToMetaCAPI(event, enrichedProperties, eventId);
 
     if (process.env.NODE_ENV === 'development') {
       console.log('[Tracking]', event, enrichedProperties);
+    }
+  }
+
+  /**
+   * Send event to Meta CAPI (server-side)
+   * This runs asynchronously and doesn't block the main tracking
+   */
+  private async sendToMetaCAPI(event: TrackingEvent, properties: BaseEventProperties, eventId: string) {
+    if (typeof window === 'undefined') return;
+
+    try {
+      await fetch('/api/tracking/meta-capi', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          event,
+          properties,
+          eventId,
+        }),
+      });
+    } catch (error) {
+      // Silently fail - tracking errors shouldn't break the app
+      if (process.env.NODE_ENV === 'development') {
+        console.error('[Tracking] Failed to send to Meta CAPI:', error);
+      }
     }
   }
 
