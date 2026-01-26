@@ -3,7 +3,7 @@
   "description": "SaaS web application for creating and sending physical handwritten-style letters via Thanks.io API integration",
   "version": "1.0",
   "totalFeatures": 95,
-  "completedFeatures": 93,
+  "completedFeatures": 95,
   "phases": {
     "phase1_core": "Core letter generation, voice transcription, image generation",
     "phase2_recipients": "Recipient management and address book",
@@ -1502,7 +1502,21 @@
       "description": "Verify Svix signature, store email events, map tags to person_id",
       "category": "growth-data-plane",
       "priority": "P0",
-      "passes": false
+      "passes": true,
+      "files": [
+        "src/app/api/webhooks/resend/route.ts",
+        "src/lib/email.js",
+        "src/app/api/webhooks/thanks/route.ts",
+        "tests/integration/resend-webhook.test.mjs"
+      ],
+      "acceptance": [
+        "Svix signature verification implemented",
+        "EmailMessage records stored with person_id from tags",
+        "EmailEvent records stored for all event types",
+        "Unified events tracked for opens and clicks",
+        "Tags support campaign and segment_id",
+        "Integration tests created"
+      ]
     },
     {
       "id": "GDP-005",
@@ -1510,7 +1524,18 @@
       "description": "Track delivered/opened/clicked/bounced events from Resend webhooks",
       "category": "growth-data-plane",
       "priority": "P0",
-      "passes": false
+      "passes": true,
+      "files": [
+        "src/app/api/webhooks/resend/route.ts",
+        "tests/integration/resend-webhook.test.mjs"
+      ],
+      "acceptance": [
+        "Email events stored in EmailEvent table",
+        "Supports delivered, opened, clicked, bounced, complained events",
+        "Click events include URL",
+        "Unified events created for opens and clicks only",
+        "User agent and IP address captured when available"
+      ]
     },
     {
       "id": "GDP-006",

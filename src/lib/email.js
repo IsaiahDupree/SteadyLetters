@@ -17,35 +17,51 @@ const DOMAIN = process.env.NEXT_PUBLIC_APP_URL || 'https://www.steadyletters.com
  * @param {string} params.subject - Email subject
  * @param {string} params.html - HTML content
  * @param {string} [params.text] - Optional plain text content
- * @returns {Promise<boolean>} - True if sent successfully
+ * @param {string} [params.personId] - Optional person ID for tracking
+ * @param {string} [params.campaign] - Optional campaign name
+ * @param {string} [params.segmentId] - Optional segment ID
+ * @returns {Promise<{success: boolean, emailId?: string}>} - Result with success status and email ID
  */
-export async function sendEmail({ to, subject, html, text }) {
+export async function sendEmail({ to, subject, html, text, personId, campaign, segmentId }) {
   // If no Resend client, log and skip (dev mode)
   if (!resend) {
     console.warn('[Email] Resend API key not configured, skipping email send');
     console.log('[Email] Would have sent:', { to, subject });
-    return false;
+    return { success: false };
   }
 
   try {
+    // Build tags array for tracking
+    const tags = [];
+    if (personId) {
+      tags.push({ name: 'person_id', value: personId });
+    }
+    if (campaign) {
+      tags.push({ name: 'campaign', value: campaign });
+    }
+    if (segmentId) {
+      tags.push({ name: 'segment_id', value: segmentId });
+    }
+
     const result = await resend.emails.send({
       from: FROM_EMAIL,
       to,
       subject,
       html,
       text: text || stripHtml(html),
+      ...(tags.length > 0 && { tags }),
     });
 
     if (result.error) {
       console.error('[Email] Send failed:', result.error);
-      return false;
+      return { success: false };
     }
 
     console.log('[Email] Sent successfully:', { to, subject, id: result.data?.id });
-    return true;
+    return { success: true, emailId: result.data?.id };
   } catch (error) {
     console.error('[Email] Error sending email:', error);
-    return false;
+    return { success: false };
   }
 }
 
@@ -76,6 +92,7 @@ function stripHtml(html) {
  * @param {string} orderDetails.productType - Product type
  * @param {string} orderDetails.recipientName - Recipient name
  * @param {string} orderDetails.recipientAddress - Recipient address
+ * @param {string} [orderDetails.personId] - Person ID for tracking
  * @returns {Promise<boolean>} - True if sent successfully
  */
 export async function sendOrderStatusEmail(
@@ -93,11 +110,15 @@ export async function sendOrderStatusEmail(
     orderDetails,
   });
 
-  return sendEmail({
+  const result = await sendEmail({
     to: recipientEmail,
     subject,
     html,
+    personId: orderDetails.personId,
+    campaign: 'order_status',
   });
+
+  return result.success;
 }
 
 /**

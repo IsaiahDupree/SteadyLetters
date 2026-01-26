@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import { verifyThanksSignature } from '@/lib/webhook-verification.js';
 import { sendOrderStatusEmail } from '@/lib/email.js';
+import { findPersonByIdentity } from '@/lib/identity.js';
 
 export async function POST(request: NextRequest) {
     try {
@@ -62,6 +63,9 @@ export async function POST(request: NextRequest) {
 
             for (const order of orders) {
                 try {
+                    // Find person by user ID for tracking
+                    const person = await findPersonByIdentity('user', order.userId);
+
                     const sent = await sendOrderStatusEmail(
                         order.user.email,
                         order.user.email.split('@')[0], // Extract name from email (fallback)
@@ -72,6 +76,7 @@ export async function POST(request: NextRequest) {
                             productType: 'Letter', // Default for Order model
                             recipientName: order.recipient.name,
                             recipientAddress: `${order.recipient.address1}, ${order.recipient.city}, ${order.recipient.state} ${order.recipient.zip}`,
+                            personId: person?.id,
                         }
                     );
 
@@ -96,6 +101,9 @@ export async function POST(request: NextRequest) {
 
             for (const mailOrder of mailOrders) {
                 try {
+                    // Find person by user ID for tracking
+                    const person = await findPersonByIdentity('user', mailOrder.userId);
+
                     const sent = await sendOrderStatusEmail(
                         mailOrder.user.email,
                         mailOrder.user.email.split('@')[0], // Extract name from email (fallback)
@@ -106,6 +114,7 @@ export async function POST(request: NextRequest) {
                             productType: mailOrder.productType,
                             recipientName: `${mailOrder.recipientCount} recipient(s)`,
                             recipientAddress: 'Multiple addresses',
+                            personId: person?.id,
                         }
                     );
 
