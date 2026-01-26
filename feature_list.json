@@ -1645,7 +1645,22 @@
       "description": "Compute active_days, core_actions, pricing_views, email_opens from events",
       "category": "growth-data-plane",
       "priority": "P1",
-      "passes": false
+      "passes": true,
+      "files": [
+        "src/lib/person-features.ts",
+        "src/lib/person-features.js",
+        "src/app/api/person-features/[personId]/route.ts",
+        "src/app/api/cron/compute-features/route.ts",
+        "tests/unit/person-features.test.mjs"
+      ],
+      "acceptance": [
+        "computePersonFeatures function implemented",
+        "Features computed from UnifiedEvent data",
+        "Supports batch computation",
+        "API endpoints created",
+        "Cron endpoint for periodic computation",
+        "Unit tests written (24 tests)"
+      ]
     },
     {
       "id": "GDP-012",
@@ -1653,7 +1668,27 @@
       "description": "Evaluate segment membership and trigger automations (Resend, Meta, outbound)",
       "category": "growth-data-plane",
       "priority": "P1",
-      "passes": false
+      "passes": true,
+      "files": [
+        "src/lib/segment-engine.ts",
+        "src/lib/segment-engine.js",
+        "src/app/api/segments/route.ts",
+        "src/app/api/segments/[segmentId]/route.ts",
+        "src/app/api/segments/[segmentId]/evaluate/route.ts",
+        "src/app/api/cron/evaluate-segments/route.ts",
+        "tests/unit/segment-engine.test.mjs"
+      ],
+      "acceptance": [
+        "Segment CRUD operations implemented",
+        "Rule evaluation engine with AND/OR operators",
+        "Support for eq, neq, gt, lt, gte, lte, in, contains operators",
+        "Segment membership management",
+        "Batch evaluation for all persons",
+        "Automation triggers (email, meta_audience, webhook)",
+        "API endpoints for segment management",
+        "Cron endpoint for periodic evaluation",
+        "Unit tests written (27 tests)"
+      ]
     }
   ]
 }
