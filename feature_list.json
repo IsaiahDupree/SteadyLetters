@@ -3,7 +3,7 @@
   "description": "SaaS web application for creating and sending physical handwritten-style letters via Thanks.io API integration",
   "version": "1.0",
   "totalFeatures": 95,
-  "completedFeatures": 89,
+  "completedFeatures": 90,
   "phases": {
     "phase1_core": "Core letter generation, voice transcription, image generation",
     "phase2_recipients": "Recipient management and address book",
@@ -1415,7 +1415,18 @@
       "description": "Set up conversion optimization for key events",
       "category": "meta-pixel",
       "priority": "P2",
-      "passes": false
+      "passes": true,
+      "files": [
+        "docs/META_CONVERSION_OPTIMIZATION.md",
+        "src/lib/meta-pixel.ts",
+        "src/lib/meta-capi.ts"
+      ],
+      "acceptance": [
+        "Value-based bidding documentation",
+        "A/B testing framework documented",
+        "Conversion lift study guide",
+        "Creative optimization best practices"
+      ]
     },
     {
       "id": "GDP-001",
