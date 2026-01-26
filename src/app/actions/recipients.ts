@@ -5,6 +5,8 @@ import { revalidatePath } from 'next/cache';
 import { getCurrentUser } from '@/lib/server-auth';
 import type { RecipientInput } from '@/lib/validations/recipient';
 import { validateAddress } from '@/lib/address-validation.js';
+import { trackAppEvent } from '@/lib/unified-events';
+import { findPersonByIdentity } from '@/lib/identity';
 
 export async function createRecipient(data: {
     name: string;
@@ -68,6 +70,22 @@ export async function createRecipient(data: {
                 country: addressToSave.country || 'US',
             },
         });
+
+        // Track UnifiedEvent: recipient_added
+        try {
+            const person = await findPersonByIdentity('user', user.id);
+            if (person) {
+                await trackAppEvent('recipient_added', person.id, {
+                    recipient_id: recipient.id,
+                    recipient_name: recipient.name,
+                    validated: validationResult.deliverable,
+                    corrected: validationResult.corrected !== undefined,
+                });
+            }
+        } catch (error) {
+            console.error('[Recipient] Failed to track unified event:', error);
+            // Don't fail the action if event tracking fails
+        }
 
         revalidatePath('/recipients');
         return {

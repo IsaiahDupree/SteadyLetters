@@ -162,6 +162,9 @@ class TrackingSDK {
     // Send to Meta CAPI (server-side) for deduplication
     this.sendToMetaCAPI(event, enrichedProperties, eventId);
 
+    // Send to UnifiedEvent table for Growth Data Plane
+    this.sendToUnifiedEvents(event, enrichedProperties);
+
     if (process.env.NODE_ENV === 'development') {
       console.log('[Tracking]', event, enrichedProperties);
     }
@@ -190,6 +193,44 @@ class TrackingSDK {
       // Silently fail - tracking errors shouldn't break the app
       if (process.env.NODE_ENV === 'development') {
         console.error('[Tracking] Failed to send to Meta CAPI:', error);
+      }
+    }
+  }
+
+  /**
+   * Send event to UnifiedEvent table (server-side)
+   * This stores events in the Growth Data Plane for unified analytics
+   */
+  private async sendToUnifiedEvents(event: TrackingEvent, properties: BaseEventProperties) {
+    if (typeof window === 'undefined') return;
+
+    try {
+      // Extract UTM parameters from URL
+      const urlParams = new URLSearchParams(window.location.search);
+      const attribution = {
+        sessionId: sessionStorage.getItem('sessionId') || undefined,
+        referrer: document.referrer || undefined,
+        utmSource: urlParams.get('utm_source') || undefined,
+        utmMedium: urlParams.get('utm_medium') || undefined,
+        utmCampaign: urlParams.get('utm_campaign') || undefined,
+      };
+
+      await fetch('/api/tracking/unified', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          eventName: event,
+          properties,
+          source: 'web',
+          attribution,
+        }),
+      });
+    } catch (error) {
+      // Silently fail - tracking errors shouldn't break the app
+      if (process.env.NODE_ENV === 'development') {
+        console.error('[Tracking] Failed to send to UnifiedEvent:', error);
       }
     }
   }

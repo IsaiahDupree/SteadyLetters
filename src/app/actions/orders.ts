@@ -7,6 +7,8 @@ import { sendPostcard, sendLetter, sendGreetingCard, ProductType } from '@/lib/t
 import { canGenerate } from '@/lib/tiers';
 import { trackServerEvent } from '@/lib/posthog-server';
 import { validateAddress } from '@/lib/address-validation.js';
+import { trackAppEvent } from '@/lib/unified-events';
+import { findPersonByIdentity } from '@/lib/identity';
 
 export async function createOrder(data: {
     recipientId: string;
@@ -173,6 +175,23 @@ export async function createOrder(data: {
             const previouslySent = usage.lettersSent || 0;
             if (previouslySent > 0) {
                 await trackServerEvent(user.id, 'letter_returning_user', {});
+            }
+
+            // Track UnifiedEvent: letter_sent
+            try {
+                const person = await findPersonByIdentity('user', user.id);
+                if (person) {
+                    await trackAppEvent('letter_sent', person.id, {
+                        letter_id: order.id,
+                        recipient_count: 1,
+                        product_type: data.productType,
+                        thanks_io_id: response.id,
+                        tier: usage.tier,
+                    });
+                }
+            } catch (error) {
+                console.error('[Order] Failed to track unified event:', error);
+                // Don't fail the order if event tracking fails
             }
 
             revalidatePath('/orders');
