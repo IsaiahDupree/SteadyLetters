@@ -67,28 +67,33 @@ export type TrackingEvent =
 // Event Property Interfaces
 // ============================
 
-export interface LetterCreatedProperties {
+// Generic properties for any event
+export interface BaseEventProperties {
+  [key: string]: string | number | boolean | undefined;
+}
+
+export interface LetterCreatedProperties extends BaseEventProperties {
   letter_id: string;
   font_id: string;
   word_count: number;
   template_used?: string;
 }
 
-export interface LetterSentProperties {
+export interface LetterSentProperties extends BaseEventProperties {
   letter_id: string;
   recipient_count: number;
   mail_class: 'first_class' | 'priority';
   cost: number;
 }
 
-export interface CheckoutStartedProperties {
+export interface CheckoutStartedProperties extends BaseEventProperties {
   value: number;
   currency: string;
   plan?: string;
   credits?: number;
 }
 
-export interface PurchaseCompletedProperties {
+export interface PurchaseCompletedProperties extends BaseEventProperties {
   value: number;
   currency: string;
   transaction_id: string;
@@ -96,22 +101,17 @@ export interface PurchaseCompletedProperties {
   credits?: number;
 }
 
-export interface CTAClickProperties {
+export interface CTAClickProperties extends BaseEventProperties {
   cta_text: string;
   cta_location: string;
   target_url?: string;
 }
 
-export interface ErrorShownProperties {
+export interface ErrorShownProperties extends BaseEventProperties {
   error_type: string;
   error_message: string;
   component?: string;
   severity?: 'low' | 'medium' | 'high';
-}
-
-// Generic properties for any event
-export interface BaseEventProperties {
-  [key: string]: string | number | boolean | undefined;
 }
 
 // ============================

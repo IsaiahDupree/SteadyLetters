@@ -31,6 +31,13 @@ export default function PricingPage() {
             const userId = user.id;
             const email = user.email!;
 
+            // Track checkout started
+            tracking.trackCheckoutStarted({
+                value: STRIPE_PLANS[tier].price / 100, // Convert cents to dollars
+                currency: 'USD',
+                plan: tier,
+            });
+
             const response = await fetch('/api/stripe/checkout', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },

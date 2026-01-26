@@ -78,11 +78,23 @@ export async function POST(request: NextRequest) {
                     data: { tier },
                 });
 
-                // Track subscription started in PostHog
+                // Get subscription price for tracking
+                const price = subscription.items.data[0].price;
+                const amount = price.unit_amount ? price.unit_amount / 100 : 0; // Convert cents to dollars
+
+                // Track purchase completed (monetization milestone)
+                await trackServerEvent(userId, 'purchase_completed', {
+                    value: amount,
+                    currency: price.currency?.toUpperCase() || 'USD',
+                    transaction_id: session.id,
+                    plan: tier,
+                });
+
+                // Track subscription started
                 await trackServerEvent(userId, 'subscription_started', {
-                    tier,
-                    priceId,
-                    subscriptionId: subscription.id,
+                    plan: tier,
+                    value: amount,
+                    currency: price.currency?.toUpperCase() || 'USD',
                 });
 
                 break;
@@ -114,9 +126,31 @@ export async function POST(request: NextRequest) {
                     },
                 });
 
-                // Track subscription updated in PostHog
+                // Get updated subscription price
+                const price = subscription.items.data[0].price;
+                const amount = price.unit_amount ? price.unit_amount / 100 : 0;
+
+                // Determine the new tier
+                const priceId = price.id;
+                let newTier = 'FREE';
+                if (priceId === process.env.STRIPE_PRO_PRICE_ID) {
+                    newTier = 'PRO';
+                } else if (priceId === process.env.STRIPE_BUSINESS_PRICE_ID) {
+                    newTier = 'BUSINESS';
+                }
+
+                // Update tier in database
+                await prisma.userUsage.update({
+                    where: { userId: user.id },
+                    data: { tier: newTier },
+                });
+
+                // Track subscription updated/changed
                 await trackServerEvent(user.id, 'subscription_updated', {
-                    priceId: subscription.items.data[0].price.id,
+                    plan: newTier,
+                    value: amount,
+                    currency: price.currency?.toUpperCase() || 'USD',
+                    priceId: price.id,
                     subscriptionId: subscription.id,
                 });
 
@@ -148,9 +182,10 @@ export async function POST(request: NextRequest) {
                     data: { tier: 'FREE' },
                 });
 
-                // Track subscription cancelled in PostHog
+                // Track subscription cancelled/deleted
                 await trackServerEvent(user.id, 'subscription_cancelled', {
                     subscriptionId: subscription.id,
+                    reason: 'deleted', // Stripe deleted event
                 });
 
                 break;
