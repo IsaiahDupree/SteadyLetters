@@ -1,6 +1,20 @@
 import { z } from 'zod';
 
 /**
+ * Supported countries for international addresses
+ */
+export const SUPPORTED_COUNTRIES = [
+  { code: 'US', name: 'United States', postalLabel: 'ZIP Code' },
+  { code: 'CA', name: 'Canada', postalLabel: 'Postal Code' },
+  { code: 'GB', name: 'United Kingdom', postalLabel: 'Postcode' },
+  { code: 'AU', name: 'Australia', postalLabel: 'Postcode' },
+  { code: 'DE', name: 'Germany', postalLabel: 'Postcode' },
+  { code: 'FR', name: 'France', postalLabel: 'Postal Code' },
+  { code: 'JP', name: 'Japan', postalLabel: 'Postal Code' },
+  { code: 'MX', name: 'Mexico', postalLabel: 'Postal Code' },
+] as const;
+
+/**
  * Validation schema for recipient data
  */
 export const recipientSchema = z.object({

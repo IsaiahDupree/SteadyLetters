@@ -7,6 +7,7 @@ import type { RecipientInput } from '@/lib/validations/recipient';
 import { validateAddress } from '@/lib/address-validation.js';
 import { trackAppEvent } from '@/lib/unified-events';
 import { findPersonByIdentity } from '@/lib/identity';
+import { findDuplicates, type DuplicateMatch, type RecipientForDuplicateCheck } from '@/lib/duplicate-detection';
 
 export async function createRecipient(data: {
     name: string;
@@ -245,6 +246,121 @@ export async function bulkImportRecipients(recipients: RecipientInput[]): Promis
             imported: 0,
             failed: recipients.length,
             errors: [{ rowNumber: 0, errors: [error.message || 'Failed to import recipients'] }],
+        };
+    }
+}
+
+/**
+ * Find duplicate recipients for the current user
+ */
+export async function findDuplicateRecipients(): Promise<{
+    success: boolean;
+    duplicates: DuplicateMatch[];
+    error?: string;
+}> {
+    try {
+        const user = await getCurrentUser();
+
+        const recipients = await prisma.recipient.findMany({
+            where: { userId: user.id },
+            select: {
+                id: true,
+                name: true,
+                address1: true,
+                address2: true,
+                city: true,
+                state: true,
+                zip: true,
+                country: true,
+            },
+        });
+
+        // Convert to format expected by duplicate detection
+        const recipientsForCheck: RecipientForDuplicateCheck[] = recipients.map(r => ({
+            id: r.id,
+            name: r.name,
+            address1: r.address1,
+            address2: r.address2 || undefined,
+            city: r.city,
+            state: r.state,
+            zip: r.zip,
+            country: r.country,
+        }));
+
+        const duplicates = findDuplicates(recipientsForCheck);
+
+        return {
+            success: true,
+            duplicates,
+        };
+    } catch (error: any) {
+        console.error('Failed to find duplicate recipients:', error);
+        return {
+            success: false,
+            duplicates: [],
+            error: error.message || 'Failed to find duplicates',
+        };
+    }
+}
+
+/**
+ * Merge two recipients, keeping the primary and deleting the duplicate
+ * Also updates any orders that referenced the duplicate to reference the primary
+ */
+export async function mergeRecipients(
+    primaryId: string,
+    duplicateId: string
+): Promise<{
+    success: boolean;
+    error?: string;
+}> {
+    try {
+        const user = await getCurrentUser();
+
+        // Verify both recipients belong to the user
+        const [primary, duplicate] = await Promise.all([
+            prisma.recipient.findUnique({ where: { id: primaryId } }),
+            prisma.recipient.findUnique({ where: { id: duplicateId } }),
+        ]);
+
+        if (!primary || !duplicate) {
+            return {
+                success: false,
+                error: 'One or both recipients not found',
+            };
+        }
+
+        if (primary.userId !== user.id || duplicate.userId !== user.id) {
+            return {
+                success: false,
+                error: 'Unauthorized',
+            };
+        }
+
+        // Use a transaction to ensure atomicity
+        await prisma.$transaction(async (tx) => {
+            // Update all orders that reference the duplicate to reference the primary
+            await tx.order.updateMany({
+                where: { recipientId: duplicateId },
+                data: { recipientId: primaryId },
+            });
+
+            // Delete the duplicate recipient
+            await tx.recipient.delete({
+                where: { id: duplicateId },
+            });
+        });
+
+        revalidatePath('/recipients');
+
+        return {
+            success: true,
+        };
+    } catch (error: any) {
+        console.error('Failed to merge recipients:', error);
+        return {
+            success: false,
+            error: error.message || 'Failed to merge recipients',
         };
     }
 }

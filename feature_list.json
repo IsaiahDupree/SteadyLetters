@@ -3,7 +3,7 @@
   "description": "SaaS web application for creating and sending physical handwritten-style letters via Thanks.io API integration",
   "version": "1.0",
   "totalFeatures": 139,
-  "completedFeatures": 122,
+  "completedFeatures": 123,
   "phases": {
     "phase1_core": "Core letter generation, voice transcription, image generation",
     "phase2_recipients": "Recipient management and address book",
@@ -1798,7 +1798,23 @@
       "description": "Detect and merge duplicate recipients in address book",
       "category": "recipients",
       "priority": "P1",
-      "passes": false
+      "passes": true,
+      "files": [
+        "src/lib/duplicate-detection.ts",
+        "src/app/actions/recipients.ts",
+        "src/components/duplicate-recipients-dialog.tsx",
+        "src/app/recipients/page.tsx",
+        "tests/unit/duplicate-detection.test.ts"
+      ],
+      "acceptance": [
+        "Duplicate detection based on normalized name and address matching",
+        "Levenshtein distance algorithm for fuzzy matching",
+        "Confidence scoring (0-100) with exact/likely/possible classification",
+        "Server actions: findDuplicateRecipients() and mergeRecipients()",
+        "Merge functionality preserves order history references",
+        "UI dialog to scan, review, and merge duplicates",
+        "23 comprehensive unit tests passing"
+      ]
     },
     {
       "id": "SL-102",

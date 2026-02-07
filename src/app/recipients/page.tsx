@@ -1,6 +1,7 @@
 import { RecipientForm } from '@/features/recipients/recipient-form';
 import { RecipientList } from '@/features/recipients/recipient-list';
 import { AddressExtractor } from '@/components/address-extractor';
+import { DuplicateRecipientsDialog } from '@/components/duplicate-recipients-dialog';
 import { Button } from '@/components/ui/button';
 import { Upload } from 'lucide-react';
 import Link from 'next/link';
@@ -19,12 +20,15 @@ export default function RecipientsPage() {
                         Manage your mailing list and send personalized letters
                     </p>
                 </div>
-                <Link href="/recipients/import">
-                    <Button variant="outline">
-                        <Upload className="h-4 w-4 mr-2" />
-                        Import CSV
-                    </Button>
-                </Link>
+                <div className="flex gap-2">
+                    <DuplicateRecipientsDialog />
+                    <Link href="/recipients/import">
+                        <Button variant="outline">
+                            <Upload className="h-4 w-4 mr-2" />
+                            Import CSV
+                        </Button>
+                    </Link>
+                </div>
             </div>
             <div className="flex items-start justify-between gap-4 flex-wrap">
                 <AddressExtractor />
