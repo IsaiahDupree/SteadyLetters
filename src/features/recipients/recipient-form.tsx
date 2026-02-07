@@ -14,13 +14,25 @@ import {
 } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+} from '@/components/ui/select';
 import { createRecipient } from '@/app/actions/recipients';
 import { tracking } from '@/lib/tracking';
+import { SUPPORTED_COUNTRIES } from '@/lib/validations/recipient';
 
 export function RecipientForm() {
     const [open, setOpen] = useState(false);
     const [loading, setLoading] = useState(false);
+    const [country, setCountry] = useState('US');
     const router = useRouter();
+
+    // Get the postal label based on selected country
+    const postalLabel = SUPPORTED_COUNTRIES.find(c => c.code === country)?.postalLabel || 'Postal Code';
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
@@ -34,6 +46,7 @@ export function RecipientForm() {
             city: formData.get('city') as string,
             state: formData.get('state') as string,
             zip: formData.get('zip') as string,
+            country: formData.get('country') as string || 'US',
         };
 
         const result = await createRecipient(data);
@@ -45,6 +58,7 @@ export function RecipientForm() {
                 source: 'manual',
             });
             setOpen(false);
+            setCountry('US'); // Reset to default
             router.refresh();
         } else {
             alert(result.error);
@@ -74,6 +88,23 @@ export function RecipientForm() {
                             <Input name="name" id="name" className="col-span-3" required />
                         </div>
                         <div className="grid grid-cols-4 items-center gap-4">
+                            <Label htmlFor="country" className="text-right">
+                                Country
+                            </Label>
+                            <Select name="country" value={country} onValueChange={setCountry} required>
+                                <SelectTrigger className="col-span-3">
+                                    <SelectValue placeholder="Select country" />
+                                </SelectTrigger>
+                                <SelectContent>
+                                    {SUPPORTED_COUNTRIES.map((c) => (
+                                        <SelectItem key={c.code} value={c.code}>
+                                            {c.name}
+                                        </SelectItem>
+                                    ))}
+                                </SelectContent>
+                            </Select>
+                        </div>
+                        <div className="grid grid-cols-4 items-center gap-4">
                             <Label htmlFor="address1" className="text-right">
                                 Address 1
                             </Label>
@@ -93,15 +124,21 @@ export function RecipientForm() {
                         </div>
                         <div className="grid grid-cols-4 items-center gap-4">
                             <Label htmlFor="state" className="text-right">
-                                State
+                                {country === 'US' || country === 'CA' ? 'State/Province' : 'State/Region'}
                             </Label>
                             <Input name="state" id="state" className="col-span-3" required />
                         </div>
                         <div className="grid grid-cols-4 items-center gap-4">
                             <Label htmlFor="zip" className="text-right">
-                                Zip
+                                {postalLabel}
                             </Label>
-                            <Input name="zip" id="zip" className="col-span-3" required />
+                            <Input
+                                name="zip"
+                                id="zip"
+                                className="col-span-3"
+                                placeholder={country === 'US' ? '12345' : country === 'CA' ? 'A1A 1A1' : ''}
+                                required
+                            />
                         </div>
                     </div>
                     <DialogFooter>

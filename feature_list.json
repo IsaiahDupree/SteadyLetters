@@ -3,7 +3,7 @@
   "description": "SaaS web application for creating and sending physical handwritten-style letters via Thanks.io API integration",
   "version": "1.0",
   "totalFeatures": 139,
-  "completedFeatures": 120,
+  "completedFeatures": 121,
   "phases": {
     "phase1_core": "Core letter generation, voice transcription, image generation",
     "phase2_recipients": "Recipient management and address book",
@@ -1769,7 +1769,20 @@
       "description": "Support international address formats and postal codes",
       "category": "recipients",
       "priority": "P1",
-      "passes": false
+      "passes": true,
+      "files": [
+        "src/lib/validations/recipient.js",
+        "src/features/recipients/recipient-form.tsx",
+        "src/app/actions/recipients.ts",
+        "tests/unit/international-addresses.test.ts"
+      ],
+      "acceptance": [
+        "Country selector in recipient form with 8 supported countries",
+        "Postal code validation for US, CA, GB, AU, DE, FR, JP, MX",
+        "Dynamic form labels based on selected country",
+        "Flexible postal code validation for unsupported countries",
+        "28 comprehensive tests passing"
+      ]
     },
     {
       "id": "SL-100",
