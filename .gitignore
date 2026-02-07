@@ -46,3 +46,6 @@ prisma/dev.db-journal
 
 # Auto Claude data directory
 .auto-claude/
+
+# Live test reports (contain order IDs and spend data)
+tests/live/reports/

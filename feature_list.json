@@ -3,7 +3,7 @@
   "description": "SaaS web application for creating and sending physical handwritten-style letters via Thanks.io API integration",
   "version": "1.0",
   "totalFeatures": 139,
-  "completedFeatures": 117,
+  "completedFeatures": 118,
   "phases": {
     "phase1_core": "Core letter generation, voice transcription, image generation",
     "phase2_recipients": "Recipient management and address book",
@@ -1724,7 +1724,23 @@
       "description": "Generate downloadable PDF preview of letter before sending via Thanks.io",
       "category": "core",
       "priority": "P1",
-      "passes": false
+      "passes": true,
+      "files": [
+        "src/lib/letter-pdf.ts",
+        "src/app/api/preview/letter-pdf/route.ts",
+        "src/features/send/send-form.tsx",
+        "tests/unit/letter-pdf.test.ts"
+      ],
+      "acceptance": [
+        "PDF generation utility created with jsPDF",
+        "Client-side PDF preview download functionality",
+        "Server-side API endpoint for PDF generation",
+        "Preview PDF button added to SendForm",
+        "10 unit tests passing",
+        "PDF includes recipient address and letter content",
+        "PDF includes handwriting style and color info",
+        "PDF includes footer with timestamp and watermark"
+      ]
     },
     {
       "id": "SL-098",
