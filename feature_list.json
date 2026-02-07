@@ -1886,7 +1886,7 @@
       "description": "Real-time order status tracking with delivery estimates from Thanks.io",
       "category": "orders",
       "priority": "P1",
-      "passes": false
+      "passes": true
     },
     {
       "id": "SL-107",
@@ -2032,7 +2032,9 @@
         "Each recipient field overridable via LIVE_TEST_RECIPIENT_* env vars",
         "assertLiveTestEnabled() throws descriptive error if not enabled or no API key"
       ],
-      "files": ["tests/live/config.ts"],
+      "files": [
+        "tests/live/config.ts"
+      ],
       "passes": true
     },
     {
@@ -2053,7 +2055,9 @@
         "saveReport() writes JSON to tests/live/reports/{runId}.json, creates directory if missing",
         "printSummary() logs formatted summary with emoji to console"
       ],
-      "files": ["tests/live/cost-tracker.ts"],
+      "files": [
+        "tests/live/cost-tracker.ts"
+      ],
       "passes": true
     },
     {
@@ -2070,7 +2074,9 @@
         "All use apiRequest() helper with Authorization: Bearer {API_KEY}",
         "All record results via tracker.recordTestResult()"
       ],
-      "files": ["tests/live/thanks-io-live.test.ts"],
+      "files": [
+        "tests/live/thanks-io-live.test.ts"
+      ],
       "passes": true
     },
     {
@@ -2091,7 +2097,9 @@
         "All push orderId to createdOrderIds array for later status checks",
         "Console logs include recipient address and estimated cost"
       ],
-      "files": ["tests/live/thanks-io-live.test.ts"],
+      "files": [
+        "tests/live/thanks-io-live.test.ts"
+      ],
       "passes": true
     },
     {
@@ -2107,7 +2115,9 @@
         "Both send to default recipient",
         "Both track spend via CostTracker"
       ],
-      "files": ["tests/live/thanks-io-live.test.ts"],
+      "files": [
+        "tests/live/thanks-io-live.test.ts"
+      ],
       "passes": true
     },
     {
@@ -2122,7 +2132,9 @@
         "Sends to default recipient",
         "Tracks $3.00 spend"
       ],
-      "files": ["tests/live/thanks-io-live.test.ts"],
+      "files": [
+        "tests/live/thanks-io-live.test.ts"
+      ],
       "passes": true
     },
     {
@@ -2138,7 +2150,9 @@
         "Sends to default recipient",
         "Tracks $2.52 spend"
       ],
-      "files": ["tests/live/thanks-io-live.test.ts"],
+      "files": [
+        "tests/live/thanks-io-live.test.ts"
+      ],
       "passes": true
     },
     {
@@ -2156,7 +2170,9 @@
         "Uses separate apiRequestBadKey() helper for LIVE-016",
         "No money spent — all should be rejected by API"
       ],
-      "files": ["tests/live/thanks-io-live.test.ts"],
+      "files": [
+        "tests/live/thanks-io-live.test.ts"
+      ],
       "passes": true
     },
     {
@@ -2171,7 +2187,9 @@
         "Skips gracefully if createdOrderIds is empty",
         "Logs order status to console"
       ],
-      "files": ["tests/live/thanks-io-live.test.ts"],
+      "files": [
+        "tests/live/thanks-io-live.test.ts"
+      ],
       "passes": true
     },
     {
@@ -2190,7 +2208,9 @@
         "LIVE-027: PRODUCT_CATALOG.windowless_letter.basePrice === 2.52",
         "Import from '@/lib/thanks-io' using vitest path alias"
       ],
-      "files": ["tests/live/thanks-io-live.test.ts"],
+      "files": [
+        "tests/live/thanks-io-live.test.ts"
+      ],
       "passes": true
     },
     {
@@ -2209,7 +2229,9 @@
         "Standard: adds LIVE-005, LIVE-006, LIVE-009, LIVE-020 (~$5.78)",
         "Full: adds LIVE-007, LIVE-010, LIVE-012, LIVE-014 (~$12.00)"
       ],
-      "files": ["tests/live/thanks-io-live.test.ts"],
+      "files": [
+        "tests/live/thanks-io-live.test.ts"
+      ],
       "passes": true
     },
     {
@@ -2227,7 +2249,11 @@
         "afterAll() in test suite calls tracker.printSummary() then tracker.saveReport()",
         "tests/live/reports/ is in .gitignore"
       ],
-      "files": ["tests/live/cost-tracker.ts", "tests/live/thanks-io-live.test.ts", ".gitignore"],
+      "files": [
+        "tests/live/cost-tracker.ts",
+        "tests/live/thanks-io-live.test.ts",
+        ".gitignore"
+      ],
       "passes": true
     },
     {
@@ -2245,7 +2271,9 @@
         "'npm run test:live:smoke' runs only smoke-level tests",
         "All require THANKS_IO_API_KEY in environment to actually send mail"
       ],
-      "files": ["package.json"],
+      "files": [
+        "package.json"
+      ],
       "passes": true
     },
     {
@@ -2262,7 +2290,10 @@
         "Running 'npm test' or 'vitest' does NOT execute live tests",
         "Only 'npm run test:live' executes live tests"
       ],
-      "files": ["vitest.config.ts", "tests/live/thanks-io-live.test.ts"],
+      "files": [
+        "vitest.config.ts",
+        "tests/live/thanks-io-live.test.ts"
+      ],
       "passes": true
     },
     {
@@ -2283,7 +2314,9 @@
         "All 6 fields overridable via LIVE_TEST_RECIPIENT_* env vars",
         "defaultMessage includes ISO timestamp for uniqueness"
       ],
-      "files": ["tests/live/config.ts"],
+      "files": [
+        "tests/live/config.ts"
+      ],
       "passes": true
     }
   ]

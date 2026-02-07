@@ -6,9 +6,10 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { formatDistanceToNow, format } from 'date-fns';
-import { ArrowLeft, Mail, MapPin, Calendar, Package, FileText } from 'lucide-react';
+import { ArrowLeft, Mail, MapPin, Calendar, Package, FileText, Truck } from 'lucide-react';
 import Link from 'next/link';
 import { ReorderButton } from '@/features/orders/reorder-button';
+import { RefreshStatusButton } from '@/features/orders/refresh-status-button';
 
 // Force dynamic rendering to prevent static generation errors during build
 export const dynamic = 'force-dynamic';
@@ -101,16 +102,21 @@ export default async function OrderDetailPage({ params }: { params: Promise<{ id
                                 {order.thanksIoOrderId && `Order #${order.thanksIoOrderId.substring(0, 12)}`}
                             </CardDescription>
                         </div>
-                        <Badge className={getStatusColor(order.status)}>
-                            {order.status}
-                        </Badge>
+                        <div className="flex items-center gap-3">
+                            <Badge className={getStatusColor(order.status)}>
+                                {order.status}
+                            </Badge>
+                            {order.thanksIoOrderId && (
+                                <RefreshStatusButton orderId={order.id} />
+                            )}
+                        </div>
                     </div>
                 </CardHeader>
                 <CardContent>
                     <p className="text-sm text-muted-foreground mb-4">
                         {getStatusDescription(order.status)}
                     </p>
-                    <div className="grid gap-4 sm:grid-cols-2">
+                    <div className="grid gap-4 sm:grid-cols-2 md:grid-cols-3">
                         <div className="flex items-start gap-3">
                             <Calendar className="h-5 w-5 text-muted-foreground mt-0.5" />
                             <div>
@@ -135,6 +141,24 @@ export default async function OrderDetailPage({ params }: { params: Promise<{ id
                                 </p>
                             </div>
                         </div>
+                        {(order.status === 'sent' || order.status === 'delivered') && (
+                            <div className="flex items-start gap-3">
+                                <Truck className="h-5 w-5 text-muted-foreground mt-0.5" />
+                                <div>
+                                    <p className="text-sm font-medium">Estimated Delivery</p>
+                                    <p className="text-sm text-muted-foreground">
+                                        {order.status === 'delivered'
+                                            ? 'Delivered'
+                                            : '5-7 business days'}
+                                    </p>
+                                    <p className="text-xs text-muted-foreground">
+                                        {order.status === 'delivered'
+                                            ? 'Your letter has been delivered'
+                                            : 'From send date'}
+                                    </p>
+                                </div>
+                            </div>
+                        )}
                     </div>
                 </CardContent>
             </Card>

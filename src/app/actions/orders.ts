@@ -3,7 +3,7 @@
 import { prisma } from '@/lib/prisma';
 import { revalidatePath } from 'next/cache';
 import { getCurrentUser } from '@/lib/server-auth';
-import { sendPostcard, sendLetter, sendGreetingCard, ProductType } from '@/lib/thanks-io';
+import { sendPostcard, sendLetter, sendGreetingCard, ProductType, getOrderStatus } from '@/lib/thanks-io';
 import { canGenerate } from '@/lib/tiers';
 import { trackServerEvent } from '@/lib/posthog-server';
 import { validateAddress } from '@/lib/address-validation.js';
@@ -292,22 +292,77 @@ export async function getOrderById(id: string) {
 export async function updateOrderStatus(id: string, status: string) {
     try {
         const user = await getCurrentUser();
-        
+
         const order = await prisma.order.findUnique({ where: { id } });
         if (!order || order.userId !== user.id) {
             return { success: false, error: 'Order not found or unauthorized' };
         }
-        
+
         await prisma.order.update({
             where: { id },
             data: { status },
         });
-        
+
         revalidatePath('/orders');
         return { success: true };
     } catch (error: any) {
         console.error('Failed to update order status:', error);
         return { success: false, error: error.message || 'Failed to update order' };
+    }
+}
+
+/**
+ * Refresh order status from Thanks.io API
+ * This fetches the latest status directly from Thanks.io and updates our database
+ */
+export async function refreshOrderStatus(id: string) {
+    try {
+        const user = await getCurrentUser();
+
+        const order = await prisma.order.findUnique({
+            where: { id },
+            include: {
+                recipient: true,
+                template: true,
+            },
+        });
+
+        if (!order || order.userId !== user.id) {
+            return { success: false, error: 'Order not found or unauthorized' };
+        }
+
+        if (!order.thanksIoOrderId) {
+            return { success: false, error: 'No Thanks.io order ID found for this order' };
+        }
+
+        // Fetch latest status from Thanks.io API
+        const thanksIoStatus = await getOrderStatus(order.thanksIoOrderId);
+
+        if (!thanksIoStatus) {
+            return { success: false, error: 'Could not fetch status from Thanks.io' };
+        }
+
+        // Update our database with the latest status
+        const updatedOrder = await prisma.order.update({
+            where: { id },
+            data: { status: thanksIoStatus.status },
+        });
+
+        revalidatePath(`/orders/${id}`);
+        revalidatePath('/orders');
+
+        return {
+            success: true,
+            order: {
+                ...updatedOrder,
+                recipient: order.recipient,
+                template: order.template,
+            },
+            latestStatus: thanksIoStatus,
+        };
+    } catch (error: any) {
+        console.error('Failed to refresh order status:', error);
+        return { success: false, error: error.message || 'Failed to refresh order status' };
     }
 }
 

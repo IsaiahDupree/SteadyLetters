@@ -76,6 +76,18 @@ export interface ThanksIoResponse {
   error?: string;
 }
 
+export interface ThanksIoOrderStatus {
+  id: string;
+  status: 'queued' | 'processing' | 'sent' | 'delivered' | 'failed';
+  created_at?: string;
+  updated_at?: string;
+  delivered_at?: string;
+  estimated_delivery?: string; // ISO date string
+  tracking_number?: string;
+  error?: string;
+  message?: string;
+}
+
 export interface ThanksIoHandwritingStyleApiResponse {
   id?: number | string;
   handwriting_id?: number | string;
@@ -116,6 +128,58 @@ export async function getHandwritingStyles(): Promise<HandwritingStyle[]> {
   } catch (error) {
     console.error('Error fetching handwriting styles:', error);
     return MOCK_STYLES;
+  }
+}
+
+// ============================================================================
+// ORDER STATUS API
+// ============================================================================
+
+export async function getOrderStatus(orderId: string): Promise<ThanksIoOrderStatus | null> {
+  if (!THANKS_IO_API_KEY) {
+    console.warn('Thanks.io API key not found, returning mock status');
+    return {
+      id: orderId,
+      status: 'processing',
+      created_at: new Date().toISOString(),
+      estimated_delivery: new Date(Date.now() + 5 * 24 * 60 * 60 * 1000).toISOString(), // 5 days from now
+    };
+  }
+
+  try {
+    const response = await fetch(`${BASE_URL}/order/${orderId}`, {
+      method: 'GET',
+      headers: {
+        'Authorization': `Bearer ${THANKS_IO_API_KEY}`,
+        'Content-Type': 'application/json',
+      },
+    });
+
+    if (!response.ok) {
+      if (response.status === 404) {
+        console.warn(`Order ${orderId} not found in Thanks.io`);
+        return null;
+      }
+      throw new Error(`Failed to fetch order status: ${response.statusText}`);
+    }
+
+    const data = await response.json();
+
+    // Map API response to our interface
+    return {
+      id: data.id || orderId,
+      status: data.status || 'processing',
+      created_at: data.created_at,
+      updated_at: data.updated_at,
+      delivered_at: data.delivered_at,
+      estimated_delivery: data.estimated_delivery || data.expected_delivery_date,
+      tracking_number: data.tracking_number,
+      error: data.error,
+      message: data.message,
+    };
+  } catch (error) {
+    console.error('Error fetching order status:', error);
+    throw error;
   }
 }
 
