@@ -12,4 +12,5 @@ export const recipientSchema = z.object({
   state: z.string().min(2, 'State is required').max(50, 'State must be at most 50 characters'),
   zip: z.string().regex(/^\d{5}(-\d{4})?$/, 'ZIP code must be in format 12345 or 12345-6789'),
   country: z.string().default('US'),
+  message: z.string().max(2000, 'Message must be at most 2000 characters').optional().nullable(),
 });

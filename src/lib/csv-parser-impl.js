@@ -18,6 +18,7 @@ const COLUMN_MAPPINGS = {
   state: ['state', 'province'],
   zip: ['zip', 'zipcode', 'postal_code', 'zip_code', 'postalcode'],
   country: ['country'],
+  message: ['message', 'letter_message', 'content', 'text'],
 };
 
 function normalizeColumnName(column) {
@@ -77,7 +78,7 @@ export function parseCSV(csvText) {
     const rowData = {};
 
     // Map values to columns
-    const optionalFields = ['address2', 'country'];
+    const optionalFields = ['address2', 'country', 'message'];
     values.forEach((value, index) => {
       const columnName = columnMap.get(index);
       if (columnName) {

@@ -541,3 +541,279 @@ export async function createBulkOrder(data: {
         return { success: false, error: error.message || 'Failed to create bulk orders' };
     }
 }
+
+/**
+ * Create bulk order from CSV data
+ * Similar to createBulkOrder but accepts recipient data directly from CSV instead of IDs
+ */
+export async function createBulkOrderFromCSV(data: {
+    recipients: Array<{
+        name: string;
+        address1: string;
+        address2?: string;
+        city: string;
+        state: string;
+        zip: string;
+        country?: string;
+        message: string;
+    }>;
+    productType: ProductType;
+    handwritingStyle: string;
+    handwritingColor: string;
+}) {
+    try {
+        const user = await getCurrentUser();
+
+        if (!user) {
+            return { success: false, error: 'Not authenticated' };
+        }
+
+        if (data.recipients.length === 0) {
+            return { success: false, error: 'No recipients provided' };
+        }
+
+        // Get or create usage record
+        let usage = await prisma.userUsage.findUnique({
+            where: { userId: user.id },
+        });
+
+        if (!usage) {
+            const now = new Date();
+            const resetAt = new Date(now.getFullYear(), now.getMonth() + 1, 1);
+            usage = await prisma.userUsage.create({
+                data: { userId: user.id, tier: 'FREE', resetAt },
+            });
+        }
+
+        const results = [];
+        let successCount = 0;
+        let failCount = 0;
+
+        for (const recipient of data.recipients) {
+            // Validate recipient address before sending
+            const validationResult = await validateAddress({
+                address1: recipient.address1,
+                address2: recipient.address2,
+                city: recipient.city,
+                state: recipient.state,
+                zip: recipient.zip,
+                country: recipient.country || 'US',
+            });
+
+            if (!validationResult.isValid || validationResult.deliverable === false) {
+                const errorMessage = validationResult.messages?.[0] || 'Invalid address';
+                results.push({
+                    recipientName: recipient.name,
+                    success: false,
+                    error: `Address validation failed: ${errorMessage}`,
+                });
+                failCount++;
+                continue;
+            }
+
+            // Re-fetch usage for each iteration to get updated counts
+            const currentUsage = await prisma.userUsage.findUnique({
+                where: { userId: user.id },
+            });
+
+            if (!currentUsage || !canGenerate(currentUsage, 'letter')) {
+                // Track limit reached event
+                await trackServerEvent(user.id, 'limit_reached', {
+                    type: 'csv_bulk_order_creation',
+                    tier: currentUsage?.tier || 'FREE',
+                    successCount,
+                    failCount: failCount + 1,
+                });
+
+                results.push({
+                    recipientName: recipient.name,
+                    success: false,
+                    error: 'Monthly sending limit reached',
+                });
+                failCount++;
+                continue;
+            }
+
+            // Create a temporary recipient record (or find existing by address)
+            // This allows us to track orders properly
+            let recipientRecord = await prisma.recipient.findFirst({
+                where: {
+                    userId: user.id,
+                    name: recipient.name,
+                    address1: recipient.address1,
+                    city: recipient.city,
+                    state: recipient.state,
+                    zip: recipient.zip,
+                },
+            });
+
+            if (!recipientRecord) {
+                recipientRecord = await prisma.recipient.create({
+                    data: {
+                        userId: user.id,
+                        name: recipient.name,
+                        address1: recipient.address1,
+                        address2: recipient.address2,
+                        city: recipient.city,
+                        state: recipient.state,
+                        zip: recipient.zip,
+                        country: recipient.country || 'US',
+                    },
+                });
+            }
+
+            // Create order record first (pending status)
+            const order = await prisma.order.create({
+                data: {
+                    userId: user.id,
+                    recipientId: recipientRecord.id,
+                    templateId: null,
+                    status: 'pending',
+                },
+            });
+
+            // Format recipient for Thanks.io
+            const thanksRecipient = {
+                name: recipient.name,
+                address: recipient.address1,
+                address2: recipient.address2 || undefined,
+                city: recipient.city,
+                province: recipient.state,
+                postal_code: recipient.zip,
+                country: recipient.country || 'US',
+            };
+
+            try {
+                // Send via Thanks.io based on product type
+                let response;
+                const params = {
+                    recipients: [thanksRecipient],
+                    message: recipient.message,
+                    handwriting_style: data.handwritingStyle || '1',
+                    handwriting_color: data.handwritingColor || 'blue',
+                };
+
+                switch (data.productType) {
+                    case 'postcard':
+                        response = await sendPostcard(params);
+                        break;
+                    case 'letter':
+                        response = await sendLetter(params);
+                        break;
+                    case 'greeting':
+                        response = await sendGreetingCard(params);
+                        break;
+                    default:
+                        throw new Error('Invalid product type');
+                }
+
+                // Update order with Thanks.io ID and status
+                await prisma.order.update({
+                    where: { id: order.id },
+                    data: {
+                        status: response.status || 'queued',
+                    },
+                });
+
+                // Create MailOrder record to track Thanks.io order
+                await prisma.mailOrder.create({
+                    data: {
+                        orderId: order.id,
+                        thanksIoOrderId: response.id.toString(),
+                        status: response.status || 'queued',
+                        recipientName: recipient.name,
+                        recipientAddress: `${recipient.address1}, ${recipient.city}, ${recipient.state} ${recipient.zip}`,
+                    },
+                });
+
+                // Increment usage counter
+                await prisma.userUsage.update({
+                    where: { userId: user.id },
+                    data: { lettersSent: { increment: 1 } },
+                });
+
+                // Track unified event
+                const person = await findPersonByIdentity('user', user.id);
+                if (person) {
+                    await trackAppEvent({
+                        eventType: 'letter_sent',
+                        personId: person.id,
+                        properties: {
+                            productType: data.productType,
+                            source: 'csv_bulk_upload',
+                            recipientName: recipient.name,
+                            orderId: order.id,
+                            thanksIoId: response.id.toString(),
+                        },
+                    });
+                }
+
+                // Track in PostHog
+                await trackServerEvent(user.id, 'letter_sent', {
+                    productType: data.productType,
+                    recipientName: recipient.name,
+                    source: 'csv_bulk_upload',
+                });
+
+                // Re-check current usage to see if this is their first or subsequent send
+                const updatedUsage = await prisma.userUsage.findUnique({
+                    where: { userId: user.id },
+                });
+                const totalSent = updatedUsage?.lettersSent || 0;
+                if (totalSent > 1) {
+                    await trackServerEvent(user.id, 'letter_returning_user', {});
+                }
+
+                results.push({
+                    recipientName: recipient.name,
+                    success: true,
+                    orderId: order.id,
+                    thanksIoId: response.id,
+                    status: response.status,
+                });
+                successCount++;
+
+            } catch (sendError: any) {
+                // Mark order as failed
+                await prisma.order.update({
+                    where: { id: order.id },
+                    data: { status: 'failed' },
+                });
+
+                console.error('Thanks.io send error:', sendError);
+                results.push({
+                    recipientName: recipient.name,
+                    success: false,
+                    error: sendError.message || 'Failed to send via Thanks.io',
+                });
+                failCount++;
+            }
+        }
+
+        // Track bulk order completion in PostHog
+        await trackServerEvent(user.id, 'csv_bulk_order_created', {
+            productType: data.productType,
+            totalRecipients: data.recipients.length,
+            successCount,
+            failCount,
+            tier: usage.tier,
+        });
+
+        revalidatePath('/orders');
+        revalidatePath('/dashboard');
+
+        return {
+            success: successCount > 0,
+            results,
+            summary: {
+                total: data.recipients.length,
+                successful: successCount,
+                failed: failCount,
+            },
+        };
+
+    } catch (error: any) {
+        console.error('Failed to create bulk orders from CSV:', error);
+        return { success: false, error: error.message || 'Failed to create bulk orders from CSV' };
+    }
+}

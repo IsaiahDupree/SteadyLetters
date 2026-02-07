@@ -83,6 +83,12 @@ export function Navbar() {
                                 Bulk Send
                             </Link>
                             <Link
+                                href="/send/csv"
+                                className="text-sm font-medium transition-colors hover:text-primary"
+                            >
+                                CSV Upload
+                            </Link>
+                            <Link
                                 href="/orders"
                                 className="text-sm font-medium transition-colors hover:text-primary"
                             >
@@ -222,6 +228,13 @@ export function Navbar() {
                                 className="block px-4 py-3 text-sm font-medium transition-colors hover:bg-accent rounded-md"
                             >
                                 Bulk Send
+                            </Link>
+                            <Link
+                                href="/send/csv"
+                                onClick={closeMobileMenu}
+                                className="block px-4 py-3 text-sm font-medium transition-colors hover:bg-accent rounded-md"
+                            >
+                                CSV Upload
                             </Link>
                             <Link
                                 href="/orders"

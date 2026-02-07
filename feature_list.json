@@ -2,8 +2,8 @@
   "project": "SteadyLetters",
   "description": "SaaS web application for creating and sending physical handwritten-style letters via Thanks.io API integration",
   "version": "1.0",
-  "totalFeatures": 95,
-  "completedFeatures": 100,
+  "totalFeatures": 139,
+  "completedFeatures": 117,
   "phases": {
     "phase1_core": "Core letter generation, voice transcription, image generation",
     "phase2_recipients": "Recipient management and address book",
@@ -1689,6 +1689,509 @@
         "Cron endpoint for periodic evaluation",
         "Unit tests written (27 tests)"
       ]
+    },
+    {
+      "id": "SL-096",
+      "name": "Bulk Letter Upload via CSV",
+      "description": "Upload CSV with recipient data and letter content for batch processing",
+      "category": "core",
+      "priority": "P1",
+      "passes": true,
+      "files": [
+        "src/app/send/csv/page.tsx",
+        "src/features/send/csv-letter-upload-form.tsx",
+        "src/app/actions/orders.ts",
+        "src/lib/csv-parser-impl.js",
+        "src/lib/validations/recipient.js",
+        "src/components/navbar.tsx",
+        "tests/unit/csv-bulk-upload.test.mjs"
+      ],
+      "acceptance": [
+        "CSV upload page created at /send/csv",
+        "CSV parser supports message column",
+        "Address validation integrated for each recipient",
+        "Server action createBulkOrderFromCSV implemented",
+        "Usage limits checked per recipient",
+        "17 unit tests passing",
+        "Navigation links added to navbar",
+        "Template download functionality",
+        "Same message or per-recipient messages supported"
+      ]
+    },
+    {
+      "id": "SL-097",
+      "name": "Letter Preview PDF Generation",
+      "description": "Generate downloadable PDF preview of letter before sending via Thanks.io",
+      "category": "core",
+      "priority": "P1",
+      "passes": false
+    },
+    {
+      "id": "SL-098",
+      "name": "Address Validation with USPS",
+      "description": "Validate recipient addresses against USPS database before sending",
+      "category": "recipients",
+      "priority": "P0",
+      "passes": true,
+      "files": [
+        "src/lib/address-validation.js",
+        "src/app/actions/recipients.ts",
+        "src/app/actions/orders.ts",
+        "tests/unit/address-validation.test.mjs"
+      ],
+      "acceptance": [
+        "USPS API integration complete",
+        "Address validation integrated in recipient creation",
+        "Address validation integrated in order sending",
+        "14 unit tests passing",
+        "Graceful fallback when USPS_USER_ID not configured"
+      ]
+    },
+    {
+      "id": "SL-099",
+      "name": "International Address Support",
+      "description": "Support international address formats and postal codes",
+      "category": "recipients",
+      "priority": "P1",
+      "passes": false
+    },
+    {
+      "id": "SL-100",
+      "name": "Recipient Import from Contacts",
+      "description": "Import recipients from Google Contacts, Outlook, or vCard files",
+      "category": "recipients",
+      "priority": "P2",
+      "passes": false
+    },
+    {
+      "id": "SL-101",
+      "name": "Duplicate Recipient Detection",
+      "description": "Detect and merge duplicate recipients in address book",
+      "category": "recipients",
+      "priority": "P1",
+      "passes": false
+    },
+    {
+      "id": "SL-102",
+      "name": "Custom Handwriting Styles",
+      "description": "Multiple handwriting style options beyond default for letter personalization",
+      "category": "templates",
+      "priority": "P1",
+      "passes": false
+    },
+    {
+      "id": "SL-103",
+      "name": "Holiday Template Library",
+      "description": "Pre-built letter templates for major holidays and occasions",
+      "category": "templates",
+      "priority": "P2",
+      "passes": false
+    },
+    {
+      "id": "SL-104",
+      "name": "Template Variable System",
+      "description": "Dynamic variables (name, date, custom fields) in letter templates",
+      "category": "templates",
+      "priority": "P1",
+      "passes": false
+    },
+    {
+      "id": "SL-105",
+      "name": "Branded Envelope Options",
+      "description": "Custom return address and envelope branding for business users",
+      "category": "templates",
+      "priority": "P2",
+      "passes": false
+    },
+    {
+      "id": "SL-106",
+      "name": "Order Tracking Dashboard",
+      "description": "Real-time order status tracking with delivery estimates from Thanks.io",
+      "category": "orders",
+      "priority": "P1",
+      "passes": false
+    },
+    {
+      "id": "SL-107",
+      "name": "Delivery Confirmation Notifications",
+      "description": "Email/push notifications when letters are delivered",
+      "category": "orders",
+      "priority": "P1",
+      "passes": false
+    },
+    {
+      "id": "SL-108",
+      "name": "Order History & Reorder",
+      "description": "View past orders and quickly reorder with same or modified content",
+      "category": "orders",
+      "priority": "P1",
+      "passes": false
+    },
+    {
+      "id": "SL-109",
+      "name": "Scheduled Sending",
+      "description": "Schedule letters to be sent on specific future dates",
+      "category": "orders",
+      "priority": "P1",
+      "passes": false
+    },
+    {
+      "id": "SL-110",
+      "name": "Recurring Letter Subscriptions",
+      "description": "Set up recurring letters (monthly, quarterly) to same recipients",
+      "category": "billing",
+      "priority": "P2",
+      "passes": false
+    },
+    {
+      "id": "SL-111",
+      "name": "Team/Organization Accounts",
+      "description": "Multi-user accounts with shared templates and recipient lists",
+      "category": "billing",
+      "priority": "P2",
+      "passes": false
+    },
+    {
+      "id": "SL-112",
+      "name": "Usage Analytics Dashboard",
+      "description": "Track letters sent, costs, popular templates, and recipient engagement",
+      "category": "analytics",
+      "priority": "P1",
+      "passes": false
+    },
+    {
+      "id": "SL-113",
+      "name": "A/B Testing for Letter Content",
+      "description": "Test different letter versions to optimize response rates",
+      "category": "analytics",
+      "priority": "P2",
+      "passes": false
+    },
+    {
+      "id": "SL-114",
+      "name": "QR Code Insertion",
+      "description": "Insert QR codes in letters linking to digital content or landing pages",
+      "category": "core",
+      "priority": "P2",
+      "passes": false
+    },
+    {
+      "id": "SL-115",
+      "name": "Photo/Image Attachment",
+      "description": "Include photos or images printed alongside handwritten letter",
+      "category": "core",
+      "priority": "P1",
+      "passes": false
+    },
+    {
+      "id": "SL-116",
+      "name": "Zapier/Make Integration",
+      "description": "Trigger letter sending from Zapier or Make workflows",
+      "category": "integrations",
+      "priority": "P2",
+      "passes": false
+    },
+    {
+      "id": "SL-117",
+      "name": "CRM Integration (HubSpot/Salesforce)",
+      "description": "Sync recipients and trigger letters from CRM events",
+      "category": "integrations",
+      "priority": "P2",
+      "passes": false
+    },
+    {
+      "id": "SL-118",
+      "name": "Shopify Order Thank You Letters",
+      "description": "Automatically send thank-you letters triggered by Shopify orders",
+      "category": "integrations",
+      "priority": "P2",
+      "passes": false
+    },
+    {
+      "id": "SL-119",
+      "name": "Multi-Language Letter Generation",
+      "description": "Generate letters in multiple languages with AI translation",
+      "category": "i18n",
+      "priority": "P2",
+      "passes": false
+    },
+    {
+      "id": "SL-120",
+      "name": "API Access for Developers",
+      "description": "Public REST API for programmatic letter creation and sending",
+      "category": "api",
+      "priority": "P2",
+      "passes": false
+    },
+    {
+      "id": "LIVE-TEST-001",
+      "name": "Live Test Config with Safety Gates",
+      "description": "Create tests/live/config.ts — export LIVE_TEST_CONFIG object with: enabled (from THANKS_IO_LIVE_TEST env), apiKey (from THANKS_IO_API_KEY env), baseUrl 'https://api.thanks.io/api/v2', maxSpend (from THANKS_IO_LIVE_TEST_MAX_SPEND env, default 5.00), profile (from LIVE_TEST_PROFILE env, default 'smoke'), defaultRecipient with hardcoded address. Export assertLiveTestEnabled() that throws if disabled or no API key.",
+      "category": "live-testing",
+      "priority": "P0",
+      "prd": "PRD_LIVE_API_TESTING.md",
+      "acceptance_criteria": [
+        "tests/live/config.ts exports LIVE_TEST_CONFIG object",
+        "LIVE_TEST_CONFIG.enabled reads from THANKS_IO_LIVE_TEST env var, must be 'true'",
+        "LIVE_TEST_CONFIG.apiKey reads from THANKS_IO_API_KEY env var",
+        "LIVE_TEST_CONFIG.maxSpend defaults to 5.00, overridable via THANKS_IO_LIVE_TEST_MAX_SPEND",
+        "LIVE_TEST_CONFIG.defaultRecipient = {name:'SteadyLetters QA', address:'3425 Delaney Drive Apt 214', city:'Melbourne', province:'FL', postal_code:'32934', country:'US'}",
+        "Each recipient field overridable via LIVE_TEST_RECIPIENT_* env vars",
+        "assertLiveTestEnabled() throws descriptive error if not enabled or no API key"
+      ],
+      "files": ["tests/live/config.ts"],
+      "passes": true
+    },
+    {
+      "id": "LIVE-TEST-002",
+      "name": "Cost Tracker with Budget Enforcement",
+      "description": "Create tests/live/cost-tracker.ts — CostTracker class that tracks spend per test run, enforces max budget, records orders with testId/orderId/type/cost/recipient/timestamp, generates JSON report, and saves to tests/live/reports/. Has canSpend(), assertCanSpend(), recordSpend(), recordTestResult(), saveReport(), printSummary() methods.",
+      "category": "live-testing",
+      "priority": "P0",
+      "prd": "PRD_LIVE_API_TESTING.md",
+      "acceptance_criteria": [
+        "tests/live/cost-tracker.ts exports CostTracker class",
+        "constructor(maxSpend, profile) sets budget and generates runId",
+        "canSpend(amount) returns boolean if totalSpent + amount <= maxSpend",
+        "assertCanSpend(amount, description) throws with spend details if over budget",
+        "recordSpend(testId, orderId, type, cost, recipient) adds to total and logs",
+        "recordTestResult('passed'|'failed'|'skipped') increments counters",
+        "getReport() returns {runId, profile, totalSpent, maxSpend, tests:{passed,failed,skipped}, orders[], timestamp}",
+        "saveReport() writes JSON to tests/live/reports/{runId}.json, creates directory if missing",
+        "printSummary() logs formatted summary with emoji to console"
+      ],
+      "files": ["tests/live/cost-tracker.ts"],
+      "passes": true
+    },
+    {
+      "id": "LIVE-TEST-003",
+      "name": "API Connectivity Tests",
+      "description": "In tests/live/thanks-io-live.test.ts, add describe('1. API Connectivity') with 3 tests: LIVE-001 authenticates with Thanks.io GET /handwriting expecting 200, LIVE-002 fetches real styles and asserts array length > 0 with id/name fields, LIVE-003 verifies account is active via GET /account. All $0 cost, always run regardless of profile.",
+      "category": "live-testing",
+      "priority": "P0",
+      "prd": "PRD_LIVE_API_TESTING.md",
+      "acceptance_criteria": [
+        "LIVE-001: GET /handwriting with Bearer token returns 200",
+        "LIVE-002: Response data.data is array with length > 0, first item has id and name",
+        "LIVE-003: GET /account returns 200 (or 404 if endpoint varies)",
+        "All use apiRequest() helper with Authorization: Bearer {API_KEY}",
+        "All record results via tracker.recordTestResult()"
+      ],
+      "files": ["tests/live/thanks-io-live.test.ts"],
+      "passes": true
+    },
+    {
+      "id": "LIVE-TEST-004",
+      "name": "Postcard Send Tests (All Sizes)",
+      "description": "In tests/live/thanks-io-live.test.ts, add describe('2. Postcard Send') with tests: LIVE-004 sends 4x6 postcard ($1.14, runs in smoke+), LIVE-005 sends 6x9 ($1.61, standard+), LIVE-006 sends 6x11 ($1.83, standard+), LIVE-007 sends with custom front_image_url (full only). Each calls tracker.assertCanSpend() before sending, POSTs to /postcard/send with RECIPIENT, MESSAGE, handwriting_style, size. Asserts response.ok, data.id exists, data.status='queued'. Records spend and stores orderId.",
+      "category": "live-testing",
+      "priority": "P0",
+      "prd": "PRD_LIVE_API_TESTING.md",
+      "acceptance_criteria": [
+        "LIVE-004: POST /postcard/send with size:'4x6' → 200, {id, status:'queued'}",
+        "LIVE-005: POST with size:'6x9', skipIf(!isStandard)",
+        "LIVE-006: POST with size:'6x11', skipIf(!isStandard)",
+        "LIVE-007: POST with front_image_url, skipIf(!isFull)",
+        "All send to default recipient: 3425 Delaney Drive Apt 214, Melbourne FL 32934",
+        "All call tracker.assertCanSpend() before sending",
+        "All call tracker.recordSpend() with orderId after success",
+        "All push orderId to createdOrderIds array for later status checks",
+        "Console logs include recipient address and estimated cost"
+      ],
+      "files": ["tests/live/thanks-io-live.test.ts"],
+      "passes": true
+    },
+    {
+      "id": "LIVE-TEST-005",
+      "name": "Letter Send Tests",
+      "description": "In tests/live/thanks-io-live.test.ts, add describe('3. Letter Send') with: LIVE-009 sends windowed letter ($1.20, standard+) via POST /letter/send, LIVE-010 sends 2-page letter ($1.40, full only) with pages:2. Both use default recipient and handwriting style.",
+      "category": "live-testing",
+      "priority": "P1",
+      "prd": "PRD_LIVE_API_TESTING.md",
+      "acceptance_criteria": [
+        "LIVE-009: POST /letter/send → 200, {id, status}, skipIf(!isStandard)",
+        "LIVE-010: POST /letter/send with pages:2 → 200, skipIf(!isFull)",
+        "Both send to default recipient",
+        "Both track spend via CostTracker"
+      ],
+      "files": ["tests/live/thanks-io-live.test.ts"],
+      "passes": true
+    },
+    {
+      "id": "LIVE-TEST-006",
+      "name": "Greeting Card Send Tests",
+      "description": "In tests/live/thanks-io-live.test.ts, add describe('4. Greeting Card Send') with: LIVE-012 sends greeting card ($3.00, full only) via POST /greeting/send with handwriting style and color.",
+      "category": "live-testing",
+      "priority": "P1",
+      "prd": "PRD_LIVE_API_TESTING.md",
+      "acceptance_criteria": [
+        "LIVE-012: POST /greeting/send → 200, {id}, skipIf(!isFull)",
+        "Sends to default recipient",
+        "Tracks $3.00 spend"
+      ],
+      "files": ["tests/live/thanks-io-live.test.ts"],
+      "passes": true
+    },
+    {
+      "id": "LIVE-TEST-007",
+      "name": "Windowless Letter Send Tests",
+      "description": "In tests/live/thanks-io-live.test.ts, add describe('5. Windowless Letter Send') with: LIVE-014 sends windowless letter ($2.52, full only) via POST /send/windowlessletter with a public PDF URL.",
+      "category": "live-testing",
+      "priority": "P1",
+      "prd": "PRD_LIVE_API_TESTING.md",
+      "acceptance_criteria": [
+        "LIVE-014: POST /send/windowlessletter with pdf_url → 200, {id}, skipIf(!isFull)",
+        "Uses publicly accessible PDF URL",
+        "Sends to default recipient",
+        "Tracks $2.52 spend"
+      ],
+      "files": ["tests/live/thanks-io-live.test.ts"],
+      "passes": true
+    },
+    {
+      "id": "LIVE-TEST-008",
+      "name": "Error Handling Tests",
+      "description": "In tests/live/thanks-io-live.test.ts, add describe('6. Error Handling') with 4 tests: LIVE-016 sends with invalid API key expecting 401, LIVE-017 sends with missing recipients/message expecting 400/422, LIVE-018 sends with empty address fields expecting error, LIVE-019 sends with invalid postal code '00000'. All $0 cost, always run.",
+      "category": "live-testing",
+      "priority": "P0",
+      "prd": "PRD_LIVE_API_TESTING.md",
+      "acceptance_criteria": [
+        "LIVE-016: GET /handwriting with 'Bearer invalid_key_for_testing' → 401",
+        "LIVE-017: POST /postcard/send with missing recipients → 400 or 422",
+        "LIVE-018: POST /postcard/send with all empty address fields → error response",
+        "LIVE-019: POST /postcard/send with postal_code:'00000', province:'XX' → handled",
+        "Uses separate apiRequestBadKey() helper for LIVE-016",
+        "No money spent — all should be rejected by API"
+      ],
+      "files": ["tests/live/thanks-io-live.test.ts"],
+      "passes": true
+    },
+    {
+      "id": "LIVE-TEST-009",
+      "name": "Order Status and Tracking",
+      "description": "In tests/live/thanks-io-live.test.ts, add describe('7. Order Status') with: LIVE-020 checks order status by ID from createdOrderIds[0] via GET /order/{id}, standard+ only. Asserts response has id field and logs status.",
+      "category": "live-testing",
+      "priority": "P1",
+      "prd": "PRD_LIVE_API_TESTING.md",
+      "acceptance_criteria": [
+        "LIVE-020: GET /order/{orderId} returns order details, skipIf(!isStandard)",
+        "Skips gracefully if createdOrderIds is empty",
+        "Logs order status to console"
+      ],
+      "files": ["tests/live/thanks-io-live.test.ts"],
+      "passes": true
+    },
+    {
+      "id": "LIVE-TEST-010",
+      "name": "Pricing Verification vs PRODUCT_CATALOG",
+      "description": "In tests/live/thanks-io-live.test.ts, add describe('8. Pricing Verification') with 6 tests: LIVE-022 postcard 4x6=$1.14, LIVE-023 6x9=$1.61, LIVE-024 6x11=$1.83, LIVE-025 letter=$1.20, LIVE-026 greeting=$3.00, LIVE-027 windowless=$2.52. Import PRODUCT_CATALOG and getPostcardPrice from src/lib/thanks-io.ts. All $0 cost, always run.",
+      "category": "live-testing",
+      "priority": "P0",
+      "prd": "PRD_LIVE_API_TESTING.md",
+      "acceptance_criteria": [
+        "LIVE-022: getPostcardPrice('4x6') === 1.14 && PRODUCT_CATALOG.postcard.basePrice === 1.14",
+        "LIVE-023: getPostcardPrice('6x9') === 1.61",
+        "LIVE-024: getPostcardPrice('6x11') === 1.83",
+        "LIVE-025: PRODUCT_CATALOG.letter.basePrice === 1.20",
+        "LIVE-026: PRODUCT_CATALOG.greeting.basePrice === 3.00",
+        "LIVE-027: PRODUCT_CATALOG.windowless_letter.basePrice === 2.52",
+        "Import from '@/lib/thanks-io' using vitest path alias"
+      ],
+      "files": ["tests/live/thanks-io-live.test.ts"],
+      "passes": true
+    },
+    {
+      "id": "LIVE-TEST-011",
+      "name": "Test Run Profiles (Smoke/Standard/Full)",
+      "description": "In tests/live/thanks-io-live.test.ts, implement profile-based gating: const PROFILE reads from LIVE_TEST_CONFIG.profile. isSmoke = true for all profiles. isStandard = true for 'standard' or 'full'. isFull = true only for 'full'. Use it.skipIf(!isStandard) and it.skipIf(!isFull) to gate expensive tests. Smoke runs connectivity + 1 postcard + errors + pricing (~$1.14). Standard adds all sizes + letter (~$5.78). Full adds greeting + windowless (~$12).",
+      "category": "live-testing",
+      "priority": "P0",
+      "prd": "PRD_LIVE_API_TESTING.md",
+      "acceptance_criteria": [
+        "Profile read from LIVE_TEST_CONFIG.profile (env LIVE_TEST_PROFILE, default 'smoke')",
+        "isSmoke always true (base tests always run)",
+        "isStandard true for 'standard' and 'full'",
+        "isFull true only for 'full'",
+        "Smoke: LIVE-001 to LIVE-004, LIVE-016 to LIVE-019, LIVE-022 to LIVE-027 (~$1.14)",
+        "Standard: adds LIVE-005, LIVE-006, LIVE-009, LIVE-020 (~$5.78)",
+        "Full: adds LIVE-007, LIVE-010, LIVE-012, LIVE-014 (~$12.00)"
+      ],
+      "files": ["tests/live/thanks-io-live.test.ts"],
+      "passes": true
+    },
+    {
+      "id": "LIVE-TEST-012",
+      "name": "JSON Report Generation",
+      "description": "CostTracker.saveReport() writes JSON to tests/live/reports/{runId}.json. Report includes: runId (format 'live-{ISO-timestamp}'), profile, totalSpent, maxSpend, tests:{passed,failed,skipped}, orders[] with testId/orderId/type/cost/recipient/timestamp, and run timestamp. Directory created with fs.mkdirSync({recursive:true}) if missing. afterAll() hook calls tracker.saveReport().",
+      "category": "live-testing",
+      "priority": "P1",
+      "prd": "PRD_LIVE_API_TESTING.md",
+      "acceptance_criteria": [
+        "Report JSON saved to tests/live/reports/{runId}.json",
+        "runId format: 'live-{ISO-timestamp-with-dashes}'",
+        "Report contains all required fields per PRD spec",
+        "Directory auto-created if missing",
+        "afterAll() in test suite calls tracker.printSummary() then tracker.saveReport()",
+        "tests/live/reports/ is in .gitignore"
+      ],
+      "files": ["tests/live/cost-tracker.ts", "tests/live/thanks-io-live.test.ts", ".gitignore"],
+      "passes": true
+    },
+    {
+      "id": "LIVE-TEST-013",
+      "name": "npm Scripts for Live Test Invocation",
+      "description": "Add to package.json scripts: 'test:live' runs 'THANKS_IO_LIVE_TEST=true vitest run tests/live/ --reporter=verbose', 'test:live:smoke' sets LIVE_TEST_PROFILE=smoke, 'test:live:standard' sets LIVE_TEST_PROFILE=standard, 'test:live:full' sets LIVE_TEST_PROFILE=full. All chain to npm run test:live.",
+      "category": "live-testing",
+      "priority": "P0",
+      "prd": "PRD_LIVE_API_TESTING.md",
+      "acceptance_criteria": [
+        "package.json has 'test:live' script",
+        "package.json has 'test:live:smoke' script",
+        "package.json has 'test:live:standard' script",
+        "package.json has 'test:live:full' script",
+        "'npm run test:live:smoke' runs only smoke-level tests",
+        "All require THANKS_IO_API_KEY in environment to actually send mail"
+      ],
+      "files": ["package.json"],
+      "passes": true
+    },
+    {
+      "id": "LIVE-TEST-014",
+      "name": "CI Pipeline Exclusion",
+      "description": "Ensure vitest.config.ts include pattern ('tests/unit/**/*.test.ts') does NOT match tests/live/. The test:live script explicitly targets tests/live/ directory. Entire test suite is wrapped in describeIf(ENABLED) where ENABLED checks THANKS_IO_LIVE_TEST=true AND THANKS_IO_API_KEY is set. Without both env vars, all tests skip silently.",
+      "category": "live-testing",
+      "priority": "P0",
+      "prd": "PRD_LIVE_API_TESTING.md",
+      "acceptance_criteria": [
+        "vitest.config.ts include pattern does not match tests/live/**",
+        "Test suite uses describe.skip when ENABLED is false",
+        "ENABLED requires THANKS_IO_LIVE_TEST='true' AND THANKS_IO_API_KEY truthy",
+        "Running 'npm test' or 'vitest' does NOT execute live tests",
+        "Only 'npm run test:live' executes live tests"
+      ],
+      "files": ["vitest.config.ts", "tests/live/thanks-io-live.test.ts"],
+      "passes": true
+    },
+    {
+      "id": "LIVE-TEST-015",
+      "name": "Default Test Recipient Configuration",
+      "description": "In tests/live/config.ts, LIVE_TEST_CONFIG.defaultRecipient is a Recipient object (matching type from src/lib/thanks-io.ts) with hardcoded defaults: name='SteadyLetters QA', address='3425 Delaney Drive Apt 214', city='Melbourne', province='FL', postal_code='32934', country='US'. Each field overridable via LIVE_TEST_RECIPIENT_NAME, LIVE_TEST_RECIPIENT_ADDRESS, LIVE_TEST_RECIPIENT_CITY, LIVE_TEST_RECIPIENT_STATE, LIVE_TEST_RECIPIENT_ZIP, LIVE_TEST_RECIPIENT_COUNTRY env vars.",
+      "category": "live-testing",
+      "priority": "P0",
+      "prd": "PRD_LIVE_API_TESTING.md",
+      "acceptance_criteria": [
+        "defaultRecipient type matches Recipient from src/lib/thanks-io.ts",
+        "Default name: 'SteadyLetters QA'",
+        "Default address: '3425 Delaney Drive Apt 214'",
+        "Default city: 'Melbourne'",
+        "Default province: 'FL'",
+        "Default postal_code: '32934'",
+        "Default country: 'US'",
+        "All 6 fields overridable via LIVE_TEST_RECIPIENT_* env vars",
+        "defaultMessage includes ISO timestamp for uniqueness"
+      ],
+      "files": ["tests/live/config.ts"],
+      "passes": true
     }
   ]
 }
