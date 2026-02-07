@@ -25,6 +25,7 @@ import { getRecipients } from '@/app/actions/recipients';
 import { getTemplates } from '@/app/actions/templates';
 import { createOrder } from '@/app/actions/orders';
 import { generateAndDownloadLetterPDF } from '@/lib/letter-pdf';
+import { HandwritingStyleSelector } from '@/components/handwriting-style-selector';
 import { Loader2, FileDown } from 'lucide-react';
 
 type Recipient = {
@@ -271,26 +272,18 @@ export function SendForm() {
                                     <SelectContent>
                                         <SelectItem value="blue">Blue</SelectItem>
                                         <SelectItem value="black">Black</SelectItem>
+                                        <SelectItem value="green">Green</SelectItem>
+                                        <SelectItem value="purple">Purple</SelectItem>
+                                        <SelectItem value="red">Red</SelectItem>
                                     </SelectContent>
                                 </Select>
                             </div>
 
-                            <div className="space-y-2">
-                                <Label htmlFor="handwritingStyle">Style</Label>
-                                <Select
-                                    value={handwritingStyle}
-                                    onValueChange={setHandwritingStyle}
-                                >
-                                    <SelectTrigger id="handwritingStyle">
-                                        <SelectValue />
-                                    </SelectTrigger>
-                                    <SelectContent>
-                                        <SelectItem value="1">Style 1</SelectItem>
-                                        <SelectItem value="2">Style 2</SelectItem>
-                                        <SelectItem value="3">Style 3</SelectItem>
-                                    </SelectContent>
-                                </Select>
-                            </div>
+                            <HandwritingStyleSelector
+                                value={handwritingStyle}
+                                onValueChange={setHandwritingStyle}
+                                label="Style"
+                            />
                         </div>
                     </form>
                 </CardContent>
