@@ -9,6 +9,7 @@ import { trackServerEvent } from '@/lib/posthog-server';
 import { validateAddress } from '@/lib/address-validation.js';
 import { trackAppEvent } from '@/lib/unified-events';
 import { findPersonByIdentity } from '@/lib/identity';
+import { parseTemplateVariables } from '@/lib/template-variables.js';
 
 export async function createOrder(data: {
     recipientId: string;
@@ -95,6 +96,21 @@ export async function createOrder(data: {
             },
         });
         
+        // Parse template variables in message
+        const parsedMessage = parseTemplateVariables(data.message, {
+            name: recipient.name,
+            address1: recipient.address1,
+            address2: recipient.address2,
+            city: recipient.city,
+            state: recipient.state,
+            zip: recipient.zip,
+            country: recipient.country,
+            custom1: recipient.custom1,
+            custom2: recipient.custom2,
+            custom3: recipient.custom3,
+            custom4: recipient.custom4,
+        });
+
         // Format recipient for Thanks.io
         const thanksRecipient = {
             name: recipient.name,
@@ -105,13 +121,13 @@ export async function createOrder(data: {
             postal_code: recipient.zip,
             country: recipient.country,
         };
-        
+
         try {
             // Send via Thanks.io based on product type
             let response;
             const params = {
                 recipients: [thanksRecipient],
-                message: data.message,
+                message: parsedMessage,
                 front_image_url: data.frontImageUrl,
                 handwriting_style: data.handwritingStyle || '1',
                 handwriting_color: data.handwritingColor || 'blue',

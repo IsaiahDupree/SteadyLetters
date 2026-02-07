@@ -17,6 +17,8 @@ import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { HandwritingStyleSelector } from '@/components/handwriting-style-selector';
 import { createTemplate } from '@/app/actions/templates';
+import { AVAILABLE_VARIABLES } from '@/lib/template-variables.js';
+import { Info } from 'lucide-react';
 
 export function TemplateForm() {
     const [open, setOpen] = useState(false);
@@ -122,15 +124,30 @@ export function TemplateForm() {
                             <Label htmlFor="message" className="text-right pt-2">
                                 Message
                             </Label>
-                            <Textarea
-                                name="message"
-                                id="message"
-                                className="col-span-3"
-                                placeholder="Hello {{name}}, ..."
-                                rows={5}
-                                required
-                                defaultValue={initialMessage}
-                            />
+                            <div className="col-span-3 space-y-2">
+                                <Textarea
+                                    name="message"
+                                    id="message"
+                                    placeholder="Hello {{name}}, ..."
+                                    rows={5}
+                                    required
+                                    defaultValue={initialMessage}
+                                />
+                                <details className="text-xs text-muted-foreground">
+                                    <summary className="cursor-pointer flex items-center gap-1 hover:text-foreground">
+                                        <Info className="h-3 w-3" />
+                                        Available variables
+                                    </summary>
+                                    <div className="mt-2 space-y-1 pl-4">
+                                        {AVAILABLE_VARIABLES.map((variable) => (
+                                            <div key={variable.key} className="flex gap-2">
+                                                <code className="bg-muted px-1 rounded">{variable.key}</code>
+                                                <span className="text-muted-foreground">- {variable.description}</span>
+                                            </div>
+                                        ))}
+                                    </div>
+                                </details>
+                            </div>
                         </div>
                     </div>
                     <DialogFooter>

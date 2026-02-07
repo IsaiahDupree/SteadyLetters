@@ -26,7 +26,8 @@ import { getTemplates } from '@/app/actions/templates';
 import { createOrder } from '@/app/actions/orders';
 import { generateAndDownloadLetterPDF } from '@/lib/letter-pdf';
 import { HandwritingStyleSelector } from '@/components/handwriting-style-selector';
-import { Loader2, FileDown } from 'lucide-react';
+import { AVAILABLE_VARIABLES } from '@/lib/template-variables.js';
+import { Loader2, FileDown, Info } from 'lucide-react';
 
 type Recipient = {
     id: string;
@@ -236,10 +237,23 @@ export function SendForm() {
                                 id="message"
                                 value={message}
                                 onChange={(e) => setMessage(e.target.value)}
-                                placeholder="Write your letter content here..."
+                                placeholder="Write your letter content here... (You can use variables like {{name}}, {{date}}, etc.)"
                                 rows={8}
                                 className="resize-none"
                             />
+                            <details className="text-xs text-muted-foreground">
+                                <summary className="cursor-pointer flex items-center gap-1 hover:text-foreground">
+                                    <Info className="h-3 w-3" />
+                                    Available variables
+                                </summary>
+                                <div className="mt-2 grid grid-cols-2 gap-1 pl-4">
+                                    {AVAILABLE_VARIABLES.slice(0, 8).map((variable) => (
+                                        <div key={variable.key} className="flex gap-1">
+                                            <code className="bg-muted px-1 rounded text-xs">{variable.key}</code>
+                                        </div>
+                                    ))}
+                                </div>
+                            </details>
                         </div>
 
                         <div className="space-y-2">
