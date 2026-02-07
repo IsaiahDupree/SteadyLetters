@@ -317,6 +317,66 @@ function getNextResetDate(): Date {
     return nextMonth;
 }
 
+/**
+ * Reorder an existing order - creates a new order with the same details
+ * This is useful for sending the same letter to the same recipient again
+ */
+export async function reorderOrder(orderId: string) {
+    try {
+        const user = await getCurrentUser();
+
+        // Get the original order with all its details
+        const originalOrder = await prisma.order.findUnique({
+            where: { id: orderId },
+            include: {
+                recipient: true,
+                template: true,
+            },
+        });
+
+        if (!originalOrder || originalOrder.userId !== user.id) {
+            return { success: false, error: 'Order not found or unauthorized' };
+        }
+
+        if (!originalOrder.recipient) {
+            return { success: false, error: 'Cannot reorder: original order has no recipient information' };
+        }
+
+        // Extract the message from the template or reconstruct it
+        const message = originalOrder.template?.message || '';
+
+        if (!message) {
+            return { success: false, error: 'Cannot reorder: original order has no message content' };
+        }
+
+        // Create a new order using the createOrder function with the original details
+        // Note: We'll use 'postcard' as the default product type since we don't have it stored
+        // In a future update, we should add productType to the Order model
+        const result = await createOrder({
+            recipientId: originalOrder.recipientId,
+            templateId: originalOrder.templateId || undefined,
+            message: message,
+            productType: 'postcard', // Default - should be stored in future
+            handwritingStyle: '1', // Default - should be stored in future
+            handwritingColor: 'blue', // Default - should be stored in future
+        });
+
+        if (result.success) {
+            // Track reorder event
+            await trackServerEvent(user.id, 'order_reordered', {
+                originalOrderId: orderId,
+                newOrderId: result.orderId,
+                recipientId: originalOrder.recipientId,
+            });
+        }
+
+        return result;
+    } catch (error: any) {
+        console.error('Failed to reorder:', error);
+        return { success: false, error: error.message || 'Failed to reorder' };
+    }
+}
+
 export async function createBulkOrder(data: {
     recipientIds: string[];
     templateId?: string;

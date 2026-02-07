@@ -6,6 +6,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Badge } from '@/components/ui/badge';
 import { formatDistanceToNow } from 'date-fns';
 import { Mail, Package, DollarSign, User } from 'lucide-react';
+import Link from 'next/link';
 
 // Force dynamic rendering to prevent static generation errors during build
 // This page requires database access which isn't available at build time
@@ -123,34 +124,37 @@ export default async function OrdersPage() {
                     ) : (
                         <div className="space-y-4">
                             {orders.map((order) => (
-                                <div
+                                <Link
                                     key={order.id}
-                                    className="flex items-center justify-between p-4 border rounded-lg hover:bg-muted/50 transition-colors"
+                                    href={`/orders/${order.id}`}
+                                    className="block"
                                 >
-                                    <div className="flex-1">
-                                        <div className="flex items-center gap-3 mb-2">
-                                            <Badge className={getStatusColor(order.status)}>
-                                                {order.status}
-                                            </Badge>
-                                            {order.recipient && (
-                                                <span className="font-medium">
-                                                    {order.recipient.name}
-                                                </span>
+                                    <div className="flex items-center justify-between p-4 border rounded-lg hover:bg-muted/50 transition-colors cursor-pointer">
+                                        <div className="flex-1">
+                                            <div className="flex items-center gap-3 mb-2">
+                                                <Badge className={getStatusColor(order.status)}>
+                                                    {order.status}
+                                                </Badge>
+                                                {order.recipient && (
+                                                    <span className="font-medium">
+                                                        {order.recipient.name}
+                                                    </span>
+                                                )}
+                                            </div>
+                                            {order.template && (
+                                                <p className="text-sm text-muted-foreground line-clamp-1">
+                                                    {order.template.name}
+                                                </p>
                                             )}
-                                        </div>
-                                        {order.template && (
-                                            <p className="text-sm text-muted-foreground line-clamp-1">
-                                                {order.template.name}
-                                            </p>
-                                        )}
-                                        <div className="flex items-center gap-4 mt-2 text-xs text-muted-foreground">
-                                            {order.thanksIoOrderId && (
-                                                <span>Order #{order.thanksIoOrderId.substring(0, 8)}</span>
-                                            )}
-                                            <span>{formatDistanceToNow(order.createdAt, { addSuffix: true })}</span>
+                                            <div className="flex items-center gap-4 mt-2 text-xs text-muted-foreground">
+                                                {order.thanksIoOrderId && (
+                                                    <span>Order #{order.thanksIoOrderId.substring(0, 8)}</span>
+                                                )}
+                                                <span>{formatDistanceToNow(order.createdAt, { addSuffix: true })}</span>
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
+                                </Link>
                             ))}
                         </div>
                     )}
