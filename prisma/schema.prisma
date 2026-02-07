@@ -110,7 +110,10 @@ model Order {
   template        Template? @relation(fields: [templateId], references: [id])
   thanksIoOrderId String?
   status          String    @default("pending")
+  scheduledFor    DateTime? // For scheduled sending (SL-109)
   createdAt       DateTime  @default(now())
+
+  @@index([scheduledFor, status])
 }
 
 model MailOrder {
@@ -127,11 +130,14 @@ model MailOrder {
 
   cost Decimal @db.Decimal(10, 2)
 
+  scheduledFor DateTime? // For scheduled sending (SL-109)
+
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
   @@index([userId])
   @@index([thanksIoOrderId])
+  @@index([scheduledFor, status])
 }
 
 model Event {

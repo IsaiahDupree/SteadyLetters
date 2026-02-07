@@ -3,7 +3,7 @@
   "description": "SaaS web application for creating and sending physical handwritten-style letters via Thanks.io API integration",
   "version": "1.0",
   "totalFeatures": 139,
-  "completedFeatures": 123,
+  "completedFeatures": 125,
   "phases": {
     "phase1_core": "Core letter generation, voice transcription, image generation",
     "phase2_recipients": "Recipient management and address book",
@@ -1894,7 +1894,19 @@
       "description": "Email/push notifications when letters are delivered",
       "category": "orders",
       "priority": "P1",
-      "passes": false
+      "passes": true,
+      "files": [
+        "src/app/api/webhooks/thanks/route.ts",
+        "src/lib/email.js",
+        "tests/integration/webhook-email-notification.test.mjs"
+      ],
+      "acceptance": [
+        "Email notifications sent on order status changes",
+        "HTML email templates with order details",
+        "Support for all order statuses (pending, queued, processing, printed, shipped, delivered, failed, cancelled)",
+        "Integration with Thanks.io webhook handler",
+        "Comprehensive test coverage (11 tests)"
+      ]
     },
     {
       "id": "SL-108",
@@ -1926,7 +1938,26 @@
       "description": "Schedule letters to be sent on specific future dates",
       "category": "orders",
       "priority": "P1",
-      "passes": false
+      "passes": true,
+      "files": [
+        "prisma/schema.prisma",
+        "src/app/actions/orders.ts",
+        "src/app/api/cron/process-scheduled-orders/route.ts",
+        "vercel.json",
+        "tests/unit/scheduled-orders.test.mjs"
+      ],
+      "acceptance": [
+        "Order schema includes scheduledFor field with index",
+        "createOrder() accepts optional scheduledFor parameter",
+        "Orders with scheduledFor are created with 'scheduled' status",
+        "Scheduled orders are not sent immediately",
+        "Cron job processes scheduled orders every 15 minutes",
+        "Cron job sends orders via Thanks.io API when due",
+        "Orders update to 'queued' status after sending",
+        "Failed orders marked with 'failed' status",
+        "Cron endpoint authenticated with CRON_SECRET",
+        "22 comprehensive unit tests passing"
+      ]
     },
     {
       "id": "SL-110",

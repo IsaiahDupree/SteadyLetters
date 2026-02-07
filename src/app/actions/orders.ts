@@ -19,6 +19,7 @@ export async function createOrder(data: {
     frontImageUrl?: string;
     handwritingStyle?: string;
     handwritingColor?: string;
+    scheduledFor?: Date | string; // Optional scheduled send date (SL-109)
 }) {
     try {
         const user = await getCurrentUser();
@@ -86,13 +87,29 @@ export async function createOrder(data: {
             };
         }
 
-        // Create order record first (pending status)
+        // Parse scheduledFor date if provided
+        const scheduledFor = data.scheduledFor
+            ? typeof data.scheduledFor === 'string'
+                ? new Date(data.scheduledFor)
+                : data.scheduledFor
+            : null;
+
+        // Validate scheduled date is in the future
+        if (scheduledFor && scheduledFor <= new Date()) {
+            return {
+                success: false,
+                error: 'Scheduled date must be in the future'
+            };
+        }
+
+        // Create order record first (scheduled or pending status)
         const order = await prisma.order.create({
             data: {
                 userId: user.id,
                 recipientId: data.recipientId,
                 templateId: data.templateId || null,
-                status: 'pending',
+                status: scheduledFor ? 'scheduled' : 'pending',
+                scheduledFor,
             },
         });
         
@@ -110,6 +127,26 @@ export async function createOrder(data: {
             custom3: recipient.custom3,
             custom4: recipient.custom4,
         });
+
+        // If scheduled for future, don't send now - just return the order
+        if (scheduledFor) {
+            revalidatePath('/orders');
+
+            // Track scheduled order creation in PostHog
+            await trackServerEvent(user.id, 'order_scheduled', {
+                productType: data.productType,
+                orderId: order.id,
+                scheduledFor: scheduledFor.toISOString(),
+                tier: usage.tier,
+            });
+
+            return {
+                success: true,
+                orderId: order.id,
+                message: `Order scheduled for ${scheduledFor.toLocaleString()}`,
+                scheduled: true,
+            };
+        }
 
         // Format recipient for Thanks.io
         const thanksRecipient = {
