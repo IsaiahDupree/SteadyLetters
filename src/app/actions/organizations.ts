@@ -1,29 +1,8 @@
 'use server';
 
 import { prisma } from '@/lib/prisma';
-import { createServerClient } from '@/lib/supabase-server';
 import { revalidatePath } from 'next/cache';
-
-async function getCurrentUser() {
-  const supabase = createServerClient();
-  const { data: { user: authUser } } = await supabase.auth.getUser();
-
-  if (!authUser?.email) {
-    throw new Error('Unauthorized');
-  }
-
-  let user = await prisma.user.findUnique({
-    where: { email: authUser.email },
-  });
-
-  if (!user) {
-    user = await prisma.user.create({
-      data: { email: authUser.email },
-    });
-  }
-
-  return user;
-}
+import { getCurrentUser } from '@/lib/server-auth';
 
 export async function createOrganization(data: {
   name: string;
