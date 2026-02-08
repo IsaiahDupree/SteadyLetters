@@ -7,6 +7,7 @@ import { Badge } from '@/components/ui/badge';
 import { CreditCard, Calendar, TrendingUp, Loader2 } from 'lucide-react';
 import { useAuth } from '@/contexts/auth-context';
 import { UsageItem } from '@/components/usage-item';
+import { ReturnAddressForm } from '@/features/account/return-address-form';
 
 interface UsageStats {
     letterGenerations: { used: number; limit: number; percentage: number };
@@ -268,6 +269,9 @@ export default function BillingPage() {
                     </Button>
                 </CardContent>
             </Card>
+
+            {/* Branded Envelope Options */}
+            <ReturnAddressForm />
             </div>
         </div>
     );

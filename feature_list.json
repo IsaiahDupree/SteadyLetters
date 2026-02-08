@@ -3,7 +3,7 @@
   "description": "SaaS web application for creating and sending physical handwritten-style letters via Thanks.io API integration",
   "version": "1.0",
   "totalFeatures": 139,
-  "completedFeatures": 128,
+  "completedFeatures": 129,
   "phases": {
     "phase1_core": "Core letter generation, voice transcription, image generation",
     "phase2_recipients": "Recipient management and address book",
@@ -1908,7 +1908,23 @@
       "description": "Custom return address and envelope branding for business users",
       "category": "templates",
       "priority": "P2",
-      "passes": false
+      "passes": true,
+      "files": [
+        "src/app/actions/account.ts",
+        "src/features/account/return-address-form.tsx",
+        "src/app/billing/page.tsx",
+        "tests/unit/branded-envelope.test.ts"
+      ],
+      "acceptance": [
+        "ReturnAddressForm component with full address fields (name, address1, address2, city, state, zip, country)",
+        "updateReturnAddress() and getReturnAddress() server actions",
+        "State dropdown with all US states and international country support",
+        "Return address saved to User model in database",
+        "Integrated into billing page for easy discovery",
+        "10 comprehensive unit tests for ReturnAddress type and use cases",
+        "Success/error feedback on form submission",
+        "Reset button to reload from database"
+      ]
     },
     {
       "id": "SL-106",
