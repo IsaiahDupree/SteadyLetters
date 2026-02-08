@@ -1,5 +1,6 @@
 import { TemplateForm } from '@/features/templates/template-form';
 import { TemplateList } from '@/features/templates/template-list';
+import { HolidayTemplatesGallery } from '@/features/templates/holiday-templates-gallery';
 
 export const dynamic = 'force-dynamic';
 
@@ -14,7 +15,8 @@ export default function TemplatesPage() {
                     Reusable letter templates for quick personalization
                 </p>
             </div>
-            <div className="flex justify-end">
+            <div className="flex gap-2 justify-end">
+                <HolidayTemplatesGallery />
                 <TemplateForm />
             </div>
             <TemplateList />
