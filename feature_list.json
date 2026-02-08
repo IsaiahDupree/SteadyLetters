@@ -1790,7 +1790,22 @@
       "description": "Import recipients from Google Contacts, Outlook, or vCard files",
       "category": "recipients",
       "priority": "P2",
-      "passes": false
+      "passes": true,
+      "files": [
+        "src/app/recipients/import/page.tsx",
+        "src/features/recipients/vcard-import-form.tsx",
+        "src/lib/vcard-parser.ts",
+        "tests/unit/vcard-parser.test.ts"
+      ],
+      "acceptance": [
+        "vCard parser supports vCard 3.0 and 4.0 formats",
+        "Handles Apple Contacts, Outlook, and Google Contacts formats",
+        "Line continuations handled correctly",
+        "Quoted-printable encoding supported with UTF-8 decoding",
+        "Extended address fields (apartments/suites) combined with street",
+        "Item-prefixed properties (Apple format: item1.ADR) parsed correctly",
+        "23 comprehensive unit tests passing"
+      ]
     },
     {
       "id": "SL-101",

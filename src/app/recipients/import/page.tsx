@@ -1,11 +1,16 @@
+'use client';
+
+import { useState } from 'react';
 import { CSVImportForm } from '@/features/recipients/csv-import-form';
+import { VCardImportForm } from '@/features/recipients/vcard-import-form';
 import { Button } from '@/components/ui/button';
-import { ArrowLeft } from 'lucide-react';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { ArrowLeft, FileText, Users } from 'lucide-react';
 import Link from 'next/link';
 
-export const dynamic = 'force-dynamic';
-
 export default function RecipientImportPage() {
+    const [activeTab, setActiveTab] = useState('csv');
+
     return (
         <div className="space-y-6">
             <div className="flex items-center gap-4">
@@ -22,11 +27,30 @@ export default function RecipientImportPage() {
                     Import Recipients
                 </h1>
                 <p className="text-muted-foreground text-lg">
-                    Bulk import recipients from a CSV file
+                    Bulk import recipients from CSV or vCard files
                 </p>
             </div>
 
-            <CSVImportForm />
+            <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
+                <TabsList className="grid w-full max-w-md grid-cols-2">
+                    <TabsTrigger value="csv" className="flex items-center gap-2">
+                        <FileText className="h-4 w-4" />
+                        CSV Import
+                    </TabsTrigger>
+                    <TabsTrigger value="vcard" className="flex items-center gap-2">
+                        <Users className="h-4 w-4" />
+                        vCard Import
+                    </TabsTrigger>
+                </TabsList>
+
+                <TabsContent value="csv" className="space-y-6">
+                    <CSVImportForm />
+                </TabsContent>
+
+                <TabsContent value="vcard" className="space-y-6">
+                    <VCardImportForm />
+                </TabsContent>
+            </Tabs>
         </div>
     );
 }
