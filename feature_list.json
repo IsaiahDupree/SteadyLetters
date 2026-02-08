@@ -2011,7 +2011,7 @@
       "description": "Set up recurring letters (monthly, quarterly) to same recipients",
       "category": "billing",
       "priority": "P2",
-      "passes": false
+      "passes": true
     },
     {
       "id": "SL-111",
@@ -2019,7 +2019,7 @@
       "description": "Multi-user accounts with shared templates and recipient lists",
       "category": "billing",
       "priority": "P2",
-      "passes": false
+      "passes": true
     },
     {
       "id": "SL-112",
@@ -2054,7 +2054,7 @@
       "description": "Test different letter versions to optimize response rates",
       "category": "analytics",
       "priority": "P2",
-      "passes": false
+      "passes": true
     },
     {
       "id": "SL-114",
@@ -2110,7 +2110,7 @@
       "description": "Trigger letter sending from Zapier or Make workflows",
       "category": "integrations",
       "priority": "P2",
-      "passes": false
+      "passes": true
     },
     {
       "id": "SL-117",
@@ -2118,7 +2118,7 @@
       "description": "Sync recipients and trigger letters from CRM events",
       "category": "integrations",
       "priority": "P2",
-      "passes": false
+      "passes": true
     },
     {
       "id": "SL-118",
@@ -2126,7 +2126,7 @@
       "description": "Automatically send thank-you letters triggered by Shopify orders",
       "category": "integrations",
       "priority": "P2",
-      "passes": false
+      "passes": true
     },
     {
       "id": "SL-119",
@@ -2134,7 +2134,7 @@
       "description": "Generate letters in multiple languages with AI translation",
       "category": "i18n",
       "priority": "P2",
-      "passes": false
+      "passes": true
     },
     {
       "id": "SL-120",
@@ -2142,7 +2142,7 @@
       "description": "Public REST API for programmatic letter creation and sending",
       "category": "api",
       "priority": "P2",
-      "passes": false
+      "passes": true
     },
     {
       "id": "LIVE-TEST-001",
