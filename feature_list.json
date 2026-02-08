@@ -3,7 +3,7 @@
   "description": "SaaS web application for creating and sending physical handwritten-style letters via Thanks.io API integration",
   "version": "1.0",
   "totalFeatures": 139,
-  "completedFeatures": 126,
+  "completedFeatures": 127,
   "phases": {
     "phase1_core": "Core letter generation, voice transcription, image generation",
     "phase2_recipients": "Recipient management and address book",
@@ -2024,7 +2024,22 @@
       "description": "Include photos or images printed alongside handwritten letter",
       "category": "core",
       "priority": "P1",
-      "passes": false
+      "passes": true,
+      "files": [
+        "src/components/photo-upload.tsx",
+        "src/app/api/upload/image/route.ts",
+        "src/features/send/send-form.tsx",
+        "tests/integration/photo-attachment.test.mjs"
+      ],
+      "acceptance": [
+        "Photo upload component with drag-and-drop support",
+        "10MB file size limit with validation",
+        "Image stored in Supabase Storage with user-specific paths",
+        "Photo preview in send form",
+        "User photo overrides template image",
+        "Supports all product types (postcard, letter, greeting card)",
+        "14 integration tests passing"
+      ]
     },
     {
       "id": "SL-116",

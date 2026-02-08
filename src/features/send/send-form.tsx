@@ -27,6 +27,7 @@ import { createOrder } from '@/app/actions/orders';
 import { generateAndDownloadLetterPDF } from '@/lib/letter-pdf';
 import { HandwritingStyleSelector } from '@/components/handwriting-style-selector';
 import { AVAILABLE_VARIABLES } from '@/lib/template-variables.js';
+import { PhotoUpload } from '@/components/photo-upload';
 import { Loader2, FileDown, Info } from 'lucide-react';
 
 type Recipient = {
@@ -59,6 +60,7 @@ export function SendForm() {
     const [message, setMessage] = useState('');
     const [handwritingStyle, setHandwritingStyle] = useState('1');
     const [handwritingColor, setHandwritingColor] = useState('blue');
+    const [attachedPhotoUrl, setAttachedPhotoUrl] = useState<string | null>(null);
 
     useEffect(() => {
         loadData();
@@ -147,12 +149,15 @@ export function SendForm() {
         try {
             const template = templates.find((t) => t.id === selectedTemplate);
 
+            // Prefer user-attached photo over template image
+            const imageUrl = attachedPhotoUrl || template?.frontImageUrl || undefined;
+
             const result = await createOrder({
                 recipientId: selectedRecipient,
                 templateId: selectedTemplate || undefined,
                 message,
                 productType,
-                frontImageUrl: template?.frontImageUrl || undefined,
+                frontImageUrl: imageUrl,
                 handwritingStyle,
                 handwritingColor,
             });
@@ -299,6 +304,16 @@ export function SendForm() {
                                 label="Style"
                             />
                         </div>
+
+                        <div className="space-y-2">
+                            <Label>Attach Photo (Optional)</Label>
+                            <PhotoUpload
+                                value={attachedPhotoUrl || undefined}
+                                onChange={setAttachedPhotoUrl}
+                                maxSizeMB={10}
+                                disabled={submitting}
+                            />
+                        </div>
                     </form>
                 </CardContent>
                 <CardFooter className="flex gap-2">
@@ -350,14 +365,22 @@ export function SendForm() {
                             </div>
                         )}
 
-                        {template?.frontImageUrl && (
-                            <div className="aspect-video w-full overflow-hidden rounded-lg bg-muted flex items-center justify-center">
-                                {/* eslint-disable-next-line @next/next/no-img-element */}
-                                <img
-                                    src={template.frontImageUrl}
-                                    alt={template.name}
-                                    className="h-full w-full object-cover"
-                                />
+                        {(attachedPhotoUrl || template?.frontImageUrl) && (
+                            <div className="space-y-2">
+                                <p className="text-sm font-semibold">Attached Photo:</p>
+                                <div className="aspect-video w-full overflow-hidden rounded-lg bg-muted flex items-center justify-center">
+                                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                                    <img
+                                        src={attachedPhotoUrl || template?.frontImageUrl || ''}
+                                        alt={attachedPhotoUrl ? 'Your attached photo' : template?.name}
+                                        className="h-full w-full object-cover"
+                                    />
+                                </div>
+                                {attachedPhotoUrl && (
+                                    <p className="text-xs text-muted-foreground">
+                                        Custom photo (overrides template image)
+                                    </p>
+                                )}
                             </div>
                         )}
 

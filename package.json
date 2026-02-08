@@ -27,7 +27,7 @@
     "diagnose": "npm run check:env && npm run validate:keys && npm run test:production-diagnostics",
     "diagnose:local": "npm run check:env && npm run validate:keys && npm run test:api-health",
     "test:post-deploy": "node scripts/post-deploy-tests.mjs",
-    "test:live": "THANKS_IO_LIVE_TEST=true vitest run tests/live/thanks-io-live.test.ts --reporter=verbose --no-coverage",
+    "test:live": "THANKS_IO_LIVE_TEST=true vitest run --config vitest.config.live.ts --reporter=verbose --no-coverage",
     "test:live:smoke": "LIVE_TEST_PROFILE=smoke npm run test:live",
     "test:live:standard": "LIVE_TEST_PROFILE=standard npm run test:live",
     "test:live:full": "LIVE_TEST_PROFILE=full npm run test:live"

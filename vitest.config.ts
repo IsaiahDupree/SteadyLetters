@@ -8,9 +8,10 @@ export default defineConfig({
     environment: 'jsdom',
     globals: true,
     setupFiles: ['./vitest.setup.ts'],
-    // Include both unit and live tests, but live tests use describe.skip to prevent
-    // accidental execution without THANKS_IO_LIVE_TEST=true AND THANKS_IO_API_KEY set
-    include: ['tests/unit/**/*.test.tsx', 'tests/unit/**/*.test.ts', 'tests/live/**/*.test.ts'],
+    // Only include unit tests by default
+    // Live tests are excluded to prevent accidental execution
+    // Use 'npm run test:live' to run live tests explicitly
+    include: ['tests/unit/**/*.test.tsx', 'tests/unit/**/*.test.ts'],
   },
   resolve: {
     alias: {
