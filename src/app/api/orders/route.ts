@@ -170,9 +170,9 @@ export async function PATCH(request: NextRequest) {
             );
         }
 
-        // Valid statuses
-        const validStatuses = ['draft', 'pending', 'sent', 'delivered', 'failed'];
-        if (!validStatuses.includes(status)) {
+        // Valid statuses (includes Thanks.io real statuses)
+        const validStatuses = ['draft', 'pending', 'queued', 'reviewing', 'printing', 'printed', 'processing', 'fulfilled', 'shipped', 'sent', 'delivered', 'cancelled', 'failed', 'error'];
+        if (!validStatuses.includes(status.toLowerCase())) {
             return NextResponse.json(
                 { error: `Invalid status. Must be one of: ${validStatuses.join(', ')}` },
                 { status: 400 }

@@ -20,19 +20,37 @@ export async function POST(request: NextRequest) {
         }
 
         // Parse the verified body
-        const data = JSON.parse(body);
+        const payload = JSON.parse(body);
 
-        // Extract order info from Thanks.io webhook
-        const { order_id, status, event_type } = data;
+        // Thanks.io webhook format (from docs):
+        // { event_type: "order.status_update", event_id: "...", data: { "order.id": 42401, "order.status": "Printing" }, timestamp: ... }
+        // { event_type: "order_item.delivered", data: { "order_item.id": ..., "order.id": ..., "order_item.current_status": "Delivered", "recipient.name": ... } }
+        const eventType = payload.event_type;
+        const eventData = payload.data || {};
+
+        // Extract order ID — Thanks.io uses dot-notation keys in the data object
+        const order_id = String(eventData['order.id'] || eventData.order_id || '');
         
         if (!order_id) {
             return NextResponse.json(
-                { error: 'Missing order_id' }, 
+                { error: 'Missing order.id in webhook payload' }, 
                 { status: 400 }
             );
         }
-        
-        const newStatus = status || event_type || 'unknown';
+
+        // Determine new status based on event type
+        let newStatus: string;
+        if (eventType === 'order.status_update') {
+            newStatus = eventData['order.status'] || 'unknown';
+        } else if (eventType === 'order_item.delivered') {
+            newStatus = eventData['order_item.current_status'] || 'Delivered';
+        } else if (eventType === 'order_item.status_change') {
+            newStatus = eventData['order_item.current_status'] || 'unknown';
+        } else {
+            newStatus = eventData['order.status'] || eventData.status || 'unknown';
+        }
+
+        console.log(`[Thanks.io Webhook] Event: ${eventType}, Order: ${order_id}, Status: ${newStatus}`);
 
         // Update Order records matching this Thanks.io order ID
         const updatedOrders = await prisma.order.updateMany({

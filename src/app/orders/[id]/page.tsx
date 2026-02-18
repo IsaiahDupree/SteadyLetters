@@ -48,25 +48,39 @@ export default async function OrderDetailPage({ params }: { params: Promise<{ id
     }
 
     const getStatusColor = (status: string) => {
-        switch (status) {
+        const s = status.toLowerCase();
+        switch (s) {
+            case 'reviewing': return 'bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200';
             case 'queued': return 'bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200';
+            case 'printing': return 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200';
+            case 'printed': return 'bg-amber-100 text-amber-800 dark:bg-amber-900 dark:text-amber-200';
             case 'processing': return 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200';
+            case 'fulfilled': return 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200';
+            case 'shipped': return 'bg-sky-100 text-sky-800 dark:bg-sky-900 dark:text-sky-200';
             case 'sent': return 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200';
             case 'delivered': return 'bg-emerald-100 text-emerald-800 dark:bg-emerald-900 dark:text-emerald-200';
-            case 'failed': return 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200';
+            case 'cancelled': return 'bg-gray-100 text-gray-800 dark:bg-gray-900 dark:text-gray-200';
+            case 'failed': case 'error': return 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200';
             default: return 'bg-gray-100 text-gray-800 dark:bg-gray-900 dark:text-gray-200';
         }
     };
 
     const getStatusDescription = (status: string) => {
-        switch (status) {
+        const s = status.toLowerCase();
+        switch (s) {
             case 'pending': return 'Order is being prepared';
+            case 'reviewing': return 'Order is within the cancellation window — it will be sent to print shortly';
             case 'queued': return 'Order is queued for printing';
-            case 'processing': return 'Order is being printed and prepared for mailing';
-            case 'sent': return 'Order has been sent to the mail carrier';
+            case 'printing': return 'Mail pieces are being sent to the printer network';
+            case 'printed': return 'All mail pieces have been sent to the printer network';
+            case 'processing': return 'Order is being processed';
+            case 'fulfilled': return 'All processing for this order is complete';
+            case 'shipped': return 'Mail pieces have been shipped and are in transit';
+            case 'sent': return 'Order has been handed off to the mail carrier';
             case 'delivered': return 'Order has been delivered to the recipient';
-            case 'failed': return 'Order failed to process';
-            default: return 'Unknown status';
+            case 'cancelled': return 'Order was cancelled';
+            case 'failed': case 'error': return 'Order could not be processed — please contact support';
+            default: return `Status: ${status}`;
         }
     };
 

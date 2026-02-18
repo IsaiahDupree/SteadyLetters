@@ -1,0 +1,131 @@
+{
+  "timestamp": "2026-02-18T00:33:43.930Z",
+  "mode": "live",
+  "orders": [
+    {
+      "type": "Postcard 4x6",
+      "id": 4261373,
+      "status": "reviewing"
+    },
+    {
+      "type": "Postcard 6x9",
+      "id": 4261374,
+      "status": "reviewing"
+    },
+    {
+      "type": "Postcard 6x11",
+      "id": 4261375,
+      "status": "reviewing"
+    },
+    {
+      "type": "Letter",
+      "id": 4261376,
+      "status": "reviewing"
+    },
+    {
+      "type": "Notecard",
+      "id": 4261377,
+      "status": "reviewing"
+    }
+  ],
+  "results": [
+    {
+      "test": "Fetch styles",
+      "status": "PASS",
+      "details": "36 styles available",
+      "timestamp": "2026-02-18T00:33:39.571Z"
+    },
+    {
+      "test": "Style types",
+      "status": "INFO",
+      "details": "Realistic: 9, AI: 16, International: 7",
+      "timestamp": "2026-02-18T00:33:39.625Z"
+    },
+    {
+      "test": "Postcard 4x6",
+      "status": "PASS",
+      "details": "Order ID: 4261373, Status: reviewing, Cost: $1.14",
+      "timestamp": "2026-02-18T00:33:39.890Z"
+    },
+    {
+      "test": "Postcard 6x9",
+      "status": "PASS",
+      "details": "Order ID: 4261374, Status: reviewing, Cost: $1.61",
+      "timestamp": "2026-02-18T00:33:40.151Z"
+    },
+    {
+      "test": "Postcard 6x11",
+      "status": "PASS",
+      "details": "Order ID: 4261375, Status: reviewing, Cost: $1.83",
+      "timestamp": "2026-02-18T00:33:40.471Z"
+    },
+    {
+      "test": "Letter",
+      "status": "PASS",
+      "details": "Order ID: 4261376, Status: reviewing, Cost: $1.2",
+      "timestamp": "2026-02-18T00:33:40.874Z"
+    },
+    {
+      "test": "Notecard",
+      "status": "PASS",
+      "details": "Order ID: 4261377, Status: reviewing, Cost: $3",
+      "timestamp": "2026-02-18T00:33:41.194Z"
+    },
+    {
+      "test": "Windowless Letter",
+      "status": "FAIL",
+      "details": "Status 400: {\"status\":\"Error Submitting Order - Usually related to billing failure\",\"message\":\"Error Submitting Order - Usually related to billing failure\"}",
+      "timestamp": "2026-02-18T00:33:41.698Z"
+    },
+    {
+      "test": "Missing recipients",
+      "status": "PASS",
+      "details": "Status: 422",
+      "timestamp": "2026-02-18T00:33:42.006Z"
+    },
+    {
+      "test": "Invalid handwriting style",
+      "status": "INFO",
+      "details": "Status: 422 — {\"errors\":{\"front_image_url\":[\"The front image url field is required when none o",
+      "timestamp": "2026-02-18T00:33:42.141Z"
+    },
+    {
+      "test": "Empty message",
+      "status": "INFO",
+      "details": "Status: 422 — {\"errors\":{\"front_image_url\":[\"The front image url field is required when none o",
+      "timestamp": "2026-02-18T00:33:42.271Z"
+    },
+    {
+      "test": "Invalid API key",
+      "status": "PASS",
+      "details": "Status: 401",
+      "timestamp": "2026-02-18T00:33:42.334Z"
+    },
+    {
+      "test": "Very long message (5000 chars)",
+      "status": "INFO",
+      "details": "Status: 422 — accepted: false",
+      "timestamp": "2026-02-18T00:33:42.467Z"
+    },
+    {
+      "test": "Multiple recipients (3)",
+      "status": "PASS",
+      "details": "Status: 200, recipients: ?",
+      "timestamp": "2026-02-18T00:33:43.822Z"
+    },
+    {
+      "test": "Giftcard catalog",
+      "status": "PASS",
+      "details": "7 categories, 65 total brands",
+      "timestamp": "2026-02-18T00:33:43.929Z"
+    },
+    {
+      "test": "Categories",
+      "status": "INFO",
+      "details": "main, food, entertainment, gifts, travel, big_box, other",
+      "timestamp": "2026-02-18T00:33:43.930Z"
+    }
+  ],
+  "apiKeyValid": true,
+  "stylesAvailable": 36
+}
