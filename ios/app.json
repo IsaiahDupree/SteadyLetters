@@ -1,0 +1,59 @@
+{
+  "expo": {
+    "name": "SteadyLetters",
+    "slug": "steadyletters",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "scheme": "steadyletters",
+    "userInterfaceStyle": "automatic",
+    "splash": {
+      "image": "./assets/splash.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#1a365d"
+    },
+    "assetBundlePatterns": ["**/*"],
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "com.steadyletters.app",
+      "infoPlist": {
+        "NSMicrophoneUsageDescription": "SteadyLetters needs microphone access for voice-to-letter recording",
+        "NSCameraUsageDescription": "SteadyLetters needs camera access to take photos for letter images",
+        "NSPhotoLibraryUsageDescription": "SteadyLetters needs photo library access to select images for letters"
+      }
+    },
+    "android": {
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/adaptive-icon.png",
+        "backgroundColor": "#1a365d"
+      },
+      "package": "com.steadyletters.app",
+      "permissions": ["RECORD_AUDIO", "CAMERA", "READ_EXTERNAL_STORAGE"]
+    },
+    "web": {
+      "bundler": "metro",
+      "output": "static",
+      "favicon": "./assets/favicon.png"
+    },
+    "plugins": [
+      "expo-router",
+      "expo-secure-store",
+      [
+        "expo-av",
+        {
+          "microphonePermission": "SteadyLetters needs microphone for voice-to-letter recording."
+        }
+      ],
+      [
+        "expo-image-picker",
+        {
+          "photosPermission": "SteadyLetters needs photo access to select images for your letters.",
+          "cameraPermission": "SteadyLetters needs camera access to take photos for your letters."
+        }
+      ]
+    ],
+    "experiments": {
+      "typedRoutes": true
+    }
+  }
+}

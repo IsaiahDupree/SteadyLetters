@@ -1,0 +1,272 @@
+{
+  "project": "SteadyLetters iOS",
+  "platform": "ios",
+  "framework": "expo-router",
+  "version": "1.0.0",
+  "features": [
+    {
+      "id": "IOS-AUTH-001",
+      "name": "Sign In Screen",
+      "description": "Email/password sign-in with Supabase Auth, error handling, loading state",
+      "passes": true
+    },
+    {
+      "id": "IOS-AUTH-002",
+      "name": "Sign Up Screen",
+      "description": "Account creation with full name, email, password, confirmation, email verification",
+      "passes": true
+    },
+    {
+      "id": "IOS-AUTH-003",
+      "name": "Forgot Password Screen",
+      "description": "Password reset via Supabase with email input and reset link",
+      "passes": true
+    },
+    {
+      "id": "IOS-AUTH-004",
+      "name": "Auth Provider with SecureStore",
+      "description": "React context for auth state with expo-secure-store session persistence",
+      "passes": true
+    },
+    {
+      "id": "IOS-AUTH-005",
+      "name": "Protected Route Guard",
+      "description": "Redirect unauthenticated users from tabs to sign-in screen",
+      "passes": true
+    },
+    {
+      "id": "IOS-LETTER-001",
+      "name": "AI Letter Generation Screen",
+      "description": "Generate 3 letter variations with GPT-4o, configurable occasion/tone/key points/recipient context",
+      "passes": true
+    },
+    {
+      "id": "IOS-LETTER-002",
+      "name": "Voice-to-Letter Dictation",
+      "description": "Record audio via expo-av, transcribe with OpenAI Whisper, use as letter content",
+      "passes": true
+    },
+    {
+      "id": "IOS-LETTER-003",
+      "name": "Letter Template Browser",
+      "description": "Browse saved templates, filter by occasion/tone, tap to prefill create screen",
+      "passes": true
+    },
+    {
+      "id": "IOS-SEND-001",
+      "name": "Send Flow - Product Selection",
+      "description": "Choose between postcard, letter, greeting card with price display",
+      "passes": true
+    },
+    {
+      "id": "IOS-SEND-002",
+      "name": "Send Flow - Recipient Picker",
+      "description": "Select recipient from address book dropdown with address preview",
+      "passes": true
+    },
+    {
+      "id": "IOS-SEND-003",
+      "name": "Send Flow - Handwriting Style",
+      "description": "Choose handwriting style from Thanks.io styles API",
+      "passes": true
+    },
+    {
+      "id": "IOS-SEND-004",
+      "name": "Send Flow - Thanks.io Integration",
+      "description": "Actually send postcard/letter/greeting card via Thanks.io API, create order record",
+      "passes": true
+    },
+    {
+      "id": "IOS-RECIP-001",
+      "name": "Recipients List with Search",
+      "description": "Address book with search filter, displaying name/address/city",
+      "passes": true
+    },
+    {
+      "id": "IOS-RECIP-002",
+      "name": "Add Recipient Form",
+      "description": "Form to add new recipient with name, address, city, state, zip, country",
+      "passes": true
+    },
+    {
+      "id": "IOS-RECIP-003",
+      "name": "Delete Recipient",
+      "description": "Swipe-to-delete or button with confirmation alert",
+      "passes": true
+    },
+    {
+      "id": "IOS-ORDER-001",
+      "name": "Order History List",
+      "description": "View past orders with status badges, product type, recipient, cost, date",
+      "passes": true
+    },
+    {
+      "id": "IOS-ORDER-002",
+      "name": "Order Status Refresh",
+      "description": "Pull-to-refresh and tap-to-check live status via Thanks.io API",
+      "passes": true
+    },
+    {
+      "id": "IOS-SETTINGS-001",
+      "name": "Account Profile Section",
+      "description": "Display user email, profile info from Supabase",
+      "passes": true
+    },
+    {
+      "id": "IOS-SETTINGS-002",
+      "name": "Theme Switcher",
+      "description": "Light/dark/system theme toggle with persistent preference via SecureStore",
+      "passes": true
+    },
+    {
+      "id": "IOS-SETTINGS-003",
+      "name": "Sign Out",
+      "description": "Sign out with confirmation alert, clear session, redirect to auth",
+      "passes": true
+    },
+    {
+      "id": "IOS-NAV-001",
+      "name": "Tab Navigation",
+      "description": "5-tab layout: Create, Recipients, Templates, Orders, Settings with icons",
+      "passes": true
+    },
+    {
+      "id": "IOS-NAV-002",
+      "name": "Modal Stack Navigation",
+      "description": "Send, Voice Recorder, Add Recipient as modal presentations",
+      "passes": true
+    },
+    {
+      "id": "IOS-NAV-003",
+      "name": "Splash Screen",
+      "description": "Splash screen with auto-hide after layout load",
+      "passes": true
+    },
+    {
+      "id": "IOS-SERVICE-001",
+      "name": "Supabase Client with SecureStore",
+      "description": "Supabase JS client configured with expo-secure-store for token persistence",
+      "passes": true
+    },
+    {
+      "id": "IOS-SERVICE-002",
+      "name": "Thanks.io API Client",
+      "description": "Full Thanks.io client: sendPostcard, sendLetter, sendGreetingCard, getHandwritingStyles, getOrderStatus",
+      "passes": true
+    },
+    {
+      "id": "IOS-SERVICE-003",
+      "name": "OpenAI Client",
+      "description": "GPT-4o letter generation and Whisper audio transcription clients",
+      "passes": true
+    },
+    {
+      "id": "IOS-SERVICE-004",
+      "name": "API CRUD Service",
+      "description": "Supabase CRUD for recipients, orders, templates, usage tracking",
+      "passes": true
+    },
+    {
+      "id": "IOS-TEST-001",
+      "name": "Live Postcard Send Test",
+      "description": "Real integration test that sends an actual postcard via Thanks.io API",
+      "passes": false
+    },
+    {
+      "id": "IOS-TEST-002",
+      "name": "Live Letter Send Test",
+      "description": "Real integration test that sends an actual handwritten letter via Thanks.io API",
+      "passes": false
+    },
+    {
+      "id": "IOS-TEST-003",
+      "name": "Live Greeting Card Send Test",
+      "description": "Real integration test that sends an actual greeting card via Thanks.io API",
+      "passes": false
+    },
+    {
+      "id": "IOS-TEST-004",
+      "name": "Handwriting Styles API Test",
+      "description": "Test that retrieves available handwriting styles from Thanks.io",
+      "passes": false
+    },
+    {
+      "id": "IOS-TEST-005",
+      "name": "Order Status Check Test",
+      "description": "Test that checks order status after sending via Thanks.io",
+      "passes": false
+    },
+    {
+      "id": "IOS-BILLING-001",
+      "name": "RevenueCat SDK Setup",
+      "description": "Initialize RevenueCat with API key, configure offerings",
+      "passes": false
+    },
+    {
+      "id": "IOS-BILLING-002",
+      "name": "Subscription Paywall Screen",
+      "description": "Display subscription tiers with pricing, purchase flow via RevenueCat",
+      "passes": false
+    },
+    {
+      "id": "IOS-BILLING-003",
+      "name": "Entitlement Checking",
+      "description": "Check user subscription status, gate premium features",
+      "passes": false
+    },
+    {
+      "id": "IOS-ANALYTICS-001",
+      "name": "PostHog SDK Setup",
+      "description": "Initialize PostHog React Native SDK, identify users after auth",
+      "passes": false
+    },
+    {
+      "id": "IOS-ANALYTICS-002",
+      "name": "Event Tracking",
+      "description": "Track letter_created, letter_sent, recipient_added, template_used events",
+      "passes": false
+    },
+    {
+      "id": "IOS-NOTIF-001",
+      "name": "Push Notification Setup",
+      "description": "Configure expo-notifications, request permissions, register token",
+      "passes": false
+    },
+    {
+      "id": "IOS-NOTIF-002",
+      "name": "Order Status Notifications",
+      "description": "Send push notifications when order status changes (sent, delivered)",
+      "passes": false
+    },
+    {
+      "id": "IOS-POLISH-001",
+      "name": "Error Boundary",
+      "description": "Global error boundary with user-friendly fallback UI",
+      "passes": false
+    },
+    {
+      "id": "IOS-POLISH-002",
+      "name": "Loading Skeletons",
+      "description": "Skeleton loading states for lists (recipients, orders, templates)",
+      "passes": false
+    },
+    {
+      "id": "IOS-POLISH-003",
+      "name": "Haptic Feedback",
+      "description": "Haptic feedback on button presses and successful actions using expo-haptics",
+      "passes": false
+    },
+    {
+      "id": "IOS-POLISH-004",
+      "name": "Empty States",
+      "description": "Polished empty state illustrations for all list screens",
+      "passes": false
+    },
+    {
+      "id": "IOS-POLISH-005",
+      "name": "Keyboard Avoidance",
+      "description": "Proper keyboard avoidance on all form screens",
+      "passes": false
+    }
+  ]
+}
