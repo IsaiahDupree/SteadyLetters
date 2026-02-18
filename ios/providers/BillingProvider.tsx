@@ -7,6 +7,7 @@ import Purchases, {
 } from 'react-native-purchases';
 import { REVENUECAT_API_KEY, TIERS, type TierName } from '@/constants/config';
 import { useAuth } from '@/providers/AuthProvider';
+import { trackEvent, trackRevenue, Events } from '@/services/events';
 
 interface BillingContextType {
   tier: TierName;
@@ -93,11 +94,26 @@ export function BillingProvider({ children }: { children: React.ReactNode }) {
       throw new Error('In-app purchases are not configured yet. Please try again later.');
     }
     setIsLoading(true);
+    trackEvent(Events.PURCHASE_STARTED, {
+      product_id: pkg.identifier,
+      price: pkg.product.price,
+    });
     try {
       const { customerInfo } = await Purchases.purchasePackage(pkg);
-      setTier(determineTier(customerInfo));
+      const newTier = determineTier(customerInfo);
+      setTier(newTier);
+      trackEvent(Events.PURCHASE_COMPLETED, {
+        product_id: pkg.identifier,
+        tier: newTier,
+        price: pkg.product.price,
+      });
+      trackRevenue(pkg.product.price, pkg.product.currencyCode, pkg.identifier);
     } catch (error: any) {
       if (!error.userCancelled) {
+        trackEvent(Events.PURCHASE_FAILED, {
+          product_id: pkg.identifier,
+          error: error.message,
+        });
         throw error;
       }
     } finally {
@@ -112,7 +128,9 @@ export function BillingProvider({ children }: { children: React.ReactNode }) {
     setIsLoading(true);
     try {
       const customerInfo = await Purchases.restorePurchases();
-      setTier(determineTier(customerInfo));
+      const newTier = determineTier(customerInfo);
+      setTier(newTier);
+      trackEvent(Events.SUBSCRIPTION_RESTORED, { tier: newTier });
     } catch (error) {
       throw error;
     } finally {

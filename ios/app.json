@@ -19,7 +19,11 @@
       "infoPlist": {
         "NSMicrophoneUsageDescription": "SteadyLetters needs microphone access for voice-to-letter recording",
         "NSCameraUsageDescription": "SteadyLetters needs camera access to take photos for letter images",
-        "NSPhotoLibraryUsageDescription": "SteadyLetters needs photo library access to select images for letters"
+        "NSPhotoLibraryUsageDescription": "SteadyLetters needs photo library access to select images for letters",
+        "NSUserTrackingUsageDescription": "SteadyLetters uses this to provide personalized ads and improve your experience.",
+        "NSAppTransportSecurity": {
+          "NSAllowsLocalNetworking": true
+        }
       }
     },
     "android": {
@@ -50,6 +54,12 @@
         {
           "photosPermission": "SteadyLetters needs photo access to select images for your letters.",
           "cameraPermission": "SteadyLetters needs camera access to take photos for your letters."
+        }
+      ],
+      [
+        "expo-tracking-transparency",
+        {
+          "userTrackingPermission": "SteadyLetters uses this to provide personalized ads and improve your experience."
         }
       ]
     ],

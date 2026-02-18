@@ -12,7 +12,22 @@ export const STRIPE_PUBLISHABLE_KEY = process.env.EXPO_PUBLIC_STRIPE_PUBLISHABLE
 export const POSTHOG_API_KEY = process.env.EXPO_PUBLIC_POSTHOG_API_KEY || '';
 export const POSTHOG_HOST = process.env.EXPO_PUBLIC_POSTHOG_HOST || 'https://us.i.posthog.com';
 export const REVENUECAT_API_KEY = process.env.EXPO_PUBLIC_REVENUCAT_API_KEY || '';
+export const META_APP_ID = process.env.EXPO_PUBLIC_META_APP_ID || '';
 export const APP_URL = process.env.EXPO_PUBLIC_APP_URL || 'https://www.steadyletters.com';
+
+// RevenueCat product identifiers (must match App Store Connect / RevenueCat dashboard)
+export const RC_PRODUCT_IDS = {
+  pro_monthly: 'sl_pro_monthly',
+  pro_annual: 'sl_pro_annual',
+  business_monthly: 'sl_business_monthly',
+  business_annual: 'sl_business_annual',
+} as const;
+
+// RevenueCat entitlement identifiers
+export const RC_ENTITLEMENTS = {
+  pro: 'pro',
+  business: 'business',
+} as const;
 
 export const TIERS = {
   free: {

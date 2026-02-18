@@ -1,7 +1,9 @@
 import { useEffect } from 'react';
+import { Platform } from 'react-native';
 import { Stack } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import * as SplashScreen from 'expo-splash-screen';
+import { requestTrackingPermissionsAsync } from 'expo-tracking-transparency';
 import { AuthProvider } from '@/providers/AuthProvider';
 import { ThemeProvider, useTheme } from '@/providers/ThemeProvider';
 import { BillingProvider } from '@/providers/BillingProvider';
@@ -16,6 +18,13 @@ function RootLayoutNav() {
 
   useEffect(() => {
     SplashScreen.hideAsync();
+  }, []);
+
+  // Request ATT permission for Meta Ads (iOS 14.5+)
+  useEffect(() => {
+    if (Platform.OS === 'ios') {
+      requestTrackingPermissionsAsync().catch(() => {});
+    }
   }, []);
 
   useEffect(() => {

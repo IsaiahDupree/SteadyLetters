@@ -2,6 +2,7 @@ import React, { createContext, useCallback, useContext, useEffect, useRef } from
 import { PostHogProvider, usePostHog } from 'posthog-react-native';
 import { POSTHOG_API_KEY, POSTHOG_HOST } from '@/constants/config';
 import { useAuth } from '@/providers/AuthProvider';
+import { setPostHogCapture } from '@/services/events';
 
 interface AnalyticsContextType {
   capture: (event: string, properties?: Record<string, any>) => void;
@@ -35,6 +36,11 @@ function AnalyticsSync({ children }: { children: React.ReactNode }) {
     },
     [posthog],
   );
+
+  // Bridge PostHog capture to the unified events service
+  useEffect(() => {
+    setPostHogCapture(capture);
+  }, [capture]);
 
   const identify = useCallback(
     (userId: string, traits?: Record<string, any>) => {
