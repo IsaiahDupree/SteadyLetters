@@ -107,7 +107,7 @@ export async function getHandwritingStyles(): Promise<HandwritingStyle[]> {
   }
 
   try {
-    const response = await fetch(`${BASE_URL}/handwriting`, {
+    const response = await fetch(`${BASE_URL}/handwriting-styles`, {
       headers: {
         'Authorization': `Bearer ${THANKS_IO_API_KEY}`,
         'Content-Type': 'application/json',
@@ -147,7 +147,7 @@ export async function getOrderStatus(orderId: string): Promise<ThanksIoOrderStat
   }
 
   try {
-    const response = await fetch(`${BASE_URL}/order/${orderId}`, {
+    const response = await fetch(`${BASE_URL}/send/${orderId}`, {
       method: 'GET',
       headers: {
         'Authorization': `Bearer ${THANKS_IO_API_KEY}`,
@@ -194,7 +194,7 @@ export async function sendPostcard(params: PostcardOrderParams): Promise<ThanksI
   }
 
   try {
-    const response = await fetch(`${BASE_URL}/postcard/send`, {
+    const response = await fetch(`${BASE_URL}/send/postcard`, {
       method: 'POST',
       headers: {
         'Authorization': `Bearer ${THANKS_IO_API_KEY}`,
@@ -233,7 +233,7 @@ export async function sendLetter(params: LetterOrderParams): Promise<ThanksIoRes
   }
 
   try {
-    const response = await fetch(`${BASE_URL}/letter/send`, {
+    const response = await fetch(`${BASE_URL}/send/letter`, {
       method: 'POST',
       headers: {
         'Authorization': `Bearer ${THANKS_IO_API_KEY}`,
@@ -272,7 +272,7 @@ export async function sendGreetingCard(params: GreetingOrderParams): Promise<Tha
   }
 
   try {
-    const response = await fetch(`${BASE_URL}/greeting/send`, {
+    const response = await fetch(`${BASE_URL}/send/notecard`, {
       method: 'POST',
       headers: {
         'Authorization': `Bearer ${THANKS_IO_API_KEY}`,
