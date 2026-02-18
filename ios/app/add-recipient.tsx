@@ -29,20 +29,21 @@ export default function AddRecipientScreen() {
   const [isSaving, setIsSaving] = useState(false);
 
   const handleSave = async () => {
-    if (!name || !address || !city || !province || !postalCode) {
+    const trimmed = { name: name.trim(), address: address.trim(), address2: address2.trim(), city: city.trim(), province: province.trim(), postalCode: postalCode.trim(), country: country.trim() };
+    if (!trimmed.name || !trimmed.address || !trimmed.city || !trimmed.province || !trimmed.postalCode) {
       Alert.alert('Missing Fields', 'Please fill in all required fields.');
       return;
     }
     setIsSaving(true);
     try {
       await createRecipient({
-        name,
-        address,
-        address2: address2 || undefined,
-        city,
-        province,
-        postal_code: postalCode,
-        country,
+        name: trimmed.name,
+        address: trimmed.address,
+        address2: trimmed.address2 || undefined,
+        city: trimmed.city,
+        province: trimmed.province,
+        postal_code: trimmed.postalCode,
+        country: trimmed.country,
       });
       router.back();
     } catch (error) {
@@ -67,7 +68,7 @@ export default function AddRecipientScreen() {
   const Field = ({ label, value, onChangeText, placeholder, required }: { label: string; value: string; onChangeText: (t: string) => void; placeholder: string; required?: boolean }) => (
     <>
       <Text style={s.label}>{label} {required && <Text style={s.required}>*</Text>}</Text>
-      <TextInput style={s.input} placeholder={placeholder} placeholderTextColor={colors.textMuted} value={value} onChangeText={onChangeText} />
+      <TextInput style={s.input} placeholder={placeholder} placeholderTextColor={colors.textMuted} value={value} onChangeText={onChangeText} accessibilityLabel={label} />
     </>
   );
 
@@ -94,7 +95,7 @@ export default function AddRecipientScreen() {
           </View>
         </View>
 
-        <TouchableOpacity style={s.button} onPress={handleSave} disabled={isSaving}>
+        <TouchableOpacity style={s.button} onPress={handleSave} disabled={isSaving} accessibilityLabel="Save recipient" accessibilityRole="button">
           {isSaving ? <ActivityIndicator color="#fff" /> : <Text style={s.buttonText}>Save Recipient</Text>}
         </TouchableOpacity>
       </ScrollView>

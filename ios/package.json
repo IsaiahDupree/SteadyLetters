@@ -12,11 +12,15 @@
     "test:live": "THANKS_IO_LIVE_TEST=true jest --testPathPattern=tests/live --verbose",
     "test:live:smoke": "LIVE_TEST_PROFILE=smoke npm run test:live",
     "test:live:standard": "LIVE_TEST_PROFILE=standard npm run test:live",
-    "test:live:full": "LIVE_TEST_PROFILE=full npm run test:live"
+    "test:live:full": "LIVE_TEST_PROFILE=full npm run test:live",
+    "verify": "npx ts-node scripts/verify-features.ts",
+    "verify:failing": "npx ts-node scripts/verify-features.ts --failing",
+    "verify:passing": "npx ts-node scripts/verify-features.ts --passing"
   },
   "dependencies": {
     "@expo/vector-icons": "^14.0.0",
     "@react-navigation/native": "^7.0.0",
+    "@stripe/stripe-react-native": "^0.38.0",
     "@supabase/supabase-js": "^2.84.0",
     "expo": "~52.0.0",
     "expo-auth-session": "~6.0.0",
@@ -24,6 +28,7 @@
     "expo-clipboard": "~7.0.0",
     "expo-constants": "~17.0.0",
     "expo-crypto": "~14.0.0",
+    "expo-device": "~7.0.3",
     "expo-file-system": "~18.0.0",
     "expo-font": "~13.0.0",
     "expo-haptics": "~14.0.0",
@@ -47,7 +52,6 @@
     "react-native-safe-area-context": "~4.12.0",
     "react-native-screens": "~4.1.0",
     "react-native-svg": "~15.8.0",
-    "@stripe/stripe-react-native": "^0.38.0",
     "zustand": "^5.0.0"
   },
   "devDependencies": {

@@ -8,6 +8,8 @@ import {
   Alert,
   ActivityIndicator,
   TextInput,
+  Keyboard,
+  TouchableWithoutFeedback,
 } from 'react-native';
 import { useTheme } from '@/providers/ThemeProvider';
 import { useLocalSearchParams, useRouter } from 'expo-router';
@@ -24,6 +26,7 @@ import {
 import { getRecipients } from '@/services/api';
 import { createOrder, incrementUsage } from '@/services/api';
 import { Send, ChevronDown, Check } from 'lucide-react-native';
+import * as Haptics from 'expo-haptics';
 
 const PRODUCT_TYPES: { value: ProductType; label: string }[] = [
   { value: 'postcard', label: 'Postcard' },
@@ -118,12 +121,15 @@ export default function SendScreen() {
 
               await incrementUsage('letters_sent');
 
+              Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
+
               Alert.alert(
                 'Letter Sent!',
                 `Your ${product.name} is on its way to ${selectedRecipient.name}.\n\nOrder ID: ${result.id}`,
                 [{ text: 'View Orders', onPress: () => router.push('/(tabs)/orders') }],
               );
             } catch (error) {
+              Haptics.notificationAsync(Haptics.NotificationFeedbackType.Error);
               Alert.alert('Send Failed', error instanceof Error ? error.message : 'Something went wrong');
             } finally {
               setIsSending(false);
@@ -159,88 +165,108 @@ export default function SendScreen() {
   });
 
   return (
-    <ScrollView style={s.container} contentContainerStyle={s.content}>
-      <Text style={s.header}>Send Letter</Text>
+    <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+      <ScrollView style={s.container} contentContainerStyle={s.content} keyboardShouldPersistTaps="handled">
+        <Text style={s.header}>Send Letter</Text>
 
-      <Text style={s.sectionTitle}>Product Type</Text>
-      <View style={s.chipRow}>
-        {PRODUCT_TYPES.map((p) => (
-          <TouchableOpacity
-            key={p.value}
-            style={[s.chip, productType === p.value && s.chipActive]}
-            onPress={() => setProductType(p.value)}
-          >
-            <Text style={[s.chipText, productType === p.value && s.chipTextActive]}>{p.label}</Text>
-          </TouchableOpacity>
-        ))}
-      </View>
-
-      <Text style={s.sectionTitle}>Recipient</Text>
-      <TouchableOpacity style={s.recipientSelector} onPress={() => setShowRecipients(!showRecipients)}>
-        <View>
-          <Text style={s.recipientName}>{selectedRecipient?.name || 'Select recipient...'}</Text>
-          {selectedRecipient && (
-            <Text style={s.recipientAddr}>{selectedRecipient.address}, {selectedRecipient.city}</Text>
-          )}
-        </View>
-        <ChevronDown size={20} color={colors.textMuted} />
-      </TouchableOpacity>
-      {showRecipients && (
-        <View style={s.dropdown}>
-          {recipients.map((r, i) => (
+        <Text style={s.sectionTitle}>Product Type</Text>
+        <View style={s.chipRow}>
+          {PRODUCT_TYPES.map((p) => (
             <TouchableOpacity
-              key={r.id || i}
-              style={s.recipientOption}
-              onPress={() => { setSelectedRecipient(r); setShowRecipients(false); }}
+              key={p.value}
+              style={[s.chip, productType === p.value && s.chipActive]}
+              onPress={() => setProductType(p.value)}
+              accessibilityLabel={`Product type: ${p.label}, $${PRODUCT_CATALOG[p.value].basePrice.toFixed(2)}`}
+              accessibilityRole="button"
             >
-              <View>
-                <Text style={s.recipientName}>{r.name}</Text>
-                <Text style={s.recipientAddr}>{r.address}, {r.city}</Text>
-              </View>
-              {selectedRecipient?.id === r.id && <Check size={18} color={colors.success} />}
+              <Text style={[s.chipText, productType === p.value && s.chipTextActive]}>{p.label}</Text>
             </TouchableOpacity>
           ))}
         </View>
-      )}
 
-      <Text style={s.sectionTitle}>Handwriting Style</Text>
-      <View style={s.styleRow}>
-        {styles.slice(0, 6).map((st) => (
-          <TouchableOpacity
-            key={st.id}
-            style={[s.chip, selectedStyle === st.id && s.chipActive]}
-            onPress={() => setSelectedStyle(st.id)}
-          >
-            <Text style={[s.chipText, selectedStyle === st.id && s.chipTextActive]}>{st.name}</Text>
-          </TouchableOpacity>
-        ))}
-      </View>
-
-      <Text style={s.sectionTitle}>Message</Text>
-      <TextInput
-        style={s.messageInput}
-        placeholder="Your letter message..."
-        placeholderTextColor={colors.textMuted}
-        value={message}
-        onChangeText={setMessage}
-        multiline
-      />
-
-      <View style={s.priceRow}>
-        <Text style={s.priceLabel}>Estimated Cost</Text>
-        <Text style={s.priceValue}>${PRODUCT_CATALOG[productType].basePrice.toFixed(2)}</Text>
-      </View>
-
-      <TouchableOpacity style={s.sendButton} onPress={handleSend} disabled={isSending}>
-        {isSending ? (
-          <ActivityIndicator color="#fff" />
-        ) : (
-          <>
-            <Send size={22} color="#fff" />
-            <Text style={s.sendButtonText}>Send {PRODUCT_CATALOG[productType].name}</Text>
-          </>
+        <Text style={s.sectionTitle}>Recipient</Text>
+        <TouchableOpacity
+          style={s.recipientSelector}
+          onPress={() => setShowRecipients(!showRecipients)}
+          accessibilityLabel={selectedRecipient ? `Selected recipient: ${selectedRecipient.name}` : 'Select a recipient'}
+          accessibilityRole="button"
+        >
+          <View>
+            <Text style={s.recipientName}>{selectedRecipient?.name || 'Select recipient...'}</Text>
+            {selectedRecipient && (
+              <Text style={s.recipientAddr}>{selectedRecipient.address}, {selectedRecipient.city}</Text>
+            )}
+          </View>
+          <ChevronDown size={20} color={colors.textMuted} />
+        </TouchableOpacity>
+        {showRecipients && (
+          <View style={s.dropdown}>
+            {recipients.map((r, i) => (
+              <TouchableOpacity
+                key={r.id || i}
+                style={s.recipientOption}
+                onPress={() => { setSelectedRecipient(r); setShowRecipients(false); }}
+                accessibilityLabel={`Recipient: ${r.name}, ${r.address}`}
+                accessibilityRole="button"
+              >
+                <View>
+                  <Text style={s.recipientName}>{r.name}</Text>
+                  <Text style={s.recipientAddr}>{r.address}, {r.city}</Text>
+                </View>
+                {selectedRecipient?.id === r.id && <Check size={18} color={colors.success} />}
+              </TouchableOpacity>
+            ))}
+          </View>
         )}
-      </TouchableOpacity>
-    </ScrollView>
+
+        <Text style={s.sectionTitle}>Handwriting Style</Text>
+        <View style={s.styleRow}>
+          {styles.slice(0, 6).map((st) => (
+            <TouchableOpacity
+              key={st.id}
+              style={[s.chip, selectedStyle === st.id && s.chipActive]}
+              onPress={() => setSelectedStyle(st.id)}
+              accessibilityLabel={`Handwriting style: ${st.name}`}
+              accessibilityRole="button"
+            >
+              <Text style={[s.chipText, selectedStyle === st.id && s.chipTextActive]}>{st.name}</Text>
+            </TouchableOpacity>
+          ))}
+        </View>
+
+        <Text style={s.sectionTitle}>Message</Text>
+        <TextInput
+          style={s.messageInput}
+          placeholder="Your letter message..."
+          placeholderTextColor={colors.textMuted}
+          value={message}
+          onChangeText={setMessage}
+          multiline
+          accessibilityLabel="Letter message"
+        />
+
+        <View style={s.priceRow}>
+          <Text style={s.priceLabel}>Estimated Cost</Text>
+          <Text style={s.priceValue}>${PRODUCT_CATALOG[productType].basePrice.toFixed(2)}</Text>
+        </View>
+
+        <TouchableOpacity
+          style={s.sendButton}
+          onPress={handleSend}
+          disabled={isSending}
+          accessibilityLabel={`Send ${PRODUCT_CATALOG[productType].name}`}
+          accessibilityRole="button"
+        >
+          {isSending ? (
+            <ActivityIndicator color="#fff" />
+          ) : (
+            <>
+              <Send size={22} color="#fff" />
+              <Text style={s.sendButtonText}>Send {PRODUCT_CATALOG[productType].name}</Text>
+            </>
+          )}
+        </TouchableOpacity>
+      </ScrollView>
+    </TouchableWithoutFeedback>
   );
 }

@@ -31,6 +31,7 @@ export default function TabLayout() {
           title: 'Create',
           tabBarIcon: ({ color, size }) => <Mail size={size} color={color} />,
           headerTitle: 'Create Letter',
+          tabBarAccessibilityLabel: 'Create letter tab',
         }}
       />
       <Tabs.Screen
@@ -38,6 +39,7 @@ export default function TabLayout() {
         options={{
           title: 'Recipients',
           tabBarIcon: ({ color, size }) => <Users size={size} color={color} />,
+          tabBarAccessibilityLabel: 'Recipients tab',
         }}
       />
       <Tabs.Screen
@@ -45,6 +47,7 @@ export default function TabLayout() {
         options={{
           title: 'Templates',
           tabBarIcon: ({ color, size }) => <FileText size={size} color={color} />,
+          tabBarAccessibilityLabel: 'Templates tab',
         }}
       />
       <Tabs.Screen
@@ -52,6 +55,7 @@ export default function TabLayout() {
         options={{
           title: 'Orders',
           tabBarIcon: ({ color, size }) => <ShoppingCart size={size} color={color} />,
+          tabBarAccessibilityLabel: 'Orders tab',
         }}
       />
       <Tabs.Screen
@@ -59,6 +63,7 @@ export default function TabLayout() {
         options={{
           title: 'Settings',
           tabBarIcon: ({ color, size }) => <Settings size={size} color={color} />,
+          tabBarAccessibilityLabel: 'Settings tab',
         }}
       />
     </Tabs>

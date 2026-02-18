@@ -77,6 +77,7 @@ export default function SignInScreen() {
               autoCapitalize="none"
               keyboardType="email-address"
               autoComplete="email"
+              accessibilityLabel="Email address"
             />
           </View>
         </View>
@@ -92,6 +93,7 @@ export default function SignInScreen() {
               onChangeText={setPassword}
               secureTextEntry
               autoComplete="password"
+              accessibilityLabel="Password"
             />
           </View>
         </View>
@@ -100,7 +102,7 @@ export default function SignInScreen() {
           <Text style={s.forgotText}>Forgot password?</Text>
         </TouchableOpacity>
 
-        <TouchableOpacity style={s.button} onPress={handleSignIn} disabled={isLoading}>
+        <TouchableOpacity style={s.button} onPress={handleSignIn} disabled={isLoading} accessibilityLabel="Sign in" accessibilityRole="button">
           {isLoading ? <ActivityIndicator color="#fff" /> : <Text style={s.buttonText}>Sign In</Text>}
         </TouchableOpacity>
 

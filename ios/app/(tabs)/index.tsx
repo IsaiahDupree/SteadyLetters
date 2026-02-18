@@ -8,10 +8,15 @@ import {
   StyleSheet,
   ActivityIndicator,
   Alert,
+  Keyboard,
+  TouchableWithoutFeedback,
 } from 'react-native';
 import { useTheme } from '@/providers/ThemeProvider';
 import { generateLetter, type LetterTone, type LetterOccasion } from '@/services/openai';
-import { useRouter } from 'expo-router';
+import { saveTemplate } from '@/services/api';
+import { useRouter, useLocalSearchParams } from 'expo-router';
+import * as Haptics from 'expo-haptics';
+import { Mic } from 'lucide-react-native';
 
 const OCCASIONS: { value: LetterOccasion; label: string }[] = [
   { value: 'thank_you', label: 'Thank You' },
@@ -35,10 +40,22 @@ const TONES: { value: LetterTone; label: string }[] = [
 export default function CreateLetterScreen() {
   const { colors } = useTheme();
   const router = useRouter();
+  const params = useLocalSearchParams<{
+    voiceTranscription?: string;
+    templateContent?: string;
+    templateOccasion?: string;
+    templateTone?: string;
+  }>();
 
-  const [occasion, setOccasion] = useState<LetterOccasion>('thank_you');
-  const [tone, setTone] = useState<LetterTone>('warm');
-  const [keyPoints, setKeyPoints] = useState('');
+  const [occasion, setOccasion] = useState<LetterOccasion>(
+    (params.templateOccasion as LetterOccasion) || 'thank_you',
+  );
+  const [tone, setTone] = useState<LetterTone>(
+    (params.templateTone as LetterTone) || 'warm',
+  );
+  const [keyPoints, setKeyPoints] = useState(
+    params.voiceTranscription || params.templateContent || '',
+  );
   const [recipientContext, setRecipientContext] = useState('');
   const [senderName, setSenderName] = useState('');
   const [generatedLetters, setGeneratedLetters] = useState<string[]>([]);
@@ -46,6 +63,7 @@ export default function CreateLetterScreen() {
   const [isGenerating, setIsGenerating] = useState(false);
 
   const handleGenerate = async () => {
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
     setIsGenerating(true);
     try {
       const letters = await generateLetter({
@@ -69,10 +87,26 @@ export default function CreateLetterScreen() {
       Alert.alert('Select a Letter', 'Please generate and select a letter first.');
       return;
     }
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
     router.push({
       pathname: '/send',
       params: { message: generatedLetters[selectedLetter] },
     });
+  };
+
+  const handleSaveTemplate = async () => {
+    if (selectedLetter < 0 || !generatedLetters[selectedLetter]) return;
+    try {
+      await saveTemplate({
+        name: `${occasion} - ${tone}`,
+        occasion,
+        tone,
+        content: generatedLetters[selectedLetter],
+      });
+      Alert.alert('Saved', 'Letter saved as template.');
+    } catch (error) {
+      Alert.alert('Error', 'Failed to save template.');
+    }
   };
 
   const s = StyleSheet.create({
@@ -93,96 +127,128 @@ export default function CreateLetterScreen() {
     letterCardSelected: { borderColor: colors.primary },
     letterLabel: { fontSize: 13, fontWeight: '600', color: colors.textMuted, marginBottom: 4 },
     letterText: { fontSize: 15, color: colors.text, lineHeight: 22 },
-    sendButton: { backgroundColor: colors.success, borderRadius: 12, padding: 16, alignItems: 'center', marginTop: 16, marginBottom: 40 },
+    sendButton: { backgroundColor: colors.success, borderRadius: 12, padding: 16, alignItems: 'center', marginTop: 16 },
+    saveButton: { backgroundColor: colors.info, borderRadius: 12, padding: 14, alignItems: 'center', marginTop: 10, marginBottom: 40 },
+    saveButtonText: { color: '#fff', fontSize: 15, fontWeight: '600' },
+    voiceRow: { flexDirection: 'row', alignItems: 'center', gap: 8, marginTop: 8 },
+    voiceBtn: { backgroundColor: colors.error, borderRadius: 10, padding: 10 },
   });
 
   return (
-    <ScrollView style={s.container} contentContainerStyle={s.content}>
-      <Text style={s.sectionTitle}>Occasion</Text>
-      <View style={s.chipRow}>
-        {OCCASIONS.map((o) => (
-          <TouchableOpacity
-            key={o.value}
-            style={[s.chip, occasion === o.value && s.chipActive]}
-            onPress={() => setOccasion(o.value)}
-          >
-            <Text style={[s.chipText, occasion === o.value && s.chipTextActive]}>{o.label}</Text>
-          </TouchableOpacity>
-        ))}
-      </View>
-
-      <Text style={s.sectionTitle}>Tone</Text>
-      <View style={s.chipRow}>
-        {TONES.map((t) => (
-          <TouchableOpacity
-            key={t.value}
-            style={[s.chip, tone === t.value && s.chipActive]}
-            onPress={() => setTone(t.value)}
-          >
-            <Text style={[s.chipText, tone === t.value && s.chipTextActive]}>{t.label}</Text>
-          </TouchableOpacity>
-        ))}
-      </View>
-
-      <Text style={s.sectionTitle}>Key Points (optional)</Text>
-      <TextInput
-        style={s.input}
-        placeholder="What should the letter include?"
-        placeholderTextColor={colors.textMuted}
-        value={keyPoints}
-        onChangeText={setKeyPoints}
-        multiline
-      />
-
-      <Text style={s.sectionTitle}>Recipient Context (optional)</Text>
-      <TextInput
-        style={[s.input, s.inputSmall]}
-        placeholder="e.g. Client who just signed a deal"
-        placeholderTextColor={colors.textMuted}
-        value={recipientContext}
-        onChangeText={setRecipientContext}
-      />
-
-      <Text style={s.sectionTitle}>Your Name</Text>
-      <TextInput
-        style={[s.input, s.inputSmall]}
-        placeholder="How to sign the letter"
-        placeholderTextColor={colors.textMuted}
-        value={senderName}
-        onChangeText={setSenderName}
-      />
-
-      <TouchableOpacity
-        style={[s.button, isGenerating && s.buttonDisabled]}
-        onPress={handleGenerate}
-        disabled={isGenerating}
-      >
-        {isGenerating ? (
-          <ActivityIndicator color="#fff" />
-        ) : (
-          <Text style={s.buttonText}>Generate 3 Letter Variations</Text>
-        )}
-      </TouchableOpacity>
-
-      {generatedLetters.length > 0 && (
-        <>
-          <Text style={s.sectionTitle}>Choose a Letter</Text>
-          {generatedLetters.map((letter, i) => (
+    <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+      <ScrollView style={s.container} contentContainerStyle={s.content} keyboardShouldPersistTaps="handled">
+        <Text style={s.sectionTitle}>Occasion</Text>
+        <View style={s.chipRow}>
+          {OCCASIONS.map((o) => (
             <TouchableOpacity
-              key={i}
-              style={[s.letterCard, selectedLetter === i && s.letterCardSelected]}
-              onPress={() => setSelectedLetter(i)}
+              key={o.value}
+              style={[s.chip, occasion === o.value && s.chipActive]}
+              onPress={() => setOccasion(o.value)}
+              accessibilityLabel={`Occasion: ${o.label}`}
+              accessibilityRole="button"
             >
-              <Text style={s.letterLabel}>Variation {i + 1}</Text>
-              <Text style={s.letterText}>{letter}</Text>
+              <Text style={[s.chipText, occasion === o.value && s.chipTextActive]}>{o.label}</Text>
             </TouchableOpacity>
           ))}
+        </View>
 
-          <TouchableOpacity style={s.sendButton} onPress={handleSend}>
-            <Text style={s.buttonText}>Send This Letter</Text>
+        <Text style={s.sectionTitle}>Tone</Text>
+        <View style={s.chipRow}>
+          {TONES.map((t) => (
+            <TouchableOpacity
+              key={t.value}
+              style={[s.chip, tone === t.value && s.chipActive]}
+              onPress={() => setTone(t.value)}
+              accessibilityLabel={`Tone: ${t.label}`}
+              accessibilityRole="button"
+            >
+              <Text style={[s.chipText, tone === t.value && s.chipTextActive]}>{t.label}</Text>
+            </TouchableOpacity>
+          ))}
+        </View>
+
+        <Text style={s.sectionTitle}>Key Points (optional)</Text>
+        <TextInput
+          style={s.input}
+          placeholder="What should the letter include?"
+          placeholderTextColor={colors.textMuted}
+          value={keyPoints}
+          onChangeText={setKeyPoints}
+          multiline
+          accessibilityLabel="Key points for the letter"
+        />
+        <View style={s.voiceRow}>
+          <TouchableOpacity
+            style={s.voiceBtn}
+            onPress={() => router.push('/voice-recorder')}
+            accessibilityLabel="Record voice message"
+            accessibilityRole="button"
+          >
+            <Mic size={18} color="#fff" />
           </TouchableOpacity>
-        </>
-      )}
-    </ScrollView>
+          <Text style={{ fontSize: 13, color: colors.textMuted }}>Or dictate with your voice</Text>
+        </View>
+
+        <Text style={s.sectionTitle}>Recipient Context (optional)</Text>
+        <TextInput
+          style={[s.input, s.inputSmall]}
+          placeholder="e.g. Client who just signed a deal"
+          placeholderTextColor={colors.textMuted}
+          value={recipientContext}
+          onChangeText={setRecipientContext}
+          accessibilityLabel="Recipient context"
+        />
+
+        <Text style={s.sectionTitle}>Your Name</Text>
+        <TextInput
+          style={[s.input, s.inputSmall]}
+          placeholder="How to sign the letter"
+          placeholderTextColor={colors.textMuted}
+          value={senderName}
+          onChangeText={setSenderName}
+          accessibilityLabel="Your name to sign the letter"
+        />
+
+        <TouchableOpacity
+          style={[s.button, isGenerating && s.buttonDisabled]}
+          onPress={handleGenerate}
+          disabled={isGenerating}
+          accessibilityLabel="Generate letter variations"
+          accessibilityRole="button"
+        >
+          {isGenerating ? (
+            <ActivityIndicator color="#fff" />
+          ) : (
+            <Text style={s.buttonText}>Generate 3 Letter Variations</Text>
+          )}
+        </TouchableOpacity>
+
+        {generatedLetters.length > 0 && (
+          <>
+            <Text style={s.sectionTitle}>Choose a Letter</Text>
+            {generatedLetters.map((letter, i) => (
+              <TouchableOpacity
+                key={i}
+                style={[s.letterCard, selectedLetter === i && s.letterCardSelected]}
+                onPress={() => setSelectedLetter(i)}
+                accessibilityLabel={`Letter variation ${i + 1}`}
+                accessibilityRole="button"
+              >
+                <Text style={s.letterLabel}>Variation {i + 1}</Text>
+                <Text style={s.letterText}>{letter}</Text>
+              </TouchableOpacity>
+            ))}
+
+            <TouchableOpacity style={s.sendButton} onPress={handleSend} accessibilityLabel="Send this letter" accessibilityRole="button">
+              <Text style={s.buttonText}>Send This Letter</Text>
+            </TouchableOpacity>
+
+            <TouchableOpacity style={s.saveButton} onPress={handleSaveTemplate} accessibilityLabel="Save as template" accessibilityRole="button">
+              <Text style={s.saveButtonText}>Save as Template</Text>
+            </TouchableOpacity>
+          </>
+        )}
+      </ScrollView>
+    </TouchableWithoutFeedback>
   );
 }

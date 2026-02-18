@@ -4,6 +4,10 @@ import { StatusBar } from 'expo-status-bar';
 import * as SplashScreen from 'expo-splash-screen';
 import { AuthProvider } from '@/providers/AuthProvider';
 import { ThemeProvider, useTheme } from '@/providers/ThemeProvider';
+import { BillingProvider } from '@/providers/BillingProvider';
+import { AnalyticsProvider } from '@/providers/AnalyticsProvider';
+import ErrorBoundary from '@/components/ErrorBoundary';
+import { setupNotificationHandlers } from '@/services/notifications';
 
 SplashScreen.preventAutoHideAsync();
 
@@ -12,6 +16,11 @@ function RootLayoutNav() {
 
   useEffect(() => {
     SplashScreen.hideAsync();
+  }, []);
+
+  useEffect(() => {
+    const cleanup = setupNotificationHandlers();
+    return cleanup;
   }, []);
 
   return (
@@ -23,6 +32,7 @@ function RootLayoutNav() {
         <Stack.Screen name="send" options={{ title: 'Send Letter', presentation: 'modal' }} />
         <Stack.Screen name="voice-recorder" options={{ title: 'Voice Recorder', presentation: 'modal' }} />
         <Stack.Screen name="add-recipient" options={{ title: 'Add Recipient', presentation: 'modal' }} />
+        <Stack.Screen name="paywall" options={{ title: 'Subscription', presentation: 'modal' }} />
       </Stack>
     </>
   );
@@ -30,10 +40,16 @@ function RootLayoutNav() {
 
 export default function RootLayout() {
   return (
-    <ThemeProvider>
-      <AuthProvider>
-        <RootLayoutNav />
-      </AuthProvider>
-    </ThemeProvider>
+    <ErrorBoundary>
+      <ThemeProvider>
+        <AuthProvider>
+          <BillingProvider>
+            <AnalyticsProvider>
+              <RootLayoutNav />
+            </AnalyticsProvider>
+          </BillingProvider>
+        </AuthProvider>
+      </ThemeProvider>
+    </ErrorBoundary>
   );
 }

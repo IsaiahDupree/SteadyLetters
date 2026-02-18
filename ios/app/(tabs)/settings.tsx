@@ -6,10 +6,11 @@ import {
   TouchableOpacity,
   StyleSheet,
   Alert,
-  Switch,
+  Linking,
 } from 'react-native';
 import { useTheme } from '@/providers/ThemeProvider';
 import { useAuth } from '@/providers/AuthProvider';
+import { useRouter } from 'expo-router';
 import {
   User,
   Moon,
@@ -26,6 +27,7 @@ import {
 export default function SettingsScreen() {
   const { colors, theme, setTheme, isDark } = useTheme();
   const { user, signOut } = useAuth();
+  const router = useRouter();
 
   const handleSignOut = () => {
     Alert.alert('Sign Out', 'Are you sure you want to sign out?', [
@@ -56,7 +58,13 @@ export default function SettingsScreen() {
   });
 
   const Row = ({ icon: Icon, label, value, onPress, first }: { icon: typeof User; label: string; value?: string; onPress?: () => void; first?: boolean }) => (
-    <TouchableOpacity style={[s.row, first && s.rowFirst]} onPress={onPress} disabled={!onPress}>
+    <TouchableOpacity
+      style={[s.row, first && s.rowFirst]}
+      onPress={onPress}
+      disabled={!onPress}
+      accessibilityLabel={value ? `${label}: ${value}` : label}
+      accessibilityRole={onPress ? 'button' : 'text'}
+    >
       <View style={s.rowIcon}><Icon size={20} color={colors.textSecondary} /></View>
       <View style={s.rowContent}>
         <Text style={s.rowLabel}>{label}</Text>
@@ -71,7 +79,7 @@ export default function SettingsScreen() {
       <View style={s.section}>
         <Text style={s.sectionTitle}>Account</Text>
         <Row icon={User} label="Profile" value={user?.email || ''} first />
-        <Row icon={CreditCard} label="Subscription" value="Manage plan" onPress={() => {}} />
+        <Row icon={CreditCard} label="Subscription" value="Free — Manage plan" onPress={() => router.push('/paywall')} />
       </View>
 
       <View style={s.section}>
@@ -86,6 +94,8 @@ export default function SettingsScreen() {
               key={key}
               style={[s.themeOption, theme === key && s.themeActive]}
               onPress={() => setTheme(key)}
+              accessibilityLabel={`Theme: ${label}`}
+              accessibilityRole="button"
             >
               <TIcon size={16} color={theme === key ? '#fff' : colors.textSecondary} />
               <Text style={[s.themeText, theme === key && s.themeTextActive]}>{label}</Text>
@@ -96,12 +106,17 @@ export default function SettingsScreen() {
 
       <View style={s.section}>
         <Text style={s.sectionTitle}>App</Text>
-        <Row icon={Bell} label="Notifications" onPress={() => {}} first />
-        <Row icon={Shield} label="Privacy Policy" onPress={() => {}} />
-        <Row icon={HelpCircle} label="Help & FAQ" onPress={() => {}} />
+        <Row icon={Bell} label="Notifications" value="Manage notification preferences" onPress={() => Linking.openSettings()} first />
+        <Row icon={Shield} label="Privacy Policy" onPress={() => Linking.openURL('https://steadyletters.com/privacy')} />
+        <Row icon={HelpCircle} label="Help & FAQ" onPress={() => Linking.openURL('https://steadyletters.com/help')} />
       </View>
 
-      <TouchableOpacity style={s.signOutRow} onPress={handleSignOut}>
+      <TouchableOpacity
+        style={s.signOutRow}
+        onPress={handleSignOut}
+        accessibilityLabel="Sign out"
+        accessibilityRole="button"
+      >
         <LogOut size={20} color={colors.error} />
         <Text style={s.signOutText}>Sign Out</Text>
       </TouchableOpacity>
