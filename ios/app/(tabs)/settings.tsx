@@ -14,6 +14,7 @@ import { useBilling } from '@/providers/BillingProvider';
 import { getUsageStats, type UsageStats } from '@/services/api';
 import { TIERS } from '@/constants/config';
 import { useRouter } from 'expo-router';
+import Constants from 'expo-constants';
 import {
   User,
   Moon,
@@ -162,6 +163,10 @@ export default function SettingsScreen() {
         <LogOut size={20} color={colors.error} />
         <Text style={s.signOutText}>Sign Out</Text>
       </TouchableOpacity>
+
+      <Text style={{ fontSize: 12, color: colors.textMuted, textAlign: 'center', marginTop: 24, marginBottom: 8 }}>
+        SteadyLetters v{Constants.expoConfig?.version ?? '1.0.0'}
+      </Text>
     </ScrollView>
   );
 }

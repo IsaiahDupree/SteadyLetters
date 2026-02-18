@@ -50,17 +50,26 @@ export async function registerForPushNotifications(): Promise<string | null> {
     });
   }
 
-  const tokenData = await Notifications.getExpoPushTokenAsync();
-  const token = tokenData.data;
+  try {
+    const tokenData = await Notifications.getExpoPushTokenAsync({
+      projectId: undefined, // Uses Constants.expoConfig.extra.eas.projectId automatically
+    });
+    const token = tokenData.data;
 
-  await savePushToken(token);
+    await savePushToken(token).catch((err) =>
+      console.warn('Could not save push token:', err.message),
+    );
 
-  return token;
+    return token;
+  } catch (err: any) {
+    console.warn('Could not get push token:', err.message);
+    return null;
+  }
 }
 
 async function savePushToken(token: string): Promise<void> {
   const { data: { user } } = await supabase.auth.getUser();
-  if (!user) throw new Error('Not authenticated');
+  if (!user) return; // Not authenticated — silently skip
 
   const { error } = await supabase
     .from('push_tokens')
@@ -74,7 +83,10 @@ async function savePushToken(token: string): Promise<void> {
       { onConflict: 'user_id,token' },
     );
 
-  if (error) throw error;
+  if (error) {
+    // Don't crash if table doesn't exist yet
+    console.warn('savePushToken error:', error.message);
+  }
 }
 
 // -------------------------------------------------------------------

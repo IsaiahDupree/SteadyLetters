@@ -12,7 +12,7 @@ import { useRouter } from 'expo-router';
 import { TIERS, type TierName } from '@/constants/config';
 import { useBilling } from '@/providers/BillingProvider';
 import { useTheme } from '@/providers/ThemeProvider';
-import { Check, Crown, Star, Zap } from 'lucide-react-native';
+import { Check, Crown, Star, Zap, X } from 'lucide-react-native';
 
 const TIER_KEYS: TierName[] = ['free', 'pro', 'business'];
 
@@ -182,8 +182,8 @@ export default function PaywallScreen() {
 
   return (
     <ScrollView style={s.container} contentContainerStyle={s.content}>
-      <TouchableOpacity style={s.closeButton} onPress={() => router.back()}>
-        <Text style={s.closeText}>X</Text>
+      <TouchableOpacity style={s.closeButton} onPress={() => router.back()} accessibilityLabel="Close" accessibilityRole="button">
+        <X size={18} color={colors.textSecondary} />
       </TouchableOpacity>
 
       <Text style={s.header}>Choose Your Plan</Text>

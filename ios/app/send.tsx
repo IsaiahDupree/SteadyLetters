@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import {
   View,
   Text,
@@ -13,7 +13,7 @@ import {
 } from 'react-native';
 import { useTheme } from '@/providers/ThemeProvider';
 import { useBilling } from '@/providers/BillingProvider';
-import { useLocalSearchParams, useRouter } from 'expo-router';
+import { useLocalSearchParams, useRouter, useFocusEffect } from 'expo-router';
 import {
   sendPostcard,
   sendLetter,
@@ -52,9 +52,13 @@ export default function SendScreen() {
   const [isSending, setIsSending] = useState(false);
   const [showRecipients, setShowRecipients] = useState(false);
 
-  useEffect(() => {
-    loadData();
-  }, []);
+  // Refresh recipients every time the screen comes into focus
+  // (e.g. after navigating back from add-recipient)
+  useFocusEffect(
+    useCallback(() => {
+      loadData();
+    }, [])
+  );
 
   const loadData = async () => {
     try {
@@ -165,7 +169,8 @@ export default function SendScreen() {
     priceRow: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', backgroundColor: colors.surface, borderRadius: 12, padding: 16, marginTop: 20 },
     priceLabel: { fontSize: 15, color: colors.textSecondary },
     priceValue: { fontSize: 24, fontWeight: '700', color: colors.primary },
-    sendButton: { backgroundColor: colors.success, borderRadius: 14, padding: 18, flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 10, marginTop: 20 },
+    sendButton: { backgroundColor: colors.success, borderRadius: 14, padding: 18, flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 10, marginTop: 20, opacity: 1 },
+    sendButtonDisabled: { opacity: 0.6 },
     sendButtonText: { color: '#fff', fontSize: 18, fontWeight: '700' },
   });
 
@@ -298,7 +303,7 @@ export default function SendScreen() {
         </View>
 
         <TouchableOpacity
-          style={s.sendButton}
+          style={[s.sendButton, isSending && s.sendButtonDisabled]}
           onPress={handleSend}
           disabled={isSending}
           accessibilityLabel={`Send ${PRODUCT_CATALOG[productType].name}`}

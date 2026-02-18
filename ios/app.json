@@ -37,6 +37,7 @@
     },
     "plugins": [
       "expo-router",
+      "expo-dev-client",
       "expo-secure-store",
       [
         "expo-av",
@@ -52,6 +53,7 @@
         }
       ]
     ],
+    "runtimeVersion": "1.0.0",
     "experiments": {
       "typedRoutes": true
     }

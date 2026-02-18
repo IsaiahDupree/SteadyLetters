@@ -114,34 +114,57 @@ export async function generateImages(prompt: string, n = 4): Promise<string[]> {
 
 export async function transcribeAudio(audioUri: string): Promise<string> {
   if (!OPENAI_API_KEY) {
-    throw new Error('OpenAI API key not configured');
+    throw new Error('AI service is not configured. Please add your OpenAI API key.');
   }
 
-  const formData = new FormData();
+  const controller = new AbortController();
+  const timeout = setTimeout(() => controller.abort(), 60000);
 
-  const fileInfo = audioUri.split('/').pop() || 'recording.m4a';
-  formData.append('file', {
-    uri: audioUri,
-    type: 'audio/m4a',
-    name: fileInfo,
-  } as unknown as Blob);
-  formData.append('model', 'whisper-1');
-  formData.append('language', 'en');
+  try {
+    const formData = new FormData();
 
-  const response = await fetch(`${BASE_URL}/audio/transcriptions`, {
-    method: 'POST',
-    headers: {
-      Authorization: `Bearer ${OPENAI_API_KEY}`,
-    },
-    body: formData,
-  });
+    const fileInfo = audioUri.split('/').pop() || 'recording.m4a';
+    formData.append('file', {
+      uri: audioUri,
+      type: 'audio/m4a',
+      name: fileInfo,
+    } as unknown as Blob);
+    formData.append('model', 'whisper-1');
+    formData.append('language', 'en');
 
-  if (!response.ok) {
-    throw new Error(`Transcription failed: ${response.statusText}`);
+    const response = await fetch(`${BASE_URL}/audio/transcriptions`, {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${OPENAI_API_KEY}`,
+      },
+      signal: controller.signal,
+      body: formData,
+    });
+
+    if (!response.ok) {
+      if (response.status === 401) throw new Error('AI service authentication failed. Please check your API key.');
+      if (response.status === 429) throw new Error('AI rate limit reached. Please wait a moment and try again.');
+      if (response.status >= 500) throw new Error('AI service is temporarily unavailable. Please try again later.');
+      const err = await response.json().catch(() => ({ error: { message: response.statusText } }));
+      throw new Error(err.error?.message || `Transcription failed: ${response.statusText}`);
+    }
+
+    const data = await response.json();
+    if (!data.text || data.text.trim().length === 0) {
+      throw new Error('No speech detected in the recording. Please try again and speak clearly.');
+    }
+    return data.text;
+  } catch (error: any) {
+    if (error.name === 'AbortError') {
+      throw new Error('Transcription timed out. Try a shorter recording.');
+    }
+    if (error.message?.includes('Network request failed') || error.message?.includes('Failed to fetch')) {
+      throw new Error('No internet connection. Please check your network and try again.');
+    }
+    throw error;
+  } finally {
+    clearTimeout(timeout);
   }
-
-  const data = await response.json();
-  return data.text;
 }
 
 export async function extractAddress(text: string): Promise<{
