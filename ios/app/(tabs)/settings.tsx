@@ -27,6 +27,7 @@ import {
   LogOut,
   ChevronRight,
   BarChart3,
+  MapPin,
 } from 'lucide-react-native';
 
 export default function SettingsScreen() {
@@ -93,6 +94,7 @@ export default function SettingsScreen() {
         <Text style={s.sectionTitle}>Account</Text>
         <Row icon={User} label="Profile" value={user?.email || ''} first />
         <Row icon={CreditCard} label="Subscription" value={`${tierConfig.name} plan — Manage`} onPress={() => router.push('/paywall')} />
+        <Row icon={MapPin} label="Return Address" value="Your sender address for letters" onPress={() => router.push('/return-address')} />
       </View>
 
       {usage && (

@@ -10,7 +10,9 @@ import {
   TextInput,
   Keyboard,
   TouchableWithoutFeedback,
+  Image,
 } from 'react-native';
+import * as ImagePicker from 'expo-image-picker';
 import { useTheme } from '@/providers/ThemeProvider';
 import { useBilling } from '@/providers/BillingProvider';
 import { useLocalSearchParams, useRouter, useFocusEffect } from 'expo-router';
@@ -26,7 +28,7 @@ import {
 } from '@/services/thanks-io';
 import { getRecipients } from '@/services/api';
 import { createOrder, incrementUsage } from '@/services/api';
-import { Send, ChevronDown, Check, Plus, Lock } from 'lucide-react-native';
+import { Send, ChevronDown, Check, Plus, Lock, ImagePlus, X } from 'lucide-react-native';
 import * as Haptics from 'expo-haptics';
 
 const DEFAULT_FRONT_IMAGE = 'https://images.unsplash.com/photo-1579546929518-9e396f3cc809?w=800&q=80';
@@ -51,6 +53,7 @@ export default function SendScreen() {
   const [selectedStyle, setSelectedStyle] = useState<string>('1');
   const [isSending, setIsSending] = useState(false);
   const [showRecipients, setShowRecipients] = useState(false);
+  const [frontImage, setFrontImage] = useState<string | null>(null);
 
   // Refresh recipients every time the screen comes into focus
   // (e.g. after navigating back from add-recipient)
@@ -100,7 +103,7 @@ export default function SendScreen() {
                 recipients: [selectedRecipient],
                 message,
                 handwriting_style: selectedStyle,
-                front_image_url: DEFAULT_FRONT_IMAGE,
+                front_image_url: frontImage || DEFAULT_FRONT_IMAGE,
               };
 
               let result;
@@ -285,6 +288,55 @@ export default function SendScreen() {
             </TouchableOpacity>
           ))}
         </View>
+
+        {(productType === 'postcard' || productType === 'greeting') && (
+          <>
+            <Text style={s.sectionTitle}>Card Front Image</Text>
+            {frontImage ? (
+              <View style={{ position: 'relative', borderRadius: 12, overflow: 'hidden' }}>
+                <Image source={{ uri: frontImage }} style={{ width: '100%', height: 180, borderRadius: 12 }} resizeMode="cover" />
+                <TouchableOpacity
+                  onPress={() => setFrontImage(null)}
+                  style={{ position: 'absolute', top: 8, right: 8, backgroundColor: 'rgba(0,0,0,0.6)', borderRadius: 14, width: 28, height: 28, alignItems: 'center', justifyContent: 'center' }}
+                  accessibilityLabel="Remove image"
+                  accessibilityRole="button"
+                >
+                  <X size={16} color="#fff" />
+                </TouchableOpacity>
+              </View>
+            ) : (
+              <TouchableOpacity
+                style={{
+                  backgroundColor: colors.surface,
+                  borderRadius: 12,
+                  borderWidth: 1,
+                  borderColor: colors.border,
+                  borderStyle: 'dashed',
+                  paddingVertical: 32,
+                  alignItems: 'center',
+                  gap: 8,
+                }}
+                onPress={async () => {
+                  const result = await ImagePicker.launchImageLibraryAsync({
+                    mediaTypes: ['images'],
+                    allowsEditing: true,
+                    aspect: [4, 3],
+                    quality: 0.8,
+                  });
+                  if (!result.canceled && result.assets[0]) {
+                    setFrontImage(result.assets[0].uri);
+                  }
+                }}
+                accessibilityLabel="Choose front image for card"
+                accessibilityRole="button"
+              >
+                <ImagePlus size={28} color={colors.textMuted} />
+                <Text style={{ fontSize: 14, color: colors.textMuted }}>Tap to choose a photo</Text>
+                <Text style={{ fontSize: 12, color: colors.textMuted }}>or we'll use a default design</Text>
+              </TouchableOpacity>
+            )}
+          </>
+        )}
 
         <Text style={s.sectionTitle}>Message</Text>
         <TextInput
