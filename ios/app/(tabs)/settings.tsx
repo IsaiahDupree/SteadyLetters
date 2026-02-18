@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   View,
   Text,
@@ -10,6 +10,9 @@ import {
 } from 'react-native';
 import { useTheme } from '@/providers/ThemeProvider';
 import { useAuth } from '@/providers/AuthProvider';
+import { useBilling } from '@/providers/BillingProvider';
+import { getUsageStats, type UsageStats } from '@/services/api';
+import { TIERS } from '@/constants/config';
 import { useRouter } from 'expo-router';
 import {
   User,
@@ -22,12 +25,21 @@ import {
   HelpCircle,
   LogOut,
   ChevronRight,
+  BarChart3,
 } from 'lucide-react-native';
 
 export default function SettingsScreen() {
   const { colors, theme, setTheme, isDark } = useTheme();
   const { user, signOut } = useAuth();
+  const { tier } = useBilling();
   const router = useRouter();
+  const [usage, setUsage] = useState<UsageStats | null>(null);
+
+  useEffect(() => {
+    getUsageStats().then(setUsage).catch(() => {});
+  }, []);
+
+  const tierConfig = TIERS[tier];
 
   const handleSignOut = () => {
     Alert.alert('Sign Out', 'Are you sure you want to sign out?', [
@@ -79,8 +91,38 @@ export default function SettingsScreen() {
       <View style={s.section}>
         <Text style={s.sectionTitle}>Account</Text>
         <Row icon={User} label="Profile" value={user?.email || ''} first />
-        <Row icon={CreditCard} label="Subscription" value="Free — Manage plan" onPress={() => router.push('/paywall')} />
+        <Row icon={CreditCard} label="Subscription" value={`${tierConfig.name} plan — Manage`} onPress={() => router.push('/paywall')} />
       </View>
+
+      {usage && (
+        <View style={s.section}>
+          <Text style={s.sectionTitle}>Usage This Month</Text>
+          <View style={{ backgroundColor: colors.card, borderTopWidth: StyleSheet.hairlineWidth, borderBottomWidth: StyleSheet.hairlineWidth, borderColor: colors.border, paddingHorizontal: 16, paddingVertical: 14 }}>
+            {[
+              { label: 'Letters Generated', used: usage.letterGenerations, limit: tierConfig.letterGenerations },
+              { label: 'Images Generated', used: usage.imageGenerations, limit: tierConfig.imageGenerations },
+              { label: 'Letters Sent', used: usage.lettersSent, limit: tierConfig.lettersSent },
+            ].map((item) => {
+              const limitText = item.limit === -1 ? 'Unlimited' : String(item.limit);
+              const pct = item.limit === -1 ? 0.1 : Math.min(item.used / item.limit, 1);
+              const isNearLimit = item.limit !== -1 && item.used >= item.limit * 0.8;
+              return (
+                <View key={item.label} style={{ marginBottom: 14 }} accessibilityLabel={`${item.label}: ${item.used} of ${limitText}`}>
+                  <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginBottom: 4 }}>
+                    <Text style={{ fontSize: 14, color: colors.text }}>{item.label}</Text>
+                    <Text style={{ fontSize: 14, fontWeight: '600', color: isNearLimit ? colors.warning : colors.textSecondary }}>
+                      {item.used} / {limitText}
+                    </Text>
+                  </View>
+                  <View style={{ height: 6, borderRadius: 3, backgroundColor: colors.border }}>
+                    <View style={{ height: 6, borderRadius: 3, width: `${Math.max(pct * 100, 2)}%` as any, backgroundColor: isNearLimit ? colors.warning : colors.primary }} />
+                  </View>
+                </View>
+              );
+            })}
+          </View>
+        </View>
+      )}
 
       <View style={s.section}>
         <Text style={s.sectionTitle}>Appearance</Text>

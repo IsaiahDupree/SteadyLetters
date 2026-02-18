@@ -3,7 +3,7 @@
   "platform": "ios",
   "framework": "expo-router",
   "version": "1.0.0",
-  "total_features": 184,
+  "total_features": 192,
   "categories": [
     "auth",
     "letter-generation",
@@ -517,7 +517,7 @@
       "id": "IOS-ORDER-003",
       "name": "Order Status Badges",
       "category": "orders",
-      "description": "Orders display color-coded status badges: pending, processing, sent, delivered, failed",
+      "description": "Orders display color-coded status badges for real Thanks.io statuses: reviewing, printing, printed, fulfilled, shipped, delivered, cancelled, error",
       "file": "app/(tabs)/orders.tsx",
       "passes": true
     },
@@ -531,10 +531,10 @@
     },
     {
       "id": "IOS-ORDER-005",
-      "name": "Order Status Check via Thanks.io",
+      "name": "Order Detail Navigation",
       "category": "orders",
-      "description": "Tapping an order checks live status via thanksIo.getOrderStatus() and updates display",
-      "file": "app/(tabs)/orders.tsx",
+      "description": "Tapping an order navigates to order-detail screen with status timeline, recipient info, message preview, and reorder button",
+      "file": "app/order-detail.tsx",
       "passes": true
     },
     {
@@ -907,9 +907,9 @@
     },
     {
       "id": "IOS-SVC-023",
-      "name": "Thanks.io getOrderStatus()",
+      "name": "Thanks.io Order Status (Webhook-based)",
       "category": "services",
-      "description": "thanksIo.getOrderStatus() checks delivery status of sent order via Thanks.io API",
+      "description": "getOrderStatus() returns null — Thanks.io has no polling endpoint; status updates arrive via webhooks and are stored locally",
       "file": "services/thanks-io.ts",
       "passes": true
     },
@@ -1495,6 +1495,70 @@
       "category": "testing",
       "description": "Live test config enforces maxSpend limit ($15 default) to prevent runaway test costs",
       "file": "tests/live/config.ts",
+      "passes": true
+    },
+    {
+      "id": "IOS-ORDER-009",
+      "name": "Order Detail Screen",
+      "category": "orders",
+      "description": "Dedicated order detail screen with status hero card, 6-step status timeline, order details card, recipient info, message preview, and reorder button",
+      "file": "app/order-detail.tsx",
+      "passes": true
+    },
+    {
+      "id": "IOS-ORDER-010",
+      "name": "Order Detail Status Timeline",
+      "category": "orders",
+      "description": "Order detail shows visual timeline: reviewing → printing → printed → fulfilled → shipped → delivered with active/inactive states",
+      "file": "app/order-detail.tsx",
+      "passes": true
+    },
+    {
+      "id": "IOS-SETTINGS-011",
+      "name": "Usage Stats Display",
+      "category": "settings",
+      "description": "Settings screen displays usage progress bars for letters generated, images generated, and letters sent with current/limit counts",
+      "file": "app/(tabs)/settings.tsx",
+      "passes": true
+    },
+    {
+      "id": "IOS-SETTINGS-012",
+      "name": "Dynamic Tier Name in Subscription",
+      "category": "settings",
+      "description": "Settings subscription row shows actual tier name from BillingProvider instead of hardcoded 'Free'",
+      "file": "app/(tabs)/settings.tsx",
+      "passes": true
+    },
+    {
+      "id": "IOS-SEND-015",
+      "name": "Tier Restriction on Product Types",
+      "category": "send-flow",
+      "description": "Send screen checks canUseProduct() before allowing product selection; shows lock icon and upgrade prompt for restricted products",
+      "file": "app/send.tsx",
+      "passes": true
+    },
+    {
+      "id": "IOS-SEND-016",
+      "name": "Add Recipient from Send Screen",
+      "category": "send-flow",
+      "description": "Send screen recipient dropdown includes 'Add New Recipient' option that navigates to add-recipient modal",
+      "file": "app/send.tsx",
+      "passes": true
+    },
+    {
+      "id": "IOS-SEND-017",
+      "name": "Front Image URL for Postcards",
+      "category": "send-flow",
+      "description": "Send screen includes default front_image_url in all send requests (required by Thanks.io for postcards/notecards)",
+      "file": "app/send.tsx",
+      "passes": true
+    },
+    {
+      "id": "IOS-SVC-028",
+      "name": "DALL-E 3 Parallel Image Generation",
+      "category": "services",
+      "description": "generateImages() makes parallel n=1 requests since DALL-E 3 only supports single image per call",
+      "file": "services/openai.ts",
       "passes": true
     }
   ]

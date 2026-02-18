@@ -26,14 +26,17 @@ export interface Recipient {
 
 export interface ThanksIoResponse {
   id: string;
-  status: 'queued' | 'processing' | 'sent' | 'failed';
+  status: string;
+  authorization_total?: number;
   created_at?: string;
   error?: string;
 }
 
+export type OrderStatus = 'reviewing' | 'printing' | 'printed' | 'fulfilled' | 'shipped' | 'delivered' | 'cancelled' | 'error';
+
 export interface ThanksIoOrderStatus {
   id: string;
-  status: 'queued' | 'processing' | 'sent' | 'delivered' | 'failed';
+  status: OrderStatus | string;
   created_at?: string;
   updated_at?: string;
   delivered_at?: string;
@@ -86,7 +89,7 @@ async function apiRequest<T>(
 // -------------------------------------------------------------------
 
 export async function getHandwritingStyles(): Promise<HandwritingStyle[]> {
-  const data = await apiRequest<{ data: Array<{ id?: number; handwriting_id?: number; name?: string; description?: string; style?: string }> }>('GET', '/handwriting');
+  const data = await apiRequest<{ data: Array<{ id?: number; handwriting_id?: number; name?: string; description?: string; style?: string }> }>('GET', '/handwriting-styles');
   return (
     data.data?.map((s) => ({
       id: String(s.id ?? s.handwriting_id ?? ''),
@@ -100,8 +103,14 @@ export async function getHandwritingStyles(): Promise<HandwritingStyle[]> {
 // Order status
 // -------------------------------------------------------------------
 
-export async function getOrderStatus(orderId: string): Promise<ThanksIoOrderStatus> {
-  return apiRequest<ThanksIoOrderStatus>('GET', `/order/${orderId}`);
+/**
+ * Thanks.io does NOT have a GET-by-ID polling endpoint.
+ * Status updates arrive via webhooks. This returns null to signal
+ * the caller should use the locally stored status instead.
+ */
+export async function getOrderStatus(_orderId: string): Promise<ThanksIoOrderStatus | null> {
+  // No polling endpoint exists — status comes from webhooks
+  return null;
 }
 
 // -------------------------------------------------------------------
@@ -116,7 +125,7 @@ export async function sendPostcard(params: {
   front_image_url?: string;
   size?: PostcardSize;
 }): Promise<ThanksIoResponse> {
-  return apiRequest<ThanksIoResponse>('POST', '/postcard/send', {
+  return apiRequest<ThanksIoResponse>('POST', '/send/postcard', {
     recipients: params.recipients,
     message: params.message,
     front_image_url: params.front_image_url,
@@ -134,7 +143,7 @@ export async function sendLetter(params: {
   front_image_url?: string;
   pages?: number;
 }): Promise<ThanksIoResponse> {
-  return apiRequest<ThanksIoResponse>('POST', '/letter/send', {
+  return apiRequest<ThanksIoResponse>('POST', '/send/letter', {
     recipients: params.recipients,
     message: params.message,
     front_image_url: params.front_image_url,
@@ -152,7 +161,7 @@ export async function sendGreetingCard(params: {
   front_image_url?: string;
   envelope_style?: string;
 }): Promise<ThanksIoResponse> {
-  return apiRequest<ThanksIoResponse>('POST', '/greeting/send', {
+  return apiRequest<ThanksIoResponse>('POST', '/send/notecard', {
     recipients: params.recipients,
     message: params.message,
     front_image_url: params.front_image_url,

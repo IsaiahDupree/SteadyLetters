@@ -131,24 +131,24 @@ export default function VoiceRecorderScreen() {
       <Text style={s.timer}>{formatTime(duration)}</Text>
 
       {state === 'idle' && (
-        <TouchableOpacity style={s.recordButton} onPress={startRecording}>
+        <TouchableOpacity style={s.recordButton} onPress={startRecording} accessibilityLabel="Start recording" accessibilityRole="button">
           <Mic size={36} color="#fff" />
         </TouchableOpacity>
       )}
 
       {state === 'recording' && (
-        <TouchableOpacity style={s.stopButton} onPress={stopRecording}>
+        <TouchableOpacity style={s.stopButton} onPress={stopRecording} accessibilityLabel="Stop recording" accessibilityRole="button">
           <Square size={32} color="#fff" />
         </TouchableOpacity>
       )}
 
       {state === 'recorded' && (
         <View style={s.actionRow}>
-          <TouchableOpacity style={s.actionBtn} onPress={resetRecording}>
+          <TouchableOpacity style={s.actionBtn} onPress={resetRecording} accessibilityLabel="Redo recording" accessibilityRole="button">
             <RotateCcw size={18} color={colors.text} />
             <Text style={s.actionText}>Redo</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={[s.actionBtn, s.actionBtnPrimary]} onPress={handleTranscribe}>
+          <TouchableOpacity style={[s.actionBtn, s.actionBtnPrimary]} onPress={handleTranscribe} accessibilityLabel="Transcribe recording" accessibilityRole="button">
             <ArrowRight size={18} color="#fff" />
             <Text style={s.actionTextPrimary}>Transcribe</Text>
           </TouchableOpacity>

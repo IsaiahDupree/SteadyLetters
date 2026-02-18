@@ -12,6 +12,7 @@ import {
   TouchableWithoutFeedback,
 } from 'react-native';
 import { useTheme } from '@/providers/ThemeProvider';
+import { useBilling } from '@/providers/BillingProvider';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import {
   sendPostcard,
@@ -25,8 +26,10 @@ import {
 } from '@/services/thanks-io';
 import { getRecipients } from '@/services/api';
 import { createOrder, incrementUsage } from '@/services/api';
-import { Send, ChevronDown, Check } from 'lucide-react-native';
+import { Send, ChevronDown, Check, Plus, Lock } from 'lucide-react-native';
 import * as Haptics from 'expo-haptics';
+
+const DEFAULT_FRONT_IMAGE = 'https://images.unsplash.com/photo-1579546929518-9e396f3cc809?w=800&q=80';
 
 const PRODUCT_TYPES: { value: ProductType; label: string }[] = [
   { value: 'postcard', label: 'Postcard' },
@@ -36,6 +39,7 @@ const PRODUCT_TYPES: { value: ProductType; label: string }[] = [
 
 export default function SendScreen() {
   const { colors } = useTheme();
+  const { canUseProduct } = useBilling();
   const router = useRouter();
   const params = useLocalSearchParams<{ message?: string }>();
 
@@ -92,6 +96,7 @@ export default function SendScreen() {
                 recipients: [selectedRecipient],
                 message,
                 handwriting_style: selectedStyle,
+                front_image_url: DEFAULT_FRONT_IMAGE,
               };
 
               let result;
@@ -171,17 +176,32 @@ export default function SendScreen() {
 
         <Text style={s.sectionTitle}>Product Type</Text>
         <View style={s.chipRow}>
-          {PRODUCT_TYPES.map((p) => (
-            <TouchableOpacity
-              key={p.value}
-              style={[s.chip, productType === p.value && s.chipActive]}
-              onPress={() => setProductType(p.value)}
-              accessibilityLabel={`Product type: ${p.label}, $${PRODUCT_CATALOG[p.value].basePrice.toFixed(2)}`}
-              accessibilityRole="button"
-            >
-              <Text style={[s.chipText, productType === p.value && s.chipTextActive]}>{p.label}</Text>
-            </TouchableOpacity>
-          ))}
+          {PRODUCT_TYPES.map((p) => {
+            const allowed = canUseProduct(p.value);
+            return (
+              <TouchableOpacity
+                key={p.value}
+                style={[s.chip, productType === p.value && s.chipActive, !allowed && { opacity: 0.5 }]}
+                onPress={() => {
+                  if (!allowed) {
+                    Alert.alert('Upgrade Required', `${p.label} is not available on your plan.`, [
+                      { text: 'Upgrade', onPress: () => router.push('/paywall') },
+                      { text: 'Cancel', style: 'cancel' },
+                    ]);
+                    return;
+                  }
+                  setProductType(p.value);
+                }}
+                accessibilityLabel={`Product type: ${p.label}, $${PRODUCT_CATALOG[p.value].basePrice.toFixed(2)}${!allowed ? ', upgrade required' : ''}`}
+                accessibilityRole="button"
+              >
+                <View style={{ flexDirection: 'row', alignItems: 'center', gap: 4 }}>
+                  {!allowed && <Lock size={12} color={productType === p.value ? '#fff' : colors.textMuted} />}
+                  <Text style={[s.chipText, productType === p.value && s.chipTextActive]}>{p.label}</Text>
+                </View>
+              </TouchableOpacity>
+            );
+          })}
         </View>
 
         <Text style={s.sectionTitle}>Recipient</Text>
@@ -201,21 +221,48 @@ export default function SendScreen() {
         </TouchableOpacity>
         {showRecipients && (
           <View style={s.dropdown}>
-            {recipients.map((r, i) => (
+            {recipients.length === 0 ? (
               <TouchableOpacity
-                key={r.id || i}
-                style={s.recipientOption}
-                onPress={() => { setSelectedRecipient(r); setShowRecipients(false); }}
-                accessibilityLabel={`Recipient: ${r.name}, ${r.address}`}
+                style={[s.recipientOption, { justifyContent: 'center' }]}
+                onPress={() => { setShowRecipients(false); router.push('/add-recipient'); }}
+                accessibilityLabel="Add a new recipient"
                 accessibilityRole="button"
               >
-                <View>
-                  <Text style={s.recipientName}>{r.name}</Text>
-                  <Text style={s.recipientAddr}>{r.address}, {r.city}</Text>
+                <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
+                  <Plus size={18} color={colors.primary} />
+                  <Text style={[s.recipientName, { color: colors.primary }]}>Add New Recipient</Text>
                 </View>
-                {selectedRecipient?.id === r.id && <Check size={18} color={colors.success} />}
               </TouchableOpacity>
-            ))}
+            ) : (
+              <>
+                {recipients.map((r, i) => (
+                  <TouchableOpacity
+                    key={r.id || i}
+                    style={s.recipientOption}
+                    onPress={() => { setSelectedRecipient(r); setShowRecipients(false); }}
+                    accessibilityLabel={`Recipient: ${r.name}, ${r.address}`}
+                    accessibilityRole="button"
+                  >
+                    <View>
+                      <Text style={s.recipientName}>{r.name}</Text>
+                      <Text style={s.recipientAddr}>{r.address}, {r.city}</Text>
+                    </View>
+                    {selectedRecipient?.id === r.id && <Check size={18} color={colors.success} />}
+                  </TouchableOpacity>
+                ))}
+                <TouchableOpacity
+                  style={[s.recipientOption, { borderBottomWidth: 0 }]}
+                  onPress={() => { setShowRecipients(false); router.push('/add-recipient'); }}
+                  accessibilityLabel="Add a new recipient"
+                  accessibilityRole="button"
+                >
+                  <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
+                    <Plus size={16} color={colors.primary} />
+                    <Text style={{ fontSize: 15, fontWeight: '500', color: colors.primary }}>Add New</Text>
+                  </View>
+                </TouchableOpacity>
+              </>
+            )}
           </View>
         )}
 

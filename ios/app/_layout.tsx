@@ -29,10 +29,11 @@ function RootLayoutNav() {
       <Stack screenOptions={{ headerShown: false }}>
         <Stack.Screen name="(auth)" options={{ headerShown: false }} />
         <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-        <Stack.Screen name="send" options={{ title: 'Send Letter', presentation: 'modal' }} />
-        <Stack.Screen name="voice-recorder" options={{ title: 'Voice Recorder', presentation: 'modal' }} />
-        <Stack.Screen name="add-recipient" options={{ title: 'Add Recipient', presentation: 'modal' }} />
-        <Stack.Screen name="paywall" options={{ title: 'Subscription', presentation: 'modal' }} />
+        <Stack.Screen name="send" options={{ title: 'Send Letter', presentation: 'modal', headerShown: true }} />
+        <Stack.Screen name="voice-recorder" options={{ title: 'Voice Recorder', presentation: 'modal', headerShown: true }} />
+        <Stack.Screen name="add-recipient" options={{ title: 'Add Recipient', presentation: 'modal', headerShown: true }} />
+        <Stack.Screen name="order-detail" options={{ title: 'Order Details', presentation: 'card', headerShown: true }} />
+        <Stack.Screen name="paywall" options={{ title: 'Subscription', presentation: 'modal', headerShown: true }} />
       </Stack>
     </>
   );

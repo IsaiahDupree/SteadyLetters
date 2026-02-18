@@ -9,17 +9,22 @@ import {
 } from 'react-native';
 import { useTheme } from '@/providers/ThemeProvider';
 import { getOrders, type Order } from '@/services/api';
-import { getOrderStatus } from '@/services/thanks-io';
-import { ShoppingCart, Clock, CheckCircle, AlertCircle, Truck, Send } from 'lucide-react-native';
+import { ShoppingCart, Clock, CheckCircle, AlertCircle, Truck, Send, Printer, Package, XCircle, Eye } from 'lucide-react-native';
 import { useRouter } from 'expo-router';
 
 const STATUS_CONFIG: Record<string, { icon: typeof Clock; color: string; label: string }> = {
+  reviewing: { icon: Eye, color: '#d69e2e', label: 'Reviewing' },
+  printing: { icon: Printer, color: '#3182ce', label: 'Printing' },
+  printed: { icon: Printer, color: '#3182ce', label: 'Printed' },
+  fulfilled: { icon: Package, color: '#38a169', label: 'Fulfilled' },
+  shipped: { icon: Truck, color: '#38a169', label: 'Shipped' },
+  delivered: { icon: CheckCircle, color: '#38a169', label: 'Delivered' },
+  cancelled: { icon: XCircle, color: '#a0aec0', label: 'Cancelled' },
+  error: { icon: AlertCircle, color: '#e53e3e', label: 'Error' },
   pending: { icon: Clock, color: '#d69e2e', label: 'Pending' },
   queued: { icon: Clock, color: '#d69e2e', label: 'Queued' },
   processing: { icon: Clock, color: '#3182ce', label: 'Processing' },
   sent: { icon: Truck, color: '#38a169', label: 'Sent' },
-  delivered: { icon: CheckCircle, color: '#38a169', label: 'Delivered' },
-  failed: { icon: AlertCircle, color: '#e53e3e', label: 'Failed' },
 };
 
 const SkeletonCard = memo(({ colors }: { colors: Record<string, string> }) => (
@@ -97,20 +102,9 @@ export default function OrdersScreen() {
 
   useEffect(() => { loadOrders(); }, [loadOrders]);
 
-  const refreshOrderStatus = useCallback(async (order: Order) => {
-    try {
-      const status = await getOrderStatus(order.thanks_io_order_id);
-      if (status) {
-        setOrders((prev) =>
-          prev.map((o) =>
-            o.id === order.id ? { ...o, status: status.status } : o,
-          ),
-        );
-      }
-    } catch (error) {
-      console.error('Failed to refresh order status:', error);
-    }
-  }, []);
+  const handleOrderPress = useCallback((order: Order) => {
+    router.push({ pathname: '/order-detail', params: { orderId: order.id } });
+  }, [router]);
 
   const colorsObj = colors as unknown as Record<string, string>;
 
@@ -148,7 +142,7 @@ export default function OrdersScreen() {
             <RefreshControl refreshing={refreshing} onRefresh={() => { setRefreshing(true); loadOrders(); }} />
           }
           renderItem={({ item }) => (
-            <OrderCard item={item} colors={colorsObj} onPress={() => refreshOrderStatus(item)} />
+            <OrderCard item={item} colors={colorsObj} onPress={() => handleOrderPress(item)} />
           )}
         />
       )}

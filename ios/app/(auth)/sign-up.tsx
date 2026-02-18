@@ -74,32 +74,32 @@ export default function SignUpScreen() {
         <View style={s.inputGroup}>
           <View style={s.inputWrapper}>
             <User size={20} color={colors.textMuted} />
-            <TextInput style={s.input} placeholder="Full Name" placeholderTextColor={colors.textMuted} value={fullName} onChangeText={setFullName} autoComplete="name" />
+            <TextInput style={s.input} placeholder="Full Name" placeholderTextColor={colors.textMuted} value={fullName} onChangeText={setFullName} autoComplete="name" accessibilityLabel="Full name" />
           </View>
         </View>
 
         <View style={s.inputGroup}>
           <View style={s.inputWrapper}>
             <Mail size={20} color={colors.textMuted} />
-            <TextInput style={s.input} placeholder="Email" placeholderTextColor={colors.textMuted} value={email} onChangeText={setEmail} autoCapitalize="none" keyboardType="email-address" autoComplete="email" />
+            <TextInput style={s.input} placeholder="Email" placeholderTextColor={colors.textMuted} value={email} onChangeText={setEmail} autoCapitalize="none" keyboardType="email-address" autoComplete="email" accessibilityLabel="Email address" />
           </View>
         </View>
 
         <View style={s.inputGroup}>
           <View style={s.inputWrapper}>
             <Lock size={20} color={colors.textMuted} />
-            <TextInput style={s.input} placeholder="Password" placeholderTextColor={colors.textMuted} value={password} onChangeText={setPassword} secureTextEntry autoComplete="new-password" />
+            <TextInput style={s.input} placeholder="Password" placeholderTextColor={colors.textMuted} value={password} onChangeText={setPassword} secureTextEntry autoComplete="new-password" accessibilityLabel="Password" />
           </View>
         </View>
 
         <View style={s.inputGroup}>
           <View style={s.inputWrapper}>
             <Lock size={20} color={colors.textMuted} />
-            <TextInput style={s.input} placeholder="Confirm Password" placeholderTextColor={colors.textMuted} value={confirmPassword} onChangeText={setConfirmPassword} secureTextEntry />
+            <TextInput style={s.input} placeholder="Confirm Password" placeholderTextColor={colors.textMuted} value={confirmPassword} onChangeText={setConfirmPassword} secureTextEntry accessibilityLabel="Confirm password" />
           </View>
         </View>
 
-        <TouchableOpacity style={s.button} onPress={handleSignUp} disabled={isLoading}>
+        <TouchableOpacity style={s.button} onPress={handleSignUp} disabled={isLoading} accessibilityLabel="Create account" accessibilityRole="button">
           {isLoading ? <ActivityIndicator color="#fff" /> : <Text style={s.buttonText}>Create Account</Text>}
         </TouchableOpacity>
       </ScrollView>

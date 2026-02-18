@@ -74,17 +74,22 @@ ${params.senderName ? `Sign as: ${params.senderName}` : ''}`;
 }
 
 export async function generateImages(prompt: string, n = 4): Promise<string[]> {
-  const data = await openaiRequest<{
-    data: Array<{ url: string }>;
-  }>('/images/generations', {
-    model: 'dall-e-3',
-    prompt: `Beautiful card/letter front image: ${prompt}. Artistic, warm, suitable for physical mail.`,
-    n: Math.min(n, 4),
-    size: '1024x1024',
-    quality: 'standard',
-  });
+  const count = Math.min(Math.max(n, 1), 4);
+  const fullPrompt = `Beautiful card/letter front image: ${prompt}. Artistic, warm, suitable for physical mail.`;
 
-  return data.data.map((img) => img.url);
+  // DALL-E 3 only supports n=1 per request — run parallel calls
+  const requests = Array.from({ length: count }, () =>
+    openaiRequest<{ data: Array<{ url: string }> }>('/images/generations', {
+      model: 'dall-e-3',
+      prompt: fullPrompt,
+      n: 1,
+      size: '1024x1024',
+      quality: 'standard',
+    }),
+  );
+
+  const results = await Promise.all(requests);
+  return results.map((r) => r.data[0]?.url).filter(Boolean);
 }
 
 export async function transcribeAudio(audioUri: string): Promise<string> {
