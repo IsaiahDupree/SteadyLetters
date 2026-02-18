@@ -14,6 +14,8 @@ import {
 import { useTheme } from '@/providers/ThemeProvider';
 import { useRouter } from 'expo-router';
 import { createRecipient } from '@/services/api';
+import * as Haptics from 'expo-haptics';
+import { UserPlus } from 'lucide-react-native';
 
 export default function AddRecipientScreen() {
   const { colors } = useTheme();
@@ -29,9 +31,15 @@ export default function AddRecipientScreen() {
   const [isSaving, setIsSaving] = useState(false);
 
   const handleSave = async () => {
-    const trimmed = { name: name.trim(), address: address.trim(), address2: address2.trim(), city: city.trim(), province: province.trim(), postalCode: postalCode.trim(), country: country.trim() };
-    if (!trimmed.name || !trimmed.address || !trimmed.city || !trimmed.province || !trimmed.postalCode) {
-      Alert.alert('Missing Fields', 'Please fill in all required fields.');
+    const trimmed = { name: name.trim(), address: address.trim(), address2: address2.trim(), city: city.trim(), province: province.trim(), postalCode: postalCode.trim(), country: country.trim() || 'US' };
+    const missing: string[] = [];
+    if (!trimmed.name) missing.push('Full Name');
+    if (!trimmed.address) missing.push('Street Address');
+    if (!trimmed.city) missing.push('City');
+    if (!trimmed.province) missing.push('State');
+    if (!trimmed.postalCode) missing.push('ZIP Code');
+    if (missing.length > 0) {
+      Alert.alert('Missing Fields', `Please fill in: ${missing.join(', ')}`);
       return;
     }
     setIsSaving(true);
@@ -45,8 +53,12 @@ export default function AddRecipientScreen() {
         postal_code: trimmed.postalCode,
         country: trimmed.country,
       });
-      router.back();
+      Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
+      Alert.alert('Recipient Saved', `${trimmed.name} has been added to your address book.`, [
+        { text: 'OK', onPress: () => router.back() },
+      ]);
     } catch (error) {
+      Haptics.notificationAsync(Haptics.NotificationFeedbackType.Error);
       Alert.alert('Error', error instanceof Error ? error.message : 'Failed to save recipient');
     } finally {
       setIsSaving(false);
@@ -65,25 +77,26 @@ export default function AddRecipientScreen() {
     required: { color: colors.error, fontSize: 12 },
   });
 
-  const Field = ({ label, value, onChangeText, placeholder, required }: { label: string; value: string; onChangeText: (t: string) => void; placeholder: string; required?: boolean }) => (
+  const Field = ({ label, value, onChangeText, placeholder, required, autoCapitalize, keyboardType }: { label: string; value: string; onChangeText: (t: string) => void; placeholder: string; required?: boolean; autoCapitalize?: 'none' | 'sentences' | 'words' | 'characters'; keyboardType?: 'default' | 'number-pad' }) => (
     <>
       <Text style={s.label}>{label} {required && <Text style={s.required}>*</Text>}</Text>
-      <TextInput style={s.input} placeholder={placeholder} placeholderTextColor={colors.textMuted} value={value} onChangeText={onChangeText} accessibilityLabel={label} />
+      <TextInput style={s.input} placeholder={placeholder} placeholderTextColor={colors.textMuted} value={value} onChangeText={onChangeText} accessibilityLabel={label} autoCapitalize={autoCapitalize} keyboardType={keyboardType} />
     </>
   );
 
   return (
     <KeyboardAvoidingView style={s.container} behavior={Platform.OS === 'ios' ? 'padding' : undefined}>
       <ScrollView contentContainerStyle={s.content}>
-        <Field label="Full Name" value={name} onChangeText={setName} placeholder="John Doe" required />
-        <Field label="Street Address" value={address} onChangeText={setAddress} placeholder="123 Main St" required />
+        <Text style={{ fontSize: 14, color: colors.textSecondary, lineHeight: 20, marginBottom: 8 }}>Add a mailing address for someone you'd like to send letters to. This address will be used by Thanks.io to deliver physical mail.</Text>
+        <Field label="Full Name" value={name} onChangeText={setName} placeholder="John Doe" required autoCapitalize="words" />
+        <Field label="Street Address" value={address} onChangeText={setAddress} placeholder="123 Main St" required autoCapitalize="words" />
         <Field label="Apt / Suite" value={address2} onChangeText={setAddress2} placeholder="Apt 4B" />
         <View style={s.row}>
           <View style={s.flex1}>
-            <Field label="City" value={city} onChangeText={setCity} placeholder="Austin" required />
+            <Field label="City" value={city} onChangeText={setCity} placeholder="Austin" required autoCapitalize="words" />
           </View>
           <View style={s.flex1}>
-            <Field label="State" value={province} onChangeText={setProvince} placeholder="TX" required />
+            <Field label="State" value={province} onChangeText={(t) => setProvince(t.toUpperCase())} placeholder="TX" required autoCapitalize="characters" />
           </View>
         </View>
         <View style={s.row}>
@@ -95,8 +108,13 @@ export default function AddRecipientScreen() {
           </View>
         </View>
 
-        <TouchableOpacity style={s.button} onPress={handleSave} disabled={isSaving} accessibilityLabel="Save recipient" accessibilityRole="button">
-          {isSaving ? <ActivityIndicator color="#fff" /> : <Text style={s.buttonText}>Save Recipient</Text>}
+        <TouchableOpacity style={[s.button, isSaving && { opacity: 0.6 }]} onPress={handleSave} disabled={isSaving} accessibilityLabel="Save recipient" accessibilityRole="button">
+          {isSaving ? <ActivityIndicator color="#fff" /> : (
+            <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
+              <UserPlus size={20} color="#fff" />
+              <Text style={s.buttonText}>Save Recipient</Text>
+            </View>
+          )}
         </TouchableOpacity>
       </ScrollView>
     </KeyboardAvoidingView>

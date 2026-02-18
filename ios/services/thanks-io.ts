@@ -64,24 +64,45 @@ async function apiRequest<T>(
   body?: Record<string, unknown>,
 ): Promise<T> {
   if (!THANKS_IO_API_KEY) {
-    throw new Error('Thanks.io API key not configured');
+    throw new Error('Mail service is not configured. Please add your Thanks.io API key in settings.');
   }
 
-  const response = await fetch(`${BASE_URL}${endpoint}`, {
-    method,
-    headers: {
-      Authorization: `Bearer ${THANKS_IO_API_KEY}`,
-      'Content-Type': 'application/json',
-    },
-    ...(body ? { body: JSON.stringify(body) } : {}),
-  });
+  const controller = new AbortController();
+  const timeout = setTimeout(() => controller.abort(), 15000);
 
-  if (!response.ok) {
-    const err = await response.json().catch(() => ({ error: response.statusText }));
-    throw new Error(err.error || `Thanks.io API error: ${response.status}`);
+  try {
+    const response = await fetch(`${BASE_URL}${endpoint}`, {
+      method,
+      headers: {
+        Authorization: `Bearer ${THANKS_IO_API_KEY}`,
+        'Content-Type': 'application/json',
+      },
+      signal: controller.signal,
+      ...(body ? { body: JSON.stringify(body) } : {}),
+    });
+
+    if (!response.ok) {
+      const err = await response.json().catch(() => ({ error: response.statusText }));
+      const msg = err.error || err.message || `API error ${response.status}`;
+      if (response.status === 401) throw new Error('Mail service authentication failed. Please check your API key.');
+      if (response.status === 422) throw new Error(`Invalid request: ${msg}`);
+      if (response.status === 429) throw new Error('Too many requests. Please wait a moment and try again.');
+      if (response.status >= 500) throw new Error('Mail service is temporarily unavailable. Please try again later.');
+      throw new Error(msg);
+    }
+
+    return response.json();
+  } catch (error: any) {
+    if (error.name === 'AbortError') {
+      throw new Error('Request timed out. Please check your connection and try again.');
+    }
+    if (error.message?.includes('Network request failed') || error.message?.includes('Failed to fetch')) {
+      throw new Error('No internet connection. Please check your network and try again.');
+    }
+    throw error;
+  } finally {
+    clearTimeout(timeout);
   }
-
-  return response.json();
 }
 
 // -------------------------------------------------------------------

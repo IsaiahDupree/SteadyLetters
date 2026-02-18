@@ -31,10 +31,17 @@ export default function SignInScreen() {
     }
     setIsLoading(true);
     try {
-      await signIn(email, password);
+      await signIn(email.trim(), password);
       router.replace('/(tabs)');
     } catch (error) {
-      Alert.alert('Sign In Failed', error instanceof Error ? error.message : 'Invalid credentials');
+      const msg = error instanceof Error ? error.message : 'Something went wrong';
+      if (msg.includes('Invalid login')) {
+        Alert.alert('Incorrect Credentials', 'The email or password you entered is incorrect. Please try again.');
+      } else if (msg.includes('Email not confirmed')) {
+        Alert.alert('Email Not Verified', 'Please check your email and click the verification link before signing in.');
+      } else {
+        Alert.alert('Sign In Failed', msg);
+      }
     } finally {
       setIsLoading(false);
     }
@@ -49,7 +56,8 @@ export default function SignInScreen() {
     inputWrapper: { flexDirection: 'row', alignItems: 'center', backgroundColor: colors.surface, borderRadius: 12, borderWidth: 1, borderColor: colors.border, paddingHorizontal: 14 },
     inputIcon: { marginRight: 10 },
     input: { flex: 1, paddingVertical: 14, fontSize: 16, color: colors.text },
-    button: { backgroundColor: colors.primary, borderRadius: 12, padding: 16, alignItems: 'center', marginTop: 8 },
+    button: { backgroundColor: colors.primary, borderRadius: 12, padding: 16, alignItems: 'center', marginTop: 8, flexDirection: 'row', justifyContent: 'center' },
+    buttonDisabled: { opacity: 0.6 },
     buttonText: { color: '#fff', fontSize: 17, fontWeight: '600' },
     linkRow: { flexDirection: 'row', justifyContent: 'center', marginTop: 20, gap: 4 },
     linkText: { fontSize: 15, color: colors.textSecondary },
@@ -77,6 +85,7 @@ export default function SignInScreen() {
               autoCapitalize="none"
               keyboardType="email-address"
               autoComplete="email"
+              returnKeyType="next"
               accessibilityLabel="Email address"
             />
           </View>
@@ -93,6 +102,8 @@ export default function SignInScreen() {
               onChangeText={setPassword}
               secureTextEntry
               autoComplete="password"
+              returnKeyType="done"
+              onSubmitEditing={handleSignIn}
               accessibilityLabel="Password"
             />
           </View>
@@ -102,7 +113,7 @@ export default function SignInScreen() {
           <Text style={s.forgotText}>Forgot password?</Text>
         </TouchableOpacity>
 
-        <TouchableOpacity style={s.button} onPress={handleSignIn} disabled={isLoading} accessibilityLabel="Sign in" accessibilityRole="button">
+        <TouchableOpacity style={[s.button, isLoading && s.buttonDisabled]} onPress={handleSignIn} disabled={isLoading} accessibilityLabel="Sign in" accessibilityRole="button">
           {isLoading ? <ActivityIndicator color="#fff" /> : <Text style={s.buttonText}>Sign In</Text>}
         </TouchableOpacity>
 

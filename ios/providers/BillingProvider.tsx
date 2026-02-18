@@ -34,8 +34,15 @@ export function BillingProvider({ children }: { children: React.ReactNode }) {
   const [offerings, setOfferings] = useState<PurchasesOfferings | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
+  const isConfigured = Boolean(REVENUECAT_API_KEY);
+
   // Initialize RevenueCat on mount
   useEffect(() => {
+    if (!isConfigured) {
+      console.warn('BillingProvider: REVENUECAT_API_KEY not set — defaulting to free tier');
+      setIsLoading(false);
+      return;
+    }
     async function init() {
       try {
         Purchases.configure({ apiKey: REVENUECAT_API_KEY });
@@ -52,10 +59,11 @@ export function BillingProvider({ children }: { children: React.ReactNode }) {
       }
     }
     init();
-  }, []);
+  }, [isConfigured]);
 
   // Identify user when auth changes
   useEffect(() => {
+    if (!isConfigured) return;
     async function identify() {
       if (!user?.id) return;
       try {
@@ -66,10 +74,11 @@ export function BillingProvider({ children }: { children: React.ReactNode }) {
       }
     }
     identify();
-  }, [user?.id]);
+  }, [user?.id, isConfigured]);
 
   // Listen for customer info updates
   useEffect(() => {
+    if (!isConfigured) return;
     const listener = (info: CustomerInfo) => {
       setTier(determineTier(info));
     };
@@ -77,9 +86,12 @@ export function BillingProvider({ children }: { children: React.ReactNode }) {
     return () => {
       Purchases.removeCustomerInfoUpdateListener(listener);
     };
-  }, []);
+  }, [isConfigured]);
 
   const purchasePackage = useCallback(async (pkg: PurchasesPackage) => {
+    if (!isConfigured) {
+      throw new Error('In-app purchases are not configured yet. Please try again later.');
+    }
     setIsLoading(true);
     try {
       const { customerInfo } = await Purchases.purchasePackage(pkg);
@@ -91,9 +103,12 @@ export function BillingProvider({ children }: { children: React.ReactNode }) {
     } finally {
       setIsLoading(false);
     }
-  }, []);
+  }, [isConfigured]);
 
   const restorePurchases = useCallback(async () => {
+    if (!isConfigured) {
+      throw new Error('In-app purchases are not configured yet. Please try again later.');
+    }
     setIsLoading(true);
     try {
       const customerInfo = await Purchases.restorePurchases();
@@ -103,7 +118,7 @@ export function BillingProvider({ children }: { children: React.ReactNode }) {
     } finally {
       setIsLoading(false);
     }
-  }, []);
+  }, [isConfigured]);
 
   const isSubscribed = tier !== 'free';
 

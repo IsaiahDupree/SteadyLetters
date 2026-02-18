@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   View,
   Text,
@@ -11,12 +11,15 @@ import {
   Keyboard,
   TouchableWithoutFeedback,
 } from 'react-native';
+import * as SecureStore from 'expo-secure-store';
 import { useTheme } from '@/providers/ThemeProvider';
 import { generateLetter, type LetterTone, type LetterOccasion } from '@/services/openai';
 import { saveTemplate } from '@/services/api';
 import { useRouter, useLocalSearchParams } from 'expo-router';
 import * as Haptics from 'expo-haptics';
-import { Mic } from 'lucide-react-native';
+import { Mic, Sparkles, Send, BookmarkPlus } from 'lucide-react-native';
+
+const SENDER_NAME_KEY = 'steadyletters_sender_name';
 
 const OCCASIONS: { value: LetterOccasion; label: string }[] = [
   { value: 'thank_you', label: 'Thank You' },
@@ -61,6 +64,18 @@ export default function CreateLetterScreen() {
   const [generatedLetters, setGeneratedLetters] = useState<string[]>([]);
   const [selectedLetter, setSelectedLetter] = useState<number>(-1);
   const [isGenerating, setIsGenerating] = useState(false);
+
+  // Persist sender name across sessions
+  useEffect(() => {
+    SecureStore.getItemAsync(SENDER_NAME_KEY).then((name) => {
+      if (name) setSenderName(name);
+    });
+  }, []);
+
+  const updateSenderName = (name: string) => {
+    setSenderName(name);
+    SecureStore.setItemAsync(SENDER_NAME_KEY, name).catch(() => {});
+  };
 
   const handleGenerate = async () => {
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
@@ -111,8 +126,11 @@ export default function CreateLetterScreen() {
 
   const s = StyleSheet.create({
     container: { flex: 1, backgroundColor: colors.background },
-    content: { padding: 16 },
-    sectionTitle: { fontSize: 17, fontWeight: '600', color: colors.text, marginBottom: 8, marginTop: 16 },
+    content: { padding: 16, paddingBottom: 40 },
+    heroTitle: { fontSize: 28, fontWeight: '800', color: colors.text, marginTop: 8 },
+    heroSubtitle: { fontSize: 15, color: colors.textSecondary, marginTop: 6, lineHeight: 22 },
+    sectionTitle: { fontSize: 17, fontWeight: '600', color: colors.text, marginBottom: 4, marginTop: 20 },
+    sectionHint: { fontSize: 13, color: colors.textMuted, marginBottom: 8 },
     chipRow: { flexDirection: 'row', flexWrap: 'wrap', gap: 8 },
     chip: { paddingHorizontal: 14, paddingVertical: 8, borderRadius: 20, backgroundColor: colors.surface, borderWidth: 1, borderColor: colors.border },
     chipActive: { backgroundColor: colors.primary, borderColor: colors.primary },
@@ -137,7 +155,11 @@ export default function CreateLetterScreen() {
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
       <ScrollView style={s.container} contentContainerStyle={s.content} keyboardShouldPersistTaps="handled">
+        <Text style={s.heroTitle}>Create a Letter</Text>
+        <Text style={s.heroSubtitle}>AI will generate 3 unique variations based on your inputs. Pick your favorite and send it as real mail.</Text>
+
         <Text style={s.sectionTitle}>Occasion</Text>
+        <Text style={s.sectionHint}>What's the letter for?</Text>
         <View style={s.chipRow}>
           {OCCASIONS.map((o) => (
             <TouchableOpacity
@@ -153,6 +175,7 @@ export default function CreateLetterScreen() {
         </View>
 
         <Text style={s.sectionTitle}>Tone</Text>
+        <Text style={s.sectionHint}>How should it sound?</Text>
         <View style={s.chipRow}>
           {TONES.map((t) => (
             <TouchableOpacity
@@ -167,10 +190,11 @@ export default function CreateLetterScreen() {
           ))}
         </View>
 
-        <Text style={s.sectionTitle}>Key Points (optional)</Text>
+        <Text style={s.sectionTitle}>Key Points</Text>
+        <Text style={s.sectionHint}>Optional — mention specific things to include</Text>
         <TextInput
           style={s.input}
-          placeholder="What should the letter include?"
+          placeholder="e.g. Thank them for the birthday gift, mention the dinner last week..."
           placeholderTextColor={colors.textMuted}
           value={keyPoints}
           onChangeText={setKeyPoints}
@@ -189,23 +213,24 @@ export default function CreateLetterScreen() {
           <Text style={{ fontSize: 13, color: colors.textMuted }}>Or dictate with your voice</Text>
         </View>
 
-        <Text style={s.sectionTitle}>Recipient Context (optional)</Text>
+        <Text style={s.sectionTitle}>Who's it for?</Text>
+        <Text style={s.sectionHint}>Optional — helps AI personalize the letter</Text>
         <TextInput
           style={[s.input, s.inputSmall]}
-          placeholder="e.g. Client who just signed a deal"
+          placeholder="e.g. My grandmother, a client, my best friend"
           placeholderTextColor={colors.textMuted}
           value={recipientContext}
           onChangeText={setRecipientContext}
-          accessibilityLabel="Recipient context"
+          accessibilityLabel="Who the letter is for"
         />
 
-        <Text style={s.sectionTitle}>Your Name</Text>
+        <Text style={s.sectionTitle}>Sign off as</Text>
         <TextInput
           style={[s.input, s.inputSmall]}
-          placeholder="How to sign the letter"
+          placeholder="Your name"
           placeholderTextColor={colors.textMuted}
           value={senderName}
-          onChangeText={setSenderName}
+          onChangeText={updateSenderName}
           accessibilityLabel="Your name to sign the letter"
         />
 
@@ -219,7 +244,10 @@ export default function CreateLetterScreen() {
           {isGenerating ? (
             <ActivityIndicator color="#fff" />
           ) : (
-            <Text style={s.buttonText}>Generate 3 Letter Variations</Text>
+            <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
+              <Sparkles size={20} color="#fff" />
+              <Text style={s.buttonText}>Generate 3 Variations</Text>
+            </View>
           )}
         </TouchableOpacity>
 
@@ -240,11 +268,17 @@ export default function CreateLetterScreen() {
             ))}
 
             <TouchableOpacity style={s.sendButton} onPress={handleSend} accessibilityLabel="Send this letter" accessibilityRole="button">
-              <Text style={s.buttonText}>Send This Letter</Text>
+              <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
+                <Send size={20} color="#fff" />
+                <Text style={s.buttonText}>Send This Letter</Text>
+              </View>
             </TouchableOpacity>
 
             <TouchableOpacity style={s.saveButton} onPress={handleSaveTemplate} accessibilityLabel="Save as template" accessibilityRole="button">
-              <Text style={s.saveButtonText}>Save as Template</Text>
+              <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
+                <BookmarkPlus size={18} color="#fff" />
+                <Text style={s.saveButtonText}>Save as Template</Text>
+              </View>
             </TouchableOpacity>
           </>
         )}

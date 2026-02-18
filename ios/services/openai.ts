@@ -4,24 +4,44 @@ const BASE_URL = 'https://api.openai.com/v1';
 
 async function openaiRequest<T>(endpoint: string, body: Record<string, unknown>): Promise<T> {
   if (!OPENAI_API_KEY) {
-    throw new Error('OpenAI API key not configured');
+    throw new Error('AI service is not configured. Please add your OpenAI API key.');
   }
 
-  const response = await fetch(`${BASE_URL}${endpoint}`, {
-    method: 'POST',
-    headers: {
-      Authorization: `Bearer ${OPENAI_API_KEY}`,
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify(body),
-  });
+  const controller = new AbortController();
+  const timeout = setTimeout(() => controller.abort(), 30000);
 
-  if (!response.ok) {
-    const err = await response.json().catch(() => ({ error: { message: response.statusText } }));
-    throw new Error(err.error?.message || `OpenAI error: ${response.status}`);
+  try {
+    const response = await fetch(`${BASE_URL}${endpoint}`, {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${OPENAI_API_KEY}`,
+        'Content-Type': 'application/json',
+      },
+      signal: controller.signal,
+      body: JSON.stringify(body),
+    });
+
+    if (!response.ok) {
+      const err = await response.json().catch(() => ({ error: { message: response.statusText } }));
+      const msg = err.error?.message || `API error ${response.status}`;
+      if (response.status === 401) throw new Error('AI service authentication failed. Please check your API key.');
+      if (response.status === 429) throw new Error('AI rate limit reached. Please wait a moment and try again.');
+      if (response.status >= 500) throw new Error('AI service is temporarily unavailable. Please try again later.');
+      throw new Error(msg);
+    }
+
+    return response.json();
+  } catch (error: any) {
+    if (error.name === 'AbortError') {
+      throw new Error('AI request timed out. Please try again.');
+    }
+    if (error.message?.includes('Network request failed') || error.message?.includes('Failed to fetch')) {
+      throw new Error('No internet connection. Please check your network and try again.');
+    }
+    throw error;
+  } finally {
+    clearTimeout(timeout);
   }
-
-  return response.json();
 }
 
 export type LetterTone = 'warm' | 'professional' | 'casual' | 'formal' | 'heartfelt';
