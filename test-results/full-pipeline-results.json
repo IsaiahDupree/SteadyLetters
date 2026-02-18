@@ -1,0 +1,105 @@
+{
+  "timestamp": "2026-02-18T01:04:31.923Z",
+  "mode": "dry-run",
+  "totalTimeSeconds": 33.9,
+  "pipeline": {
+    "ttsGenerated": false,
+    "transcriptionWords": 42,
+    "lettersGenerated": 5,
+    "imageGenerated": false,
+    "orderCreated": false,
+    "orderId": null
+  },
+  "results": [
+    {
+      "test": "TTS Generation",
+      "status": "SKIP",
+      "details": "Skipped via --skip-audio",
+      "timestamp": "2026-02-18T01:03:58.058Z"
+    },
+    {
+      "test": "Whisper Transcription",
+      "status": "SKIP",
+      "details": "No audio to transcribe",
+      "timestamp": "2026-02-18T01:03:58.059Z"
+    },
+    {
+      "test": "Letter: Warm Thank-You (medium)",
+      "status": "PASS",
+      "details": "238 words, 5884ms, tokens: 124→273",
+      "timestamp": "2026-02-18T01:04:03.943Z"
+    },
+    {
+      "test": "Letter: Casual General (short)",
+      "status": "PASS",
+      "details": "68 words, 1197ms, tokens: 121→81",
+      "timestamp": "2026-02-18T01:04:05.140Z"
+    },
+    {
+      "test": "Letter: Formal Thank-You (long)",
+      "status": "PASS",
+      "details": "406 words, 5855ms, tokens: 124→448",
+      "timestamp": "2026-02-18T01:04:10.995Z"
+    },
+    {
+      "test": "Letter: Friendly Congrats (medium)",
+      "status": "PASS",
+      "details": "194 words, 3059ms, tokens: 123→227",
+      "timestamp": "2026-02-18T01:04:14.054Z"
+    },
+    {
+      "test": "Letter: Professional General (short)",
+      "status": "PASS",
+      "details": "72 words, 1197ms, tokens: 121→84",
+      "timestamp": "2026-02-18T01:04:15.251Z"
+    },
+    {
+      "test": "Holiday Letter (Christmas)",
+      "status": "PASS",
+      "details": "207 words, 4449ms",
+      "timestamp": "2026-02-18T01:04:19.702Z"
+    },
+    {
+      "test": "Image-Context Letter",
+      "status": "PASS",
+      "details": "201 words, 4126ms, image refs: yes",
+      "timestamp": "2026-02-18T01:04:23.828Z"
+    },
+    {
+      "test": "Minimal Context (\"thanks\")",
+      "status": "PASS",
+      "details": "62 words from 1-word input, 1512ms",
+      "timestamp": "2026-02-18T01:04:25.340Z"
+    },
+    {
+      "test": "Spanish Language Letter",
+      "status": "PASS",
+      "details": "144 words, Spanish detected: true, 2938ms",
+      "timestamp": "2026-02-18T01:04:28.278Z"
+    },
+    {
+      "test": "Sympathy Letter",
+      "status": "PASS",
+      "details": "203 words, 3644ms",
+      "timestamp": "2026-02-18T01:04:31.922Z"
+    },
+    {
+      "test": "Image Generation",
+      "status": "SKIP",
+      "details": "Skipped via --skip-image",
+      "timestamp": "2026-02-18T01:04:31.922Z"
+    },
+    {
+      "test": "Live Send",
+      "status": "SKIP",
+      "details": "Skipped via --dry-run",
+      "timestamp": "2026-02-18T01:04:31.922Z"
+    },
+    {
+      "test": "Order Tracking",
+      "status": "SKIP",
+      "details": "No order was created",
+      "timestamp": "2026-02-18T01:04:31.923Z"
+    }
+  ]
+}

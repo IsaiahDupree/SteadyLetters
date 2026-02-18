@@ -372,18 +372,23 @@ export async function refreshOrderStatus(id: string) {
             return { success: false, error: 'No Thanks.io order ID found for this order' };
         }
 
-        // Fetch latest status from Thanks.io API
-        const thanksIoStatus = await getOrderStatus(order.thanksIoOrderId);
-
-        if (!thanksIoStatus) {
-            return { success: false, error: 'Could not fetch status from Thanks.io' };
-        }
-
-        // Update our database with the latest status
-        const updatedOrder = await prisma.order.update({
-            where: { id },
-            data: { status: thanksIoStatus.status },
+        // Thanks.io does NOT have a polling endpoint for order status.
+        // Status updates are delivered via webhooks (order.status_update, order_item.delivered).
+        // We return the current locally-stored status. If a webhook has fired, the DB is already up to date.
+        // Also check the MailOrder table which may have a more recent status.
+        const mailOrder = await prisma.mailOrder.findFirst({
+            where: { thanksIoOrderId: order.thanksIoOrderId },
         });
+
+        const latestStatus = mailOrder?.status || order.status;
+
+        // Sync status if MailOrder has a newer one
+        if (mailOrder && mailOrder.status !== order.status) {
+            await prisma.order.update({
+                where: { id },
+                data: { status: mailOrder.status },
+            });
+        }
 
         revalidatePath(`/orders/${id}`);
         revalidatePath('/orders');
@@ -391,11 +396,16 @@ export async function refreshOrderStatus(id: string) {
         return {
             success: true,
             order: {
-                ...updatedOrder,
+                ...order,
+                status: latestStatus,
                 recipient: order.recipient,
                 template: order.template,
             },
-            latestStatus: thanksIoStatus,
+            latestStatus: {
+                id: order.thanksIoOrderId,
+                status: latestStatus,
+                message: 'Status is updated via webhooks from Thanks.io. Current status reflects the latest webhook update.',
+            },
         };
     } catch (error: any) {
         console.error('Failed to refresh order status:', error);

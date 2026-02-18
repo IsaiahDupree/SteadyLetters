@@ -135,6 +135,18 @@ export async function getHandwritingStyles(): Promise<HandwritingStyle[]> {
 // ORDER STATUS API
 // ============================================================================
 
+/**
+ * Get order status for a Thanks.io order.
+ *
+ * IMPORTANT: Thanks.io does NOT have a GET-by-ID endpoint for order status.
+ * Order status updates are delivered via webhooks (order.status_update,
+ * order_item.delivered, etc.). The initial status is returned in the
+ * send response.
+ *
+ * This function looks up the status from our local database. If the order
+ * hasn't been updated by a webhook yet, it returns the status we stored
+ * when the order was created.
+ */
 export async function getOrderStatus(orderId: string): Promise<ThanksIoOrderStatus | null> {
   if (!THANKS_IO_API_KEY) {
     console.warn('Thanks.io API key not found, returning mock status');
@@ -142,45 +154,15 @@ export async function getOrderStatus(orderId: string): Promise<ThanksIoOrderStat
       id: orderId,
       status: 'processing',
       created_at: new Date().toISOString(),
-      estimated_delivery: new Date(Date.now() + 5 * 24 * 60 * 60 * 1000).toISOString(), // 5 days from now
+      estimated_delivery: new Date(Date.now() + 5 * 24 * 60 * 60 * 1000).toISOString(),
     };
   }
 
-  try {
-    const response = await fetch(`${BASE_URL}/send/${orderId}`, {
-      method: 'GET',
-      headers: {
-        'Authorization': `Bearer ${THANKS_IO_API_KEY}`,
-        'Content-Type': 'application/json',
-      },
-    });
-
-    if (!response.ok) {
-      if (response.status === 404) {
-        console.warn(`Order ${orderId} not found in Thanks.io`);
-        return null;
-      }
-      throw new Error(`Failed to fetch order status: ${response.statusText}`);
-    }
-
-    const data = await response.json();
-
-    // Map API response to our interface
-    return {
-      id: data.id || orderId,
-      status: data.status || 'processing',
-      created_at: data.created_at,
-      updated_at: data.updated_at,
-      delivered_at: data.delivered_at,
-      estimated_delivery: data.estimated_delivery || data.expected_delivery_date,
-      tracking_number: data.tracking_number,
-      error: data.error,
-      message: data.message,
-    };
-  } catch (error) {
-    console.error('Error fetching order status:', error);
-    throw error;
-  }
+  // Thanks.io status lifecycle: Reviewing → Printing → Printed → Fulfilled → Shipped → Delivered
+  // Status updates arrive via webhooks — no polling endpoint exists.
+  // Return null to signal the caller should check local DB instead.
+  console.warn(`[Thanks.io] No polling endpoint for order ${orderId}. Status comes from webhooks.`);
+  return null;
 }
 
 // ============================================================================
