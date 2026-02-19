@@ -16,6 +16,7 @@ import { useRouter } from 'expo-router';
 import { createRecipient } from '@/services/api';
 import * as Haptics from 'expo-haptics';
 import { UserPlus } from 'lucide-react-native';
+import { trackEvent, Events } from '@/services/events';
 
 export default function AddRecipientScreen() {
   const { colors } = useTheme();
@@ -53,6 +54,7 @@ export default function AddRecipientScreen() {
         postal_code: trimmed.postalCode,
         country: trimmed.country,
       });
+      trackEvent(Events.RECIPIENT_ADDED, { name: trimmed.name, city: trimmed.city, state: trimmed.province });
       Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
       Alert.alert('Recipient Saved', `${trimmed.name} has been added to your address book.`, [
         { text: 'OK', onPress: () => router.back() },

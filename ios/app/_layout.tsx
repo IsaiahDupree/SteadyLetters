@@ -45,6 +45,8 @@ function RootLayoutNav() {
         <Stack.Screen name="paywall" options={{ title: 'Subscription', presentation: 'modal', headerShown: true }} />
         <Stack.Screen name="onboarding" options={{ headerShown: false, animation: 'fade' }} />
         <Stack.Screen name="return-address" options={{ title: 'Return Address', presentation: 'modal', headerShown: true }} />
+        <Stack.Screen name="letter-preview" options={{ title: 'Preview', presentation: 'card', headerShown: true }} />
+        <Stack.Screen name="import-contacts" options={{ title: 'Import Contacts', presentation: 'modal', headerShown: true }} />
       </Stack>
     </>
   );

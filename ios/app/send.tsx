@@ -28,8 +28,9 @@ import {
 } from '@/services/thanks-io';
 import { getRecipients } from '@/services/api';
 import { createOrder, incrementUsage } from '@/services/api';
-import { Send, ChevronDown, Check, Plus, Lock, ImagePlus, X } from 'lucide-react-native';
+import { Send, ChevronDown, Check, Plus, Lock, ImagePlus, X, Eye } from 'lucide-react-native';
 import * as Haptics from 'expo-haptics';
+import { trackEvent, Events } from '@/services/events';
 
 const DEFAULT_FRONT_IMAGE = 'https://images.unsplash.com/photo-1579546929518-9e396f3cc809?w=800&q=80';
 
@@ -133,6 +134,13 @@ export default function SendScreen() {
 
               await incrementUsage('letters_sent');
 
+              trackEvent(Events.LETTER_SENT, {
+                product_type: productType,
+                recipient: selectedRecipient.name,
+                cost: product.basePrice,
+                order_id: result.id,
+              });
+
               Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
 
               Alert.alert(
@@ -172,7 +180,9 @@ export default function SendScreen() {
     priceRow: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', backgroundColor: colors.surface, borderRadius: 12, padding: 16, marginTop: 20 },
     priceLabel: { fontSize: 15, color: colors.textSecondary },
     priceValue: { fontSize: 24, fontWeight: '700', color: colors.primary },
-    sendButton: { backgroundColor: colors.success, borderRadius: 14, padding: 18, flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 10, marginTop: 20, opacity: 1 },
+    previewButton: { backgroundColor: colors.info, borderRadius: 14, padding: 16, flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 10, marginTop: 16 },
+    previewButtonText: { color: '#fff', fontSize: 16, fontWeight: '600' },
+    sendButton: { backgroundColor: colors.success, borderRadius: 14, padding: 18, flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 10, marginTop: 12, opacity: 1 },
     sendButtonDisabled: { opacity: 0.6 },
     sendButtonText: { color: '#fff', fontSize: 18, fontWeight: '700' },
   });
@@ -259,7 +269,7 @@ export default function SendScreen() {
                   </TouchableOpacity>
                 ))}
                 <TouchableOpacity
-                  style={[s.recipientOption, { borderBottomWidth: 0 }]}
+                  style={s.recipientOption}
                   onPress={() => { setShowRecipients(false); router.push('/add-recipient'); }}
                   accessibilityLabel="Add a new recipient"
                   accessibilityRole="button"
@@ -267,6 +277,17 @@ export default function SendScreen() {
                   <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
                     <Plus size={16} color={colors.primary} />
                     <Text style={{ fontSize: 15, fontWeight: '500', color: colors.primary }}>Add New</Text>
+                  </View>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  style={[s.recipientOption, { borderBottomWidth: 0 }]}
+                  onPress={() => { setShowRecipients(false); router.push('/import-contacts'); }}
+                  accessibilityLabel="Import from phone contacts"
+                  accessibilityRole="button"
+                >
+                  <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
+                    <Plus size={16} color={colors.accent} />
+                    <Text style={{ fontSize: 15, fontWeight: '500', color: colors.accent }}>Import from Contacts</Text>
                   </View>
                 </TouchableOpacity>
               </>
@@ -353,6 +374,29 @@ export default function SendScreen() {
           <Text style={s.priceLabel}>Estimated Cost</Text>
           <Text style={s.priceValue}>${PRODUCT_CATALOG[productType].basePrice.toFixed(2)}</Text>
         </View>
+
+        <TouchableOpacity
+          style={s.previewButton}
+          onPress={() => {
+            router.push({
+              pathname: '/letter-preview',
+              params: {
+                message,
+                recipientName: selectedRecipient?.name || '',
+                recipientAddress: selectedRecipient
+                  ? `${selectedRecipient.address}, ${selectedRecipient.city}, ${selectedRecipient.province} ${selectedRecipient.postal_code}`
+                  : '',
+                productType,
+                frontImageUrl: frontImage || DEFAULT_FRONT_IMAGE,
+              },
+            });
+          }}
+          accessibilityLabel="Preview letter before sending"
+          accessibilityRole="button"
+        >
+          <Eye size={18} color="#fff" />
+          <Text style={s.previewButtonText}>Preview</Text>
+        </TouchableOpacity>
 
         <TouchableOpacity
           style={[s.sendButton, isSending && s.sendButtonDisabled]}

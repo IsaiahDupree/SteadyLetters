@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   View,
   Text,
@@ -13,6 +13,7 @@ import { TIERS, type TierName } from '@/constants/config';
 import { useBilling } from '@/providers/BillingProvider';
 import { useTheme } from '@/providers/ThemeProvider';
 import { Check, Crown, Star, Zap, X } from 'lucide-react-native';
+import { trackEvent, Events } from '@/services/events';
 
 const TIER_KEYS: TierName[] = ['free', 'pro', 'business'];
 
@@ -47,6 +48,11 @@ function formatProducts(products: readonly string[]): string {
 export default function PaywallScreen() {
   const { colors } = useTheme();
   const router = useRouter();
+
+  useEffect(() => {
+    trackEvent(Events.PAYWALL_VIEWED);
+  }, []);
+
   const {
     tier: currentTier,
     offerings,

@@ -14,7 +14,8 @@ import {
 import { useTheme } from '@/providers/ThemeProvider';
 import { useAuth } from '@/providers/AuthProvider';
 import { useRouter } from 'expo-router';
-import { Mail, Lock, User } from 'lucide-react-native';
+import { Mail, Lock, User, Send } from 'lucide-react-native';
+import { trackEvent, Events } from '@/services/events';
 
 export default function SignUpScreen() {
   const { colors } = useTheme();
@@ -43,6 +44,7 @@ export default function SignUpScreen() {
     setIsLoading(true);
     try {
       await signUp(email.trim(), password, fullName.trim());
+      trackEvent(Events.SIGN_UP, { email: email.trim(), name: fullName.trim() });
       Alert.alert(
         'Check Your Email',
         `We sent a verification link to ${email.trim()}. Please verify your email before signing in.`,

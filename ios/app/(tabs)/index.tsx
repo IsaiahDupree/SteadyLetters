@@ -18,6 +18,7 @@ import { saveTemplate } from '@/services/api';
 import { useRouter, useLocalSearchParams } from 'expo-router';
 import * as Haptics from 'expo-haptics';
 import { Mic, Sparkles, Send, BookmarkPlus } from 'lucide-react-native';
+import { trackEvent, Events } from '@/services/events';
 
 const SENDER_NAME_KEY = 'steadyletters_sender_name';
 
@@ -90,6 +91,7 @@ export default function CreateLetterScreen() {
       });
       setGeneratedLetters(letters);
       setSelectedLetter(0);
+      trackEvent(Events.LETTER_GENERATED, { occasion, tone, count: letters.length });
     } catch (error) {
       Alert.alert('Error', error instanceof Error ? error.message : 'Failed to generate letter');
     } finally {
@@ -118,6 +120,7 @@ export default function CreateLetterScreen() {
         tone,
         content: generatedLetters[selectedLetter],
       });
+      trackEvent(Events.TEMPLATE_USED, { occasion, tone });
       Alert.alert('Saved', 'Letter saved as template.');
     } catch (error) {
       Alert.alert('Error', 'Failed to save template.');

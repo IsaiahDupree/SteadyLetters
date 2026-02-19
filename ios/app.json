@@ -61,6 +61,12 @@
         {
           "userTrackingPermission": "SteadyLetters uses this to provide personalized ads and improve your experience."
         }
+      ],
+      [
+        "expo-contacts",
+        {
+          "contactsPermission": "SteadyLetters needs access to your contacts to help you add recipients."
+        }
       ]
     ],
     "runtimeVersion": "1.0.0",

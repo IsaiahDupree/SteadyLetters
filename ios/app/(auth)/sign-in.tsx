@@ -14,6 +14,7 @@ import { useTheme } from '@/providers/ThemeProvider';
 import { useAuth } from '@/providers/AuthProvider';
 import { useRouter } from 'expo-router';
 import { Mail, Lock, Send } from 'lucide-react-native';
+import { trackEvent, Events } from '@/services/events';
 
 export default function SignInScreen() {
   const { colors } = useTheme();
@@ -32,6 +33,7 @@ export default function SignInScreen() {
     setIsLoading(true);
     try {
       await signIn(email.trim(), password);
+      trackEvent(Events.SIGN_IN, { email: email.trim() });
       router.replace('/(tabs)');
     } catch (error) {
       const msg = error instanceof Error ? error.message : 'Something went wrong';
