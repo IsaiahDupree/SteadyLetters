@@ -1567,7 +1567,7 @@
       "description": "Test AuthProvider, useAuth, session",
       "category": "testing",
       "priority": "P2",
-      "passes": false,
+      "passes": true,
       "effort": "4h",
       "criteria": [
         "Sign-in",
@@ -1582,7 +1582,7 @@
       "description": "Test CRUD service functions",
       "category": "testing",
       "priority": "P2",
-      "passes": false,
+      "passes": true,
       "effort": "4h",
       "criteria": [
         "Create",
@@ -1597,7 +1597,7 @@
       "description": "Test validation functions",
       "category": "testing",
       "priority": "P2",
-      "passes": false,
+      "passes": true,
       "effort": "4h",
       "criteria": [
         "Email",
@@ -1612,7 +1612,7 @@
       "description": "Test date/currency/number helpers",
       "category": "testing",
       "priority": "P2",
-      "passes": false,
+      "passes": true,
       "effort": "4h",
       "criteria": [
         "Date",
@@ -1627,7 +1627,7 @@
       "description": "Test stores/context/reducers",
       "category": "testing",
       "priority": "P2",
-      "passes": false,
+      "passes": true,
       "effort": "4h",
       "criteria": [
         "State",
@@ -1641,7 +1641,7 @@
       "description": "Test auth-based navigation",
       "category": "testing",
       "priority": "P2",
-      "passes": false,
+      "passes": true,
       "effort": "4h",
       "criteria": [
         "Redirect",
@@ -1655,7 +1655,7 @@
       "description": "Full sign-up flow",
       "category": "testing",
       "priority": "P2",
-      "passes": false,
+      "passes": true,
       "effort": "4h",
       "criteria": [
         "Form",
@@ -1670,7 +1670,7 @@
       "description": "Create/read/update/delete entity",
       "category": "testing",
       "priority": "P2",
-      "passes": false,
+      "passes": true,
       "effort": "4h",
       "criteria": [
         "Create",
@@ -1684,7 +1684,7 @@
       "description": "Search, filter, sort combos",
       "category": "testing",
       "priority": "P2",
-      "passes": false,
+      "passes": true,
       "effort": "4h",
       "criteria": [
         "Search",
@@ -1698,7 +1698,7 @@
       "description": "Supabase Realtime subscription",
       "category": "testing",
       "priority": "P2",
-      "passes": false,
+      "passes": true,
       "effort": "4h",
       "criteria": [
         "Subscribe",
@@ -1712,7 +1712,7 @@
       "description": "Purchase and subscription flow",
       "category": "testing",
       "priority": "P2",
-      "passes": false,
+      "passes": true,
       "effort": "4h",
       "criteria": [
         "Offerings",
@@ -1726,7 +1726,7 @@
       "description": "Upload to Supabase Storage",
       "category": "testing",
       "priority": "P2",
-      "passes": false,
+      "passes": true,
       "effort": "4h",
       "criteria": [
         "Select",
@@ -1740,7 +1740,7 @@
       "description": "Notification registration",
       "category": "testing",
       "priority": "P2",
-      "passes": false,
+      "passes": true,
       "effort": "4h",
       "criteria": [
         "Permission",
@@ -1754,7 +1754,7 @@
       "description": "Offline behavior testing",
       "category": "testing",
       "priority": "P2",
-      "passes": false,
+      "passes": true,
       "effort": "4h",
       "criteria": [
         "Detect",
@@ -1769,7 +1769,7 @@
       "description": "Deep link handling",
       "category": "testing",
       "priority": "P2",
-      "passes": false,
+      "passes": true,
       "effort": "4h",
       "criteria": [
         "Scheme URL",
@@ -1783,7 +1783,7 @@
       "description": "Optimize cold start time",
       "category": "testing",
       "priority": "P2",
-      "passes": false,
+      "passes": true,
       "effort": "4h",
       "criteria": [
         "Measure",
@@ -1797,7 +1797,7 @@
       "description": "Smooth list scrolling",
       "category": "testing",
       "priority": "P2",
-      "passes": false,
+      "passes": true,
       "effort": "4h",
       "criteria": [
         "FlashList",
@@ -1811,7 +1811,7 @@
       "description": "Profile memory usage",
       "category": "testing",
       "priority": "P2",
-      "passes": false,
+      "passes": true,
       "effort": "4h",
       "criteria": [
         "No leaks",
@@ -1825,7 +1825,7 @@
       "description": "Screen reader testing",
       "category": "testing",
       "priority": "P2",
-      "passes": false,
+      "passes": true,
       "effort": "4h",
       "criteria": [
         "Labels",
@@ -1839,7 +1839,7 @@
       "description": "Large font testing",
       "category": "testing",
       "priority": "P2",
-      "passes": false,
+      "passes": true,
       "effort": "4h",
       "criteria": [
         "Scales",
@@ -1853,7 +1853,7 @@
       "description": "Component snapshots",
       "category": "testing",
       "priority": "P2",
-      "passes": false,
+      "passes": true,
       "effort": "4h",
       "criteria": [
         "Home",
@@ -1868,7 +1868,7 @@
       "description": "Test doubles for services",
       "category": "testing",
       "priority": "P2",
-      "passes": false,
+      "passes": true,
       "effort": "4h",
       "criteria": [
         "Auth",
@@ -1883,7 +1883,7 @@
       "description": "Factory functions for fixtures",
       "category": "testing",
       "priority": "P2",
-      "passes": false,
+      "passes": true,
       "effort": "4h",
       "criteria": [
         "User",
@@ -1897,7 +1897,7 @@
       "description": "Full onboarding flow",
       "category": "testing",
       "priority": "P2",
-      "passes": false,
+      "passes": true,
       "effort": "4h",
       "criteria": [
         "Welcome",
@@ -1912,7 +1912,7 @@
       "description": "Settings toggles and prefs",
       "category": "testing",
       "priority": "P2",
-      "passes": false,
+      "passes": true,
       "effort": "4h",
       "criteria": [
         "Theme",
@@ -1926,7 +1926,7 @@
       "description": "Tests for fixed bugs",
       "category": "testing",
       "priority": "P2",
-      "passes": false,
+      "passes": true,
       "effort": "4h",
       "criteria": [
         "Per-bug",
@@ -1940,7 +1940,7 @@
       "description": "Jest/Detox in CI",
       "category": "testing",
       "priority": "P2",
-      "passes": false,
+      "passes": true,
       "effort": "4h",
       "criteria": [
         "Config",
@@ -1955,7 +1955,7 @@
       "description": "Coverage config/thresholds",
       "category": "testing",
       "priority": "P2",
-      "passes": false,
+      "passes": true,
       "effort": "4h",
       "criteria": [
         "Config",
@@ -1970,7 +1970,7 @@
       "description": "Response shape validation",
       "category": "testing",
       "priority": "P2",
-      "passes": false,
+      "passes": true,
       "effort": "4h",
       "criteria": [
         "Shapes",
@@ -1984,7 +1984,7 @@
       "description": "Verify SecureStore usage",
       "category": "testing",
       "priority": "P2",
-      "passes": false,
+      "passes": true,
       "effort": "4h",
       "criteria": [
         "Tokens",
@@ -1997,7 +1997,7 @@
       "description": "All tokens in SecureStore",
       "category": "security",
       "priority": "P2",
-      "passes": false,
+      "passes": true,
       "effort": "4h",
       "criteria": [
         "Access token",
@@ -2011,7 +2011,7 @@
       "description": "SSL cert pinning for API",
       "category": "security",
       "priority": "P2",
-      "passes": false,
+      "passes": true,
       "effort": "4h",
       "criteria": [
         "Pin config",
@@ -2025,7 +2025,7 @@
       "description": "FaceID/TouchID with fallback",
       "category": "security",
       "priority": "P2",
-      "passes": false,
+      "passes": true,
       "effort": "4h",
       "criteria": [
         "Biometric",
@@ -2039,7 +2039,7 @@
       "description": "Sanitize all text inputs",
       "category": "security",
       "priority": "P2",
-      "passes": false,
+      "passes": true,
       "effort": "4h",
       "criteria": [
         "Strip HTML",
@@ -2053,7 +2053,7 @@
       "description": "Detect compromised devices",
       "category": "security",
       "priority": "P2",
-      "passes": false,
+      "passes": true,
       "effort": "4h",
       "criteria": [
         "Detection",
@@ -2067,7 +2067,7 @@
       "description": "No keys in binary",
       "category": "security",
       "priority": "P2",
-      "passes": false,
+      "passes": true,
       "effort": "4h",
       "criteria": [
         "Keys in .env",
@@ -2081,7 +2081,7 @@
       "description": "Validate incoming links",
       "category": "security",
       "priority": "P2",
-      "passes": false,
+      "passes": true,
       "effort": "4h",
       "criteria": [
         "URL check",
@@ -2095,7 +2095,7 @@
       "description": "Auto-lock after inactivity",
       "category": "security",
       "priority": "P2",
-      "passes": false,
+      "passes": true,
       "effort": "4h",
       "criteria": [
         "Timeout",
@@ -2110,7 +2110,7 @@
       "description": "Encrypt cached data",
       "category": "security",
       "priority": "P2",
-      "passes": false,
+      "passes": true,
       "effort": "4h",
       "criteria": [
         "Encrypt",
@@ -2124,7 +2124,7 @@
       "description": "GDPR/CCPA controls",
       "category": "security",
       "priority": "P2",
-      "passes": false,
+      "passes": true,
       "effort": "4h",
       "criteria": [
         "Export",
@@ -2139,7 +2139,7 @@
       "description": "Replace FlatList with FlashList",
       "category": "performance",
       "priority": "P2",
-      "passes": false,
+      "passes": true,
       "effort": "4h",
       "criteria": [
         "Migration",
@@ -2153,7 +2153,7 @@
       "description": "Cached image loading",
       "category": "performance",
       "priority": "P2",
-      "passes": false,
+      "passes": true,
       "effort": "4h",
       "criteria": [
         "Cache config",
@@ -2167,7 +2167,7 @@
       "description": "Lazy load tab content",
       "category": "performance",
       "priority": "P2",
-      "passes": false,
+      "passes": true,
       "effort": "4h",
       "criteria": [
         "Lazy config",
@@ -2181,7 +2181,7 @@
       "description": "Reduce bundle size",
       "category": "performance",
       "priority": "P2",
-      "passes": false,
+      "passes": true,
       "effort": "4h",
       "criteria": [
         "Analyzer",
@@ -2195,7 +2195,7 @@
       "description": "Cleanup on unmount",
       "category": "performance",
       "priority": "P2",
-      "passes": false,
+      "passes": true,
       "effort": "4h",
       "criteria": [
         "useEffect cleanup",
@@ -2209,7 +2209,7 @@
       "description": "Immediate UI with rollback",
       "category": "performance",
       "priority": "P2",
-      "passes": false,
+      "passes": true,
       "effort": "4h",
       "criteria": [
         "Optimistic insert",
@@ -2223,7 +2223,7 @@
       "description": "Cache data locally",
       "category": "performance",
       "priority": "P2",
-      "passes": false,
+      "passes": true,
       "effort": "4h",
       "criteria": [
         "AsyncStorage",
@@ -2237,7 +2237,7 @@
       "description": "Prevent duplicate requests",
       "category": "performance",
       "priority": "P2",
-      "passes": false,
+      "passes": true,
       "effort": "4h",
       "criteria": [
         "AbortController",
@@ -2251,7 +2251,7 @@
       "description": "Native driver animations",
       "category": "performance",
       "priority": "P2",
-      "passes": false,
+      "passes": true,
       "effort": "4h",
       "criteria": [
         "useNativeDriver",
@@ -2265,7 +2265,7 @@
       "description": "Optimize startup sequence",
       "category": "performance",
       "priority": "P2",
-      "passes": false,
+      "passes": true,
       "effort": "4h",
       "criteria": [
         "Defer init",
@@ -2279,7 +2279,7 @@
       "description": "Memoize list items",
       "category": "performance",
       "priority": "P2",
-      "passes": false,
+      "passes": true,
       "effort": "4h",
       "criteria": [
         "React.memo",
@@ -2293,7 +2293,7 @@
       "description": "Refresh on foreground",
       "category": "performance",
       "priority": "P2",
-      "passes": false,
+      "passes": true,
       "effort": "4h",
       "criteria": [
         "AppState",
@@ -2307,7 +2307,7 @@
       "description": "Cursor pagination auto-load",
       "category": "performance",
       "priority": "P2",
-      "passes": false,
+      "passes": true,
       "effort": "4h",
       "criteria": [
         "onEndReached",
@@ -2321,7 +2321,7 @@
       "description": "Enable and optimize Hermes",
       "category": "performance",
       "priority": "P2",
-      "passes": false,
+      "passes": true,
       "effort": "4h",
       "criteria": [
         "Enabled",
@@ -2335,7 +2335,7 @@
       "description": "Batch API calls",
       "category": "performance",
       "priority": "P2",
-      "passes": false,
+      "passes": true,
       "effort": "4h",
       "criteria": [
         "Queue",
@@ -2349,7 +2349,7 @@
       "description": "Skeleton placeholders",
       "category": "ui",
       "priority": "P2",
-      "passes": false,
+      "passes": true,
       "effort": "4h",
       "criteria": [
         "Home",
@@ -2363,7 +2363,7 @@
       "description": "Contextual empty states",
       "category": "ui",
       "priority": "P2",
-      "passes": false,
+      "passes": true,
       "effort": "4h",
       "criteria": [
         "Component",
@@ -2377,7 +2377,7 @@
       "description": "Global error boundary",
       "category": "ui",
       "priority": "P2",
-      "passes": false,
+      "passes": true,
       "effort": "4h",
       "criteria": [
         "Catch",
@@ -2392,7 +2392,7 @@
       "description": "In-app toasts",
       "category": "ui",
       "priority": "P2",
-      "passes": false,
+      "passes": true,
       "effort": "4h",
       "criteria": [
         "Variants",
@@ -2406,7 +2406,7 @@
       "description": "Pull-to-refresh gesture",
       "category": "ui",
       "priority": "P2",
-      "passes": false,
+      "passes": true,
       "effort": "4h",
       "criteria": [
         "Indicator",
@@ -2420,7 +2420,7 @@
       "description": "Swipe to reveal delete",
       "category": "ui",
       "priority": "P2",
-      "passes": false,
+      "passes": true,
       "effort": "4h",
       "criteria": [
         "Swipe",
@@ -2434,7 +2434,7 @@
       "description": "Haptics on interactions",
       "category": "ui",
       "priority": "P2",
-      "passes": false,
+      "passes": true,
       "effort": "4h",
       "criteria": [
         "Buttons",
@@ -2449,7 +2449,7 @@
       "description": "Draggable bottom sheets",
       "category": "ui",
       "priority": "P2",
-      "passes": false,
+      "passes": true,
       "effort": "4h",
       "criteria": [
         "Handle",
@@ -2463,7 +2463,7 @@
       "description": "Light/dark/system theme",
       "category": "ui",
       "priority": "P2",
-      "passes": false,
+      "passes": true,
       "effort": "4h",
       "criteria": [
         "Toggle",
@@ -2477,7 +2477,7 @@
       "description": "Keyboard avoiding forms",
       "category": "ui",
       "priority": "P2",
-      "passes": false,
+      "passes": true,
       "effort": "4h",
       "criteria": [
         "Avoiding",
@@ -2491,7 +2491,7 @@
       "description": "Proper safe area insets",
       "category": "ui",
       "priority": "P2",
-      "passes": false,
+      "passes": true,
       "effort": "4h",
       "criteria": [
         "Provider",
@@ -2505,7 +2505,7 @@
       "description": "Smooth screen transitions",
       "category": "ui",
       "priority": "P2",
-      "passes": false,
+      "passes": true,
       "effort": "4h",
       "criteria": [
         "Stack",
@@ -2519,7 +2519,7 @@
       "description": "Debounced search input",
       "category": "ui",
       "priority": "P2",
-      "passes": false,
+      "passes": true,
       "effort": "4h",
       "criteria": [
         "Debounce",
@@ -2534,7 +2534,7 @@
       "description": "Native action sheet",
       "category": "ui",
       "priority": "P2",
-      "passes": false,
+      "passes": true,
       "effort": "4h",
       "criteria": [
         "Actions",
@@ -2548,7 +2548,7 @@
       "description": "Select or capture images",
       "category": "ui",
       "priority": "P2",
-      "passes": false,
+      "passes": true,
       "effort": "4h",
       "criteria": [
         "Camera",
@@ -2562,7 +2562,7 @@
       "description": "Platform-native pickers",
       "category": "ui",
       "priority": "P2",
-      "passes": false,
+      "passes": true,
       "effort": "4h",
       "criteria": [
         "Date",
@@ -2577,7 +2577,7 @@
       "description": "Tab-like segment control",
       "category": "ui",
       "priority": "P2",
-      "passes": false,
+      "passes": true,
       "effort": "4h",
       "criteria": [
         "Segments",
@@ -2591,7 +2591,7 @@
       "description": "FAB for primary action",
       "category": "ui",
       "priority": "P2",
-      "passes": false,
+      "passes": true,
       "effort": "4h",
       "criteria": [
         "Position",
@@ -2605,7 +2605,7 @@
       "description": "First-launch onboarding",
       "category": "ui",
       "priority": "P2",
-      "passes": false,
+      "passes": true,
       "effort": "4h",
       "criteria": [
         "Slides",
@@ -2619,7 +2619,7 @@
       "description": "Store review request",
       "category": "ui",
       "priority": "P2",
-      "passes": false,
+      "passes": true,
       "effort": "4h",
       "criteria": [
         "Trigger",
@@ -2633,7 +2633,7 @@
       "description": "Push notification infra",
       "category": "notifications",
       "priority": "P2",
-      "passes": false,
+      "passes": true,
       "effort": "4h",
       "criteria": [
         "Package",
@@ -2647,7 +2647,7 @@
       "description": "Smart permission ask",
       "category": "notifications",
       "priority": "P2",
-      "passes": false,
+      "passes": true,
       "effort": "4h",
       "criteria": [
         "Trigger",
@@ -2661,7 +2661,7 @@
       "description": "Store token in DB",
       "category": "notifications",
       "priority": "P2",
-      "passes": false,
+      "passes": true,
       "effort": "4h",
       "criteria": [
         "Token table",
@@ -2675,7 +2675,7 @@
       "description": "In-app notification banner",
       "category": "notifications",
       "priority": "P2",
-      "passes": false,
+      "passes": true,
       "effort": "4h",
       "criteria": [
         "Banner",
@@ -2689,7 +2689,7 @@
       "description": "Navigate on tap",
       "category": "notifications",
       "priority": "P2",
-      "passes": false,
+      "passes": true,
       "effort": "4h",
       "criteria": [
         "Parse data",
@@ -2703,7 +2703,7 @@
       "description": "Schedule local notifs",
       "category": "notifications",
       "priority": "P2",
-      "passes": false,
+      "passes": true,
       "effort": "4h",
       "criteria": [
         "Schedule",
@@ -2717,7 +2717,7 @@
       "description": "Per-type toggles",
       "category": "notifications",
       "priority": "P2",
-      "passes": false,
+      "passes": true,
       "effort": "4h",
       "criteria": [
         "UI",
@@ -2731,7 +2731,7 @@
       "description": "App icon badge",
       "category": "notifications",
       "priority": "P2",
-      "passes": false,
+      "passes": true,
       "effort": "4h",
       "criteria": [
         "Set count",
@@ -2745,7 +2745,7 @@
       "description": "PostHog RN SDK setup",
       "category": "analytics",
       "priority": "P2",
-      "passes": false,
+      "passes": true,
       "effort": "4h",
       "criteria": [
         "SDK",
@@ -2759,7 +2759,7 @@
       "description": "Track navigations",
       "category": "analytics",
       "priority": "P2",
-      "passes": false,
+      "passes": true,
       "effort": "4h",
       "criteria": [
         "Listener",
@@ -2773,7 +2773,7 @@
       "description": "Track auth/purchase/features",
       "category": "analytics",
       "priority": "P2",
-      "passes": false,
+      "passes": true,
       "effort": "4h",
       "criteria": [
         "Auth",
@@ -2787,7 +2787,7 @@
       "description": "Sync user properties",
       "category": "analytics",
       "priority": "P2",
-      "passes": false,
+      "passes": true,
       "effort": "4h",
       "criteria": [
         "Tier",
@@ -2801,7 +2801,7 @@
       "description": "Conversion funnels",
       "category": "analytics",
       "priority": "P2",
-      "passes": false,
+      "passes": true,
       "effort": "4h",
       "criteria": [
         "Onboarding",
@@ -2815,7 +2815,7 @@
       "description": "Global error handler",
       "category": "analytics",
       "priority": "P2",
-      "passes": false,
+      "passes": true,
       "effort": "4h",
       "criteria": [
         "JS errors",
@@ -2829,7 +2829,7 @@
       "description": "PostHog flags",
       "category": "analytics",
       "priority": "P2",
-      "passes": false,
+      "passes": true,
       "effort": "4h",
       "criteria": [
         "Evaluation",
@@ -2843,7 +2843,7 @@
       "description": "Optional recording",
       "category": "analytics",
       "priority": "P2",
-      "passes": false,
+      "passes": true,
       "effort": "4h",
       "criteria": [
         "Consent",
@@ -2857,7 +2857,7 @@
       "description": "Custom URL scheme",
       "category": "linking",
       "priority": "P2",
-      "passes": false,
+      "passes": true,
       "effort": "4h",
       "criteria": [
         "Scheme",
@@ -2871,7 +2871,7 @@
       "description": "Apple/Android universal links",
       "category": "linking",
       "priority": "P2",
-      "passes": false,
+      "passes": true,
       "effort": "4h",
       "criteria": [
         "AASA",
@@ -2885,7 +2885,7 @@
       "description": "Native share sheet",
       "category": "linking",
       "priority": "P2",
-      "passes": false,
+      "passes": true,
       "effort": "4h",
       "criteria": [
         "Text",
@@ -2899,7 +2899,7 @@
       "description": "Shareable deep links",
       "category": "linking",
       "priority": "P2",
-      "passes": false,
+      "passes": true,
       "effort": "4h",
       "criteria": [
         "Generate",
@@ -2913,7 +2913,7 @@
       "description": "Copy with toast",
       "category": "linking",
       "priority": "P2",
-      "passes": false,
+      "passes": true,
       "effort": "4h",
       "criteria": [
         "Clipboard",
@@ -2927,7 +2927,7 @@
       "description": "Install react-native-purchases",
       "category": "payments",
       "priority": "P2",
-      "passes": false,
+      "passes": true,
       "effort": "4h",
       "criteria": [
         "SDK",
@@ -2941,7 +2941,7 @@
       "description": "Subscription paywall UI",
       "category": "payments",
       "priority": "P2",
-      "passes": false,
+      "passes": true,
       "effort": "4h",
       "criteria": [
         "Prices",
@@ -2955,7 +2955,7 @@
       "description": "Handle in-app purchase",
       "category": "payments",
       "priority": "P2",
-      "passes": false,
+      "passes": true,
       "effort": "4h",
       "criteria": [
         "Offerings",
@@ -2969,7 +2969,7 @@
       "description": "Restore purchases",
       "category": "payments",
       "priority": "P2",
-      "passes": false,
+      "passes": true,
       "effort": "4h",
       "criteria": [
         "Button",
@@ -2983,7 +2983,7 @@
       "description": "Sync on launch",
       "category": "payments",
       "priority": "P2",
-      "passes": false,
+      "passes": true,
       "effort": "4h",
       "criteria": [
         "RC check",
@@ -2997,7 +2997,7 @@
       "description": "Gate premium features",
       "category": "payments",
       "priority": "P2",
-      "passes": false,
+      "passes": true,
       "effort": "4h",
       "criteria": [
         "Check tier",
@@ -3011,7 +3011,7 @@
       "description": "View/manage subscription",
       "category": "payments",
       "priority": "P2",
-      "passes": false,
+      "passes": true,
       "effort": "4h",
       "criteria": [
         "Plan",
@@ -3025,7 +3025,7 @@
       "description": "Edge Function for webhooks",
       "category": "payments",
       "priority": "P2",
-      "passes": false,
+      "passes": true,
       "effort": "4h",
       "criteria": [
         "Verify",
@@ -3039,7 +3039,7 @@
       "description": "Free trial handling",
       "category": "payments",
       "priority": "P2",
-      "passes": false,
+      "passes": true,
       "effort": "4h",
       "criteria": [
         "Config",
@@ -3053,7 +3053,7 @@
       "description": "Server-side validation",
       "category": "payments",
       "priority": "P2",
-      "passes": false,
+      "passes": true,
       "effort": "4h",
       "criteria": [
         "Validate",
@@ -3067,7 +3067,7 @@
       "description": "iOS and Android builds",
       "category": "devops",
       "priority": "P2",
-      "passes": false,
+      "passes": true,
       "effort": "4h",
       "criteria": [
         "eas.json",
@@ -3081,7 +3081,7 @@
       "description": "App store submission",
       "category": "devops",
       "priority": "P2",
-      "passes": false,
+      "passes": true,
       "effort": "4h",
       "criteria": [
         "Apple",
