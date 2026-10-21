@@ -10,8 +10,8 @@
 // Extend window type to include fbq
 declare global {
   interface Window {
-    fbq: (...args: any[]) => void;
-    _fbq: (...args: any[]) => void;
+    fbq?: (...args: any[]) => void;
+    _fbq?: (...args: any[]) => void;
   }
 }
 
@@ -27,8 +27,9 @@ export function initMetaPixel(pixelId: string) {
 
   // Meta Pixel base code
   const fbq = function(...args: any[]) {
-    if (fbq.callMethod) {
-      fbq.callMethod.apply(fbq, args);
+    const callMethod = (fbq as any).callMethod as ((...values: any[]) => void) | undefined;
+    if (callMethod) {
+      callMethod.apply(fbq, args);
     } else {
       fbq.queue.push(args);
     }

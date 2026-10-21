@@ -40,8 +40,16 @@ export function ReturnAddressForm() {
   const loadReturnAddress = async () => {
     setLoadingData(true);
     const result = await getReturnAddress();
-    if (result.success) {
-      setReturnAddress(result.returnAddress);
+    if (result.success && result.returnAddress) {
+      setReturnAddress({
+        name: result.returnAddress.name ?? undefined,
+        address1: result.returnAddress.address1 ?? undefined,
+        address2: result.returnAddress.address2 ?? undefined,
+        city: result.returnAddress.city ?? undefined,
+        state: result.returnAddress.state ?? undefined,
+        zip: result.returnAddress.zip ?? undefined,
+        country: result.returnAddress.country ?? undefined,
+      });
     }
     setLoadingData(false);
   };
