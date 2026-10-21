@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { openai } from '@/lib/openai';
+import { getOpenAIClient } from '@/lib/openai';
 import { prisma } from '@/lib/prisma';
 import { canGenerate } from '@/lib/tiers';
 import { trackEvent } from '@/lib/events';
@@ -83,7 +83,7 @@ export async function POST(request: NextRequest) {
         }
 
         // Transcribe audio using Whisper
-        const transcription = await openai.audio.transcriptions.create({
+        const transcription = await getOpenAIClient().audio.transcriptions.create({
             file: audioFile,
             model: 'whisper-1',
             language: 'en',
