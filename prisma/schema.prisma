@@ -116,6 +116,7 @@ model Order {
   recurringLetterId String?
   recurringLetter   RecurringLetter? @relation(fields: [recurringLetterId], references: [id], onDelete: SetNull)
   createdAt         DateTime         @default(now())
+  updatedAt         DateTime         @updatedAt
 
   @@index([scheduledFor, status])
   @@index([recurringLetterId])
