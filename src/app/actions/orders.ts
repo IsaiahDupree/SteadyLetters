@@ -122,10 +122,6 @@ export async function createOrder(data: {
             state: recipient.state,
             zip: recipient.zip,
             country: recipient.country,
-            custom1: recipient.custom1,
-            custom2: recipient.custom2,
-            custom3: recipient.custom3,
-            custom4: recipient.custom4,
         });
 
         // If scheduled for future, don't send now - just return the order
