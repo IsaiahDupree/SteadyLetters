@@ -7,12 +7,11 @@
 'use client';
 
 import { useEffect } from 'react';
-import { usePathname, useSearchParams } from 'next/navigation';
+import { usePathname } from 'next/navigation';
 import { initMetaPixel, trackPageView } from '@/lib/meta-pixel';
 
 export function MetaPixelProvider({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
-  const searchParams = useSearchParams();
 
   // Initialize Meta Pixel on mount
   useEffect(() => {
@@ -30,7 +29,7 @@ export function MetaPixelProvider({ children }: { children: React.ReactNode }) {
     if (pathname) {
       trackPageView();
     }
-  }, [pathname, searchParams]);
+  }, [pathname]);
 
   return <>{children}</>;
 }

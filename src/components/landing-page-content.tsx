@@ -5,13 +5,11 @@ import Link from 'next/link';
 import { Mic, Image as ImageIcon, Sparkles, Send } from 'lucide-react';
 import { useEffect } from 'react';
 import { tracking } from '@/lib/tracking';
-import { useSearchParams } from 'next/navigation';
 
 export function LandingPageContent() {
-  const searchParams = useSearchParams();
-
   // Track landing view on mount with UTM parameters
   useEffect(() => {
+    const searchParams = new URLSearchParams(window.location.search);
     const utm_source = searchParams.get('utm_source');
     const utm_medium = searchParams.get('utm_medium');
     const utm_campaign = searchParams.get('utm_campaign');
@@ -21,7 +19,7 @@ export function LandingPageContent() {
       utm_medium: utm_medium || undefined,
       utm_campaign: utm_campaign || undefined,
     });
-  }, [searchParams]);
+  }, []);
 
   const handleCTAClick = (cta_text: string, cta_location: string, target_url: string) => {
     tracking.trackCTAClick({
