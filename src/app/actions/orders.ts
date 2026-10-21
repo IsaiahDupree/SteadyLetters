@@ -817,7 +817,7 @@ export async function createBulkOrderFromCSV(data: {
                         userId: user.id,
                         name: recipient.name,
                         address1: recipient.address1,
-                        address2: recipient.address2,
+                        address2: recipient.address2 || '',
                         city: recipient.city,
                         state: recipient.state,
                         zip: recipient.zip,
