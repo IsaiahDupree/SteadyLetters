@@ -2,13 +2,18 @@ import { Ratelimit } from '@upstash/ratelimit';
 import { Redis } from '@upstash/redis';
 
 // Initialize Redis client
-const redis = new Redis({
-  url: process.env.UPSTASH_REDIS_REST_URL || '',
-  token: process.env.UPSTASH_REDIS_REST_TOKEN || '',
-});
+let rateLimiters;
+
+function getRateLimiters() {
+  if (rateLimiters) return rateLimiters;
+  const url = process.env.UPSTASH_REDIS_REST_URL;
+  const token = process.env.UPSTASH_REDIS_REST_TOKEN;
+  if (!url || !token) throw new Error('Request rate limiting is not configured');
+
+  const redis = new Redis({ url, token });
 
 // Different limits for different endpoint types
-export const rateLimiters = {
+rateLimiters = {
   // Generous limit for general API
   api: new Ratelimit({
     redis,
@@ -42,6 +47,9 @@ export const rateLimiters = {
   }),
 };
 
+  return rateLimiters;
+}
+
 /**
  * Check if a request should be rate limited
  * @param {string} limiter - The rate limiter to use (api, generation, imageGeneration, transcription)
@@ -49,7 +57,7 @@ export const rateLimiters = {
  * @returns {Promise<{success: boolean, remaining: number}>} Object with success status and remaining requests
  */
 export async function checkRateLimit(limiter, identifier) {
-  const result = await rateLimiters[limiter].limit(identifier);
+  const result = await getRateLimiters()[limiter].limit(identifier);
   return {
     success: result.success,
     remaining: result.remaining

@@ -20,6 +20,18 @@ export async function proxy(request: NextRequest) {
         return NextResponse.next();
     }
 
+    // The marketing pages are public and must remain available even when the
+    // optional auth integration is misconfigured. Protected routes fail closed.
+    const publicRoutes = ['/', '/login', '/signup', '/pricing', '/privacy', '/terms'];
+    const isPublicRoute = publicRoutes.includes(path);
+    if (!process.env.NEXT_PUBLIC_SUPABASE_URL || !process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY) {
+        if (isPublicRoute) return NextResponse.next();
+        return new NextResponse('Authentication service is unavailable', {
+            status: 503,
+            headers: { 'Cache-Control': 'no-store' },
+        });
+    }
+
     let response = NextResponse.next({
         request: {
             headers: request.headers,
@@ -75,9 +87,6 @@ export async function proxy(request: NextRequest) {
     const { data: { user } } = await supabase.auth.getUser();
 
     // Public routes that don't require authentication
-    const publicRoutes = ['/', '/login', '/signup', '/pricing', '/privacy', '/terms'];
-    const isPublicRoute = publicRoutes.includes(path);
-
     // Redirect logic for authentication (pages only, not API)
     if (!user && !isPublicRoute) {
         return NextResponse.redirect(new URL('/login', request.url));

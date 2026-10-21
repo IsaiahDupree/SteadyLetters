@@ -1,9 +1,23 @@
 import Stripe from 'stripe';
 import { STRIPE_PLANS, type StripePlan } from './pricing-tiers';
 
-export const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
-    apiVersion: '2025-11-17.clover',
-    typescript: true,
+let stripeClient: Stripe | undefined;
+
+function getStripeClient(): Stripe {
+    if (stripeClient) return stripeClient;
+    const secretKey = process.env.STRIPE_SECRET_KEY;
+    if (!secretKey) throw new Error('Stripe billing is not configured');
+    stripeClient = new Stripe(secretKey, {
+        apiVersion: '2025-11-17.clover',
+        typescript: true,
+    });
+    return stripeClient;
+}
+
+export const stripe = new Proxy({} as Stripe, {
+    get(_target, property) {
+        return Reflect.get(getStripeClient(), property);
+    },
 });
 
 export { STRIPE_PLANS, type StripePlan };

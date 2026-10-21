@@ -1,8 +1,18 @@
 import OpenAI from 'openai';
 
-const openai = new OpenAI({
-    apiKey: process.env.OPENAI_API_KEY,
-});
+let openaiClient: OpenAI | undefined;
+
+function getOpenAIClient(): OpenAI {
+    if (openaiClient) return openaiClient;
+
+    const apiKey = process.env.OPENAI_API_KEY;
+    if (!apiKey) {
+        throw new Error('OpenAI generation is not configured');
+    }
+
+    openaiClient = new OpenAI({ apiKey });
+    return openaiClient;
+}
 
 import type { Tone, Occasion } from '@/lib/types';
 
@@ -49,7 +59,7 @@ Include a greeting and closing.
 Make it sound natural and human, not AI-generated.
 Do not include a date or recipient address.`;
 
-    const completion = await openai.chat.completions.create({
+    const completion = await getOpenAIClient().chat.completions.create({
         model: 'gpt-4o',
         messages: [{ role: 'user', content: prompt }],
         temperature: 0.8,
@@ -96,7 +106,7 @@ ${imageContext}
 Style: ${colorPalettes[tone]}, elegant, minimal, suitable for a physical greeting card.
 Clean design with space for text. No text in the image.`;
 
-    const response = await openai.images.generate({
+    const response = await getOpenAIClient().images.generate({
         model: 'dall-e-3',
         prompt,
         size: '1024x1024',
@@ -107,4 +117,4 @@ Clean design with space for text. No text in the image.`;
     return response.data?.[0]?.url || '';
 }
 
-export { openai };
+export { getOpenAIClient };

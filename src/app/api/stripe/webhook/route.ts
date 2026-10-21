@@ -4,7 +4,7 @@ import { prisma } from '@/lib/prisma';
 import { headers } from 'next/headers';
 import Stripe from 'stripe';
 import { trackServerEvent } from '@/lib/posthog-server';
-import { getOrCreatePersonFromStripe } from '@/lib/identity.js';
+import { getOrCreatePersonFromUser, linkIdentity } from '@/lib/identity.js';
 
 /**
  * Upsert PersonSubscription from Stripe subscription object
@@ -14,8 +14,8 @@ async function upsertPersonSubscription(
     subscription: Stripe.Subscription
 ) {
     // Get first price item
-    const items = subscription.items as unknown as { data: Array<{ price: Stripe.Price }> };
-    const price = items.data[0].price;
+    const item = subscription.items.data[0];
+    const price = item.price as Stripe.Price;
     const priceId = price.id;
     const amount = price.unit_amount ? price.unit_amount / 100 : 0;
 
@@ -34,8 +34,8 @@ async function upsertPersonSubscription(
             plan: tier,
             mrr: amount,
             stripePriceId: priceId,
-            currentPeriodStart: new Date(subscription.current_period_start * 1000),
-            currentPeriodEnd: new Date(subscription.current_period_end * 1000),
+            currentPeriodStart: new Date(item.current_period_start * 1000),
+            currentPeriodEnd: new Date(item.current_period_end * 1000),
             cancelAt: subscription.cancel_at ? new Date(subscription.cancel_at * 1000) : null,
         },
         create: {
@@ -46,8 +46,8 @@ async function upsertPersonSubscription(
             status: subscription.status,
             plan: tier,
             mrr: amount,
-            currentPeriodStart: new Date(subscription.current_period_start * 1000),
-            currentPeriodEnd: new Date(subscription.current_period_end * 1000),
+            currentPeriodStart: new Date(item.current_period_start * 1000),
+            currentPeriodEnd: new Date(item.current_period_end * 1000),
             cancelAt: subscription.cancel_at ? new Date(subscription.cancel_at * 1000) : null,
         },
     });
@@ -110,8 +110,8 @@ export async function POST(request: NextRequest) {
                     data: {
                         stripeSubscriptionId: subscription.id,
                         stripePriceId: subscription.items.data[0].price.id,
-                        stripeCurrentPeriodEnd: subscription.current_period_end
-                            ? new Date(subscription.current_period_end * 1000)
+                        stripeCurrentPeriodEnd: subscription.items.data[0]?.current_period_end
+                            ? new Date(subscription.items.data[0].current_period_end * 1000)
                             : null,
                     },
                 });
@@ -142,12 +142,13 @@ export async function POST(request: NextRequest) {
                     const [firstName, ...lastNameParts] = customerName.split(' ');
                     const lastName = lastNameParts.join(' ');
 
-                    const person = await getOrCreatePersonFromStripe(
-                        stripeCustomerId,
+                    const person = await getOrCreatePersonFromUser(
+                        userId,
                         user.email,
                         firstName || undefined,
                         lastName || undefined
                     );
+                    await linkIdentity(person.id, 'stripe', stripeCustomerId);
 
                     // GDP-008: Upsert subscription snapshot
                     await upsertPersonSubscription(person.id, subscription);
@@ -176,13 +177,7 @@ export async function POST(request: NextRequest) {
             }
 
             case 'customer.subscription.updated': {
-                const subscription = event.data.object as Stripe.Subscription & {
-                    items: {
-                        data: Array<{
-                            price: Stripe.Price;
-                        }>;
-                    };
-                };
+                const subscription = event.data.object as Stripe.Subscription;
                 const customerId = subscription.customer as string;
 
                 const user = await prisma.user.findUnique({
@@ -195,8 +190,8 @@ export async function POST(request: NextRequest) {
                     where: { id: user.id },
                     data: {
                         stripePriceId: subscription.items.data[0].price.id,
-                        stripeCurrentPeriodEnd: subscription.current_period_end
-                            ? new Date(subscription.current_period_end * 1000)
+                        stripeCurrentPeriodEnd: subscription.items.data[0]?.current_period_end
+                            ? new Date(subscription.items.data[0].current_period_end * 1000)
                             : null,
                     },
                 });
@@ -221,12 +216,8 @@ export async function POST(request: NextRequest) {
                 });
 
                 // GDP-007: Update Person record
-                const person = await getOrCreatePersonFromStripe(
-                    customerId,
-                    user.email,
-                    undefined,
-                    undefined
-                );
+                const person = await getOrCreatePersonFromUser(user.id, user.email);
+                await linkIdentity(person.id, 'stripe', customerId);
 
                 // GDP-008: Update subscription snapshot
                 await upsertPersonSubscription(person.id, subscription);

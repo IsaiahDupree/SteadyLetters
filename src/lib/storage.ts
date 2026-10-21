@@ -1,9 +1,13 @@
 import { createClient } from '@supabase/supabase-js';
 
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
-const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
-
-export const supabase = createClient(supabaseUrl, supabaseKey);
+function getSupabaseStorageClient() {
+    const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+    const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+    if (!supabaseUrl || !supabaseKey) {
+        throw new Error('Image storage is not configured');
+    }
+    return createClient(supabaseUrl, supabaseKey);
+}
 
 /**
  * Upload an image to Supabase Storage
@@ -20,6 +24,7 @@ export async function uploadImage(
     const fileExt = file.name.split('.').pop();
     const fileName = `${userId}/${Date.now()}.${fileExt}`;
 
+    const supabase = getSupabaseStorageClient();
     const { data, error } = await supabase.storage
         .from(bucket)
         .upload(fileName, file, {
@@ -45,6 +50,7 @@ export async function uploadImage(
  * @param bucket - Storage bucket name
  */
 export async function deleteImage(path: string, bucket: string = 'images'): Promise<void> {
+    const supabase = getSupabaseStorageClient();
     const { error } = await supabase.storage.from(bucket).remove([path]);
 
     if (error) {
@@ -58,6 +64,7 @@ export async function deleteImage(path: string, bucket: string = 'images'): Prom
  * @param bucket - Storage bucket name
  */
 export async function listUserImages(userId: string, bucket: string = 'images') {
+    const supabase = getSupabaseStorageClient();
     const { data, error } = await supabase.storage.from(bucket).list(userId);
 
     if (error) {

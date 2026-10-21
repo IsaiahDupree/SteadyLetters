@@ -55,6 +55,15 @@ export type ReliabilityEvent =
   | 'render_failed'
   | 'send_failed';
 
+export type WebVitalEvent =
+  | 'web_vital'
+  | 'web_vital_cls'
+  | 'web_vital_fid'
+  | 'web_vital_fcp'
+  | 'web_vital_lcp'
+  | 'web_vital_ttfb'
+  | 'web_vital_inp';
+
 // All Events Union Type
 export type TrackingEvent =
   | AcquisitionEvent
@@ -62,7 +71,8 @@ export type TrackingEvent =
   | CoreValueEvent
   | MonetizationEvent
   | RetentionEvent
-  | ReliabilityEvent;
+  | ReliabilityEvent
+  | WebVitalEvent;
 
 // ============================
 // Event Property Interfaces

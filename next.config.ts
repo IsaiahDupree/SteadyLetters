@@ -2,6 +2,10 @@ import type { NextConfig } from "next";
 import { withSentryConfig } from '@sentry/nextjs';
 
 const nextConfig: NextConfig = {
+  typescript: {
+    tsconfigPath: "tsconfig.build.json",
+  },
+
   /* Performance optimizations */
   compress: true,
   poweredByHeader: false,

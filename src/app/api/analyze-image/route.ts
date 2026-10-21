@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { openai } from '@/lib/openai';
+import { getOpenAIClient } from '@/lib/openai';
 import { prisma } from '@/lib/prisma';
 import { canGenerate } from '@/lib/tiers';
 import { trackEvent } from '@/lib/events';
@@ -83,7 +83,7 @@ export async function POST(request: NextRequest) {
         const imageUrl = `data:${imageFile.type};base64,${base64Image}`;
 
         // Analyze image using GPT-4 Vision
-        const response = await openai.chat.completions.create({
+        const response = await getOpenAIClient().chat.completions.create({
             model: 'gpt-4o',
             messages: [
                 {

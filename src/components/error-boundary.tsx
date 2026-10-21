@@ -47,7 +47,7 @@ export class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundarySt
     console.error('Error caught by ErrorBoundary:', error, errorInfo);
   }
 
-  private getComponentName(componentStack?: string): string {
+  private getComponentName(componentStack?: string | null): string {
     if (!componentStack) return 'unknown';
     // Extract first component from stack
     const match = componentStack.match(/at (\w+)/);

@@ -23,9 +23,18 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
+        if (!process.env.NEXT_PUBLIC_SUPABASE_URL || !process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY) {
+            setLoading(false);
+            return;
+        }
+
         // Get initial user
         getCurrentUser().then((currentUser) => {
             setUser(currentUser);
+            setLoading(false);
+        }).catch((error) => {
+            console.error('Failed to initialize Supabase session:', error);
+            setUser(null);
             setLoading(false);
         });
 

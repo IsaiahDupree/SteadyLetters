@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { openai } from '@/lib/openai';
+import { getOpenAIClient } from '@/lib/openai';
 import { getAuthenticatedUser } from '@/lib/api-auth';
 import { prisma } from '@/lib/prisma';
 import { trackEvent } from '@/lib/events';
@@ -127,7 +127,7 @@ COMPOSITION:
 `.trim();
 
         // Generate card front image using DALL-E
-        const response = await openai.images.generate({
+        const response = await getOpenAIClient().images.generate({
             model: 'dall-e-3',
             prompt: comprehensivePrompt,
             n: 1,

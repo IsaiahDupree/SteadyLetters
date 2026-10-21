@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { openai } from '@/lib/openai';
+import { getOpenAIClient } from '@/lib/openai';
 import { getAuthenticatedUser } from '@/lib/api-auth';
 import { prisma } from '@/lib/prisma';
 import { trackEvent } from '@/lib/events';
@@ -115,7 +115,7 @@ Important:
 - ZIP should be 5 digits, or 9 digits with a hyphen (e.g., "90210" or "90210-1234")
 - Name should be the full name or organization name from the return address`;
 
-        const response = await openai.chat.completions.create({
+        const response = await getOpenAIClient().chat.completions.create({
             model: 'gpt-4o',
             messages: [
                 {

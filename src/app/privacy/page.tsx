@@ -1,4 +1,12 @@
 import Link from 'next/link';
+import type { Metadata } from 'next';
+import { SITE_URL } from '@/lib/site-url';
+
+export const metadata: Metadata = {
+    title: 'Privacy Policy | SteadyLetters',
+    description: 'Read how SteadyLetters handles account, recipient, letter, payment, and usage information.',
+    alternates: { canonical: `${SITE_URL}/privacy` },
+};
 
 export default function PrivacyPage() {
     return (

@@ -12,8 +12,8 @@ interface RecurringLetter {
   name: string;
   frequency: string;
   active: boolean;
-  nextSendAt: string;
-  lastSentAt: string | null;
+  nextSendAt: string | Date;
+  lastSentAt: string | Date | null;
   recipient: {
     name: string;
     address1: string;

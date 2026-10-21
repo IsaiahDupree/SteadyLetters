@@ -122,10 +122,6 @@ export async function createOrder(data: {
             state: recipient.state,
             zip: recipient.zip,
             country: recipient.country,
-            custom1: recipient.custom1,
-            custom2: recipient.custom2,
-            custom3: recipient.custom3,
-            custom4: recipient.custom4,
         });
 
         // If scheduled for future, don't send now - just return the order
@@ -821,7 +817,7 @@ export async function createBulkOrderFromCSV(data: {
                         userId: user.id,
                         name: recipient.name,
                         address1: recipient.address1,
-                        address2: recipient.address2,
+                        address2: recipient.address2 || '',
                         city: recipient.city,
                         state: recipient.state,
                         zip: recipient.zip,
@@ -883,17 +879,6 @@ export async function createBulkOrderFromCSV(data: {
                     },
                 });
 
-                // Create MailOrder record to track Thanks.io order
-                await prisma.mailOrder.create({
-                    data: {
-                        orderId: order.id,
-                        thanksIoOrderId: response.id.toString(),
-                        status: response.status || 'queued',
-                        recipientName: recipient.name,
-                        recipientAddress: `${recipient.address1}, ${recipient.city}, ${recipient.state} ${recipient.zip}`,
-                    },
-                });
-
                 // Increment usage counter
                 await prisma.userUsage.update({
                     where: { userId: user.id },
@@ -901,19 +886,19 @@ export async function createBulkOrderFromCSV(data: {
                 });
 
                 // Track unified event
-                const person = await findPersonByIdentity('user', user.id);
-                if (person) {
-                    await trackAppEvent({
-                        eventType: 'letter_sent',
-                        personId: person.id,
-                        properties: {
+                try {
+                    const person = await findPersonByIdentity('user', user.id);
+                    if (person) {
+                        await trackAppEvent('letter_sent', person.id, {
                             productType: data.productType,
                             source: 'csv_bulk_upload',
                             recipientName: recipient.name,
                             orderId: order.id,
                             thanksIoId: response.id.toString(),
-                        },
-                    });
+                        });
+                    }
+                } catch (error) {
+                    console.error('[Order] Failed to track unified event:', error);
                 }
 
                 // Track in PostHog
