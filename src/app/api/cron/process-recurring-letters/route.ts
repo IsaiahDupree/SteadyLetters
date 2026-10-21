@@ -44,7 +44,7 @@ export async function GET(request: NextRequest) {
         results.processed++;
 
         // Create order for this recurring letter
-        await prisma.order.create({
+        const order = await prisma.order.create({
           data: {
             userId: letter.userId,
             recipientId: letter.recipientId,
@@ -55,32 +55,26 @@ export async function GET(request: NextRequest) {
         });
 
         // Send via Thanks.io
-        const response = await sendLetter(
-          {
+        const response = await sendLetter({
+          recipients: [{
             name: letter.recipient.name,
             address: letter.recipient.address1,
-            address2: letter.recipient.address2,
+            address2: letter.recipient.address2 || undefined,
             city: letter.recipient.city,
             province: letter.recipient.state,
             postal_code: letter.recipient.zip,
             country: letter.recipient.country,
-          },
-          letter.message,
-          letter.handwritingStyle || 'default'
-        );
+          }],
+          message: letter.message,
+          handwriting_style: letter.handwritingStyle || undefined,
+        });
 
-        if (response.ok) {
-          const data = await response.json();
-
-          // Update order with Thanks.io ID
-          await prisma.order.updateMany({
-            where: {
-              recurringLetterId: letter.id,
-              thanksIoOrderId: null,
-            },
+        if (response.id && response.status !== 'failed') {
+          await prisma.order.update({
+            where: { id: order.id },
             data: {
-              thanksIoOrderId: data.id,
-              status: 'queued',
+              thanksIoOrderId: response.id,
+              status: response.status,
             },
           });
 
@@ -98,10 +92,14 @@ export async function GET(request: NextRequest) {
 
           results.succeeded++;
         } else {
+          await prisma.order.update({
+            where: { id: order.id },
+            data: { status: 'failed' },
+          });
           results.failed++;
           results.errors.push({
             letterId: letter.id,
-            error: 'Failed to send via Thanks.io',
+            error: response.error || 'Failed to send via Thanks.io',
           });
         }
       } catch (error) {
