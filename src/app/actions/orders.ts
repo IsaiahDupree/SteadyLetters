@@ -886,19 +886,19 @@ export async function createBulkOrderFromCSV(data: {
                 });
 
                 // Track unified event
-                const person = await findPersonByIdentity('user', user.id);
-                if (person) {
-                    await trackAppEvent({
-                        eventType: 'letter_sent',
-                        personId: person.id,
-                        properties: {
+                try {
+                    const person = await findPersonByIdentity('user', user.id);
+                    if (person) {
+                        await trackAppEvent('letter_sent', person.id, {
                             productType: data.productType,
                             source: 'csv_bulk_upload',
                             recipientName: recipient.name,
                             orderId: order.id,
                             thanksIoId: response.id.toString(),
-                        },
-                    });
+                        });
+                    }
+                } catch (error) {
+                    console.error('[Order] Failed to track unified event:', error);
                 }
 
                 // Track in PostHog
