@@ -20,6 +20,12 @@ export async function proxy(request: NextRequest) {
         return NextResponse.next();
     }
 
+    // Search crawler policy and URL inventory are public machine-readable files.
+    // Bypass session lookup so auth/provider outages cannot turn them into login HTML.
+    if (path === '/robots.txt' || path === '/sitemap.xml') {
+        return NextResponse.next();
+    }
+
     // The marketing pages are public and must remain available even when the
     // optional auth integration is misconfigured. Protected routes fail closed.
     const publicRoutes = ['/', '/login', '/signup', '/pricing', '/privacy', '/terms'];
