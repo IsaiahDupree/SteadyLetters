@@ -33,7 +33,8 @@ model User {
   returnZip      String?
   returnCountry  String? @default("US")
 
-  mailOrders MailOrder[]
+  mailOrders       MailOrder[]
+  recurringLetters RecurringLetter[]
 }
 
 model UserUsage {
@@ -77,7 +78,8 @@ model Recipient {
   country   String   @default("US")
   createdAt DateTime @default(now())
 
-  orders Order[]
+  orders           Order[]
+  recurringLetters RecurringLetter[]
 }
 
 model Template {
@@ -101,19 +103,44 @@ model Template {
 }
 
 model Order {
-  id              String    @id @default(cuid())
-  userId          String
-  user            User      @relation(fields: [userId], references: [id], onDelete: Cascade)
-  recipientId     String
-  recipient       Recipient @relation(fields: [recipientId], references: [id])
-  templateId      String?
-  template        Template? @relation(fields: [templateId], references: [id])
-  thanksIoOrderId String?
-  status          String    @default("pending")
-  scheduledFor    DateTime? // For scheduled sending (SL-109)
-  createdAt       DateTime  @default(now())
+  id                String           @id @default(cuid())
+  userId            String
+  user              User             @relation(fields: [userId], references: [id], onDelete: Cascade)
+  recipientId       String
+  recipient         Recipient        @relation(fields: [recipientId], references: [id])
+  templateId        String?
+  template          Template?        @relation(fields: [templateId], references: [id])
+  thanksIoOrderId   String?
+  status            String           @default("pending")
+  scheduledFor      DateTime? // For scheduled sending (SL-109)
+  recurringLetterId String?
+  recurringLetter   RecurringLetter? @relation(fields: [recurringLetterId], references: [id], onDelete: SetNull)
+  createdAt         DateTime         @default(now())
 
   @@index([scheduledFor, status])
+  @@index([recurringLetterId])
+}
+
+model RecurringLetter {
+  id               String    @id @default(cuid())
+  userId           String
+  user             User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  recipientId      String
+  recipient        Recipient @relation(fields: [recipientId], references: [id], onDelete: Cascade)
+  name             String
+  message          String    @db.Text
+  handwritingStyle String?
+  frequency        String
+  nextSendAt       DateTime
+  lastSentAt       DateTime?
+  active           Boolean   @default(true)
+  createdAt        DateTime  @default(now())
+  updatedAt        DateTime  @updatedAt
+  sentOrders       Order[]
+
+  @@index([userId])
+  @@index([recipientId])
+  @@index([active, nextSendAt])
 }
 
 model MailOrder {
