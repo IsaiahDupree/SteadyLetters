@@ -19,6 +19,7 @@ import { Analytics } from '@vercel/analytics/react';
 import { PostHogProvider } from '@/components/posthog-provider';
 import { MetaPixelProvider } from '@/components/meta-pixel-provider';
 import { WebVitalsTracker } from '@/components/web-vitals-tracker';
+import { SITE_URL } from '@/lib/site-url';
 
 const lora = Lora({
   variable: "--font-serif",
@@ -79,6 +80,7 @@ const sacramento = Sacramento({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL(SITE_URL),
   title: "SteadyLetters",
   description: "Send handwritten letters with AI assistance - SteadyLetters",
   icons: {

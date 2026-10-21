@@ -1,4 +1,12 @@
 import Link from 'next/link';
+import type { Metadata } from 'next';
+import { SITE_URL } from '@/lib/site-url';
+
+export const metadata: Metadata = {
+    title: 'Terms of Service | SteadyLetters',
+    description: 'Read the terms that apply when using SteadyLetters to create and send personalized handwritten letters.',
+    alternates: { canonical: `${SITE_URL}/terms` },
+};
 
 export default function TermsPage() {
     return (
