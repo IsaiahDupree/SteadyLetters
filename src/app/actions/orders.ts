@@ -879,17 +879,6 @@ export async function createBulkOrderFromCSV(data: {
                     },
                 });
 
-                // Create MailOrder record to track Thanks.io order
-                await prisma.mailOrder.create({
-                    data: {
-                        orderId: order.id,
-                        thanksIoOrderId: response.id.toString(),
-                        status: response.status || 'queued',
-                        recipientName: recipient.name,
-                        recipientAddress: `${recipient.address1}, ${recipient.city}, ${recipient.state} ${recipient.zip}`,
-                    },
-                });
-
                 // Increment usage counter
                 await prisma.userUsage.update({
                     where: { userId: user.id },
