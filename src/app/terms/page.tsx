@@ -1,12 +1,11 @@
 import Link from 'next/link';
-import type { Metadata } from 'next';
-import { SITE_URL } from '@/lib/site-url';
+import { publicPageMetadata } from '@/lib/public-page-metadata';
 
-export const metadata: Metadata = {
+export const metadata = publicPageMetadata({
     title: 'Terms of Service | SteadyLetters',
     description: 'Read the terms that apply when using SteadyLetters to create and send personalized handwritten letters.',
-    alternates: { canonical: `${SITE_URL}/terms` },
-};
+    path: '/terms',
+});
 
 export default function TermsPage() {
     return (

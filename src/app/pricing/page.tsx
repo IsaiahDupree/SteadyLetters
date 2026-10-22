@@ -1,12 +1,11 @@
-import type { Metadata } from 'next';
-import { SITE_URL } from '@/lib/site-url';
+import { publicPageMetadata } from '@/lib/public-page-metadata';
 import PricingPageClient from './pricing-page-client';
 
-export const metadata: Metadata = {
+export const metadata = publicPageMetadata({
     title: 'Pricing | SteadyLetters',
     description: 'Compare SteadyLetters plans for creating and sending personalized handwritten letters with AI assistance.',
-    alternates: { canonical: `${SITE_URL}/pricing` },
-};
+    path: '/pricing',
+});
 
 export default function PricingPage() {
     return <PricingPageClient />;
