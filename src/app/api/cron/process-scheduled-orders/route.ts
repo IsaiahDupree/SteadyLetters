@@ -13,7 +13,7 @@ import { sendPostcard, sendLetter } from '@/lib/thanks-io';
  * {
  *   "crons": [{
  *     "path": "/api/cron/process-scheduled-orders",
- *     "schedule": "*/15 * * * *"
+ *     "schedule": "every 15 minutes"
  *   }]
  * }
  * ```

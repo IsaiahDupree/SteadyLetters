@@ -22,7 +22,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Get user data from session
-    const supabase = createClient();
+    const supabase = await createClient();
     const { data: { user } } = await supabase.auth.getUser();
 
     // Build user data for CAPI
