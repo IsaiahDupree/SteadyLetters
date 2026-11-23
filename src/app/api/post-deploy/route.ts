@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { authorizeExternalDiagnostics } from '@/lib/operational-guard';
 
 const PRODUCTION_URL = process.env.NEXT_PUBLIC_URL || 'https://www.steadyletters.com';
 
@@ -32,6 +33,8 @@ async function testEndpoint(name: string, url: string, options: RequestInit = {}
 }
 
 export async function POST(request: NextRequest) {
+    const blocked = authorizeExternalDiagnostics(request, process.env.STEADYLETTERS_ALLOW_EXTERNAL_DIAGNOSTICS, process.env.CRON_SECRET);
+    if (blocked) return blocked;
     const results = [];
     const startTime = Date.now();
 

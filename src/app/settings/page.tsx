@@ -42,6 +42,7 @@ export default function SettingsPage() {
             });
 
             const data = await response.json();
+            if (!response.ok) throw new Error(data.error || `Diagnostics unavailable (HTTP ${response.status})`);
             
             setTestSuites(data.suites || []);
             setOverallStatus(data.overallStatus || 'fail');
@@ -117,8 +118,7 @@ export default function SettingsPage() {
                 <CardHeader>
                     <CardTitle>Production Test Runner</CardTitle>
                     <CardDescription>
-                        Run comprehensive tests against the production deployment to diagnose issues.
-                        Tests all API endpoints, authentication, and core functionality.
+                        External diagnostics are restricted because some checks can send data or incur charges.
                     </CardDescription>
                 </CardHeader>
                 <CardContent>

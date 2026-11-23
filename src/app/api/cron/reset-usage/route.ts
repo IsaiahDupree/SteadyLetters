@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
+import { authorizeCron } from '@/lib/operational-guard';
 
 /**
  * Cron job to reset usage counters on the 1st of each month
@@ -12,19 +13,8 @@ import { prisma } from '@/lib/prisma';
  */
 export async function GET(request: NextRequest) {
   try {
-    // Verify the request is from Vercel Cron
-    const authHeader = request.headers.get('authorization');
-    const cronSecret = process.env.CRON_SECRET;
-
-    // If CRON_SECRET is configured, verify it
-    if (cronSecret) {
-      if (authHeader !== `Bearer ${cronSecret}`) {
-        return NextResponse.json(
-          { error: 'Unauthorized' },
-          { status: 401 }
-        );
-      }
-    }
+    const blocked = authorizeCron(request, process.env.CRON_SECRET);
+    if (blocked) return blocked;
 
     // Calculate the next reset date (1st of next month)
     const now = new Date();

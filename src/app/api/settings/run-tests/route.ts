@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getAuthenticatedUser } from '@/lib/api-auth';
+import { authorizeExternalDiagnostics } from '@/lib/operational-guard';
 
 export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
@@ -52,6 +53,8 @@ async function runTest(
 }
 
 export async function POST(request: NextRequest) {
+    const blocked = authorizeExternalDiagnostics(request, process.env.STEADYLETTERS_ALLOW_EXTERNAL_DIAGNOSTICS, process.env.CRON_SECRET);
+    if (blocked) return blocked;
     try {
         // Verify authentication
         const user = await getAuthenticatedUser(request);
